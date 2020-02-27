@@ -4,16 +4,11 @@ Description:
     Contains useful function for handling dates
 Functions:
     get_all_dates: Creates a list of tuples with date info for all the dates between 'start' and 'end'
-    get_same_date: Returns the 'absolute' equivalent day from the chosen year
-    get_same_day: Returns the 'relative' equivalent day with the chosen delta
 """
 
 
 # Built-in
 from datetime import datetime, timedelta
-
-# Third-party
-from dateutil.relativedelta import relativedelta
 
 
 # --------------------------------------------------------------------------------
@@ -67,43 +62,3 @@ def get_all_dates(start, end):
                 week += " " + str(date.year)
         date_list.append((year, month, week, day))
     return date_list
-
-
-def get_same_date(date, years, format="%Y-%m-%d"):
-    """
-    Description:
-        Returns the 'absolute' equivalent day from the chosen year.
-        Absolute means matching 01/01 with 01/01.
-    Args
-        date (str): string input of a date.
-        years (int): number of years between your date and the one you want.
-        format (str): output format of the returned date.
-    Returns
-        date_equiv_format -- corresponding date (with the chosen delta) in the requested format.
-    """
-    date_format = datetime.strptime(date, "%Y-%m-%d")
-    date_equiv = date_format + relativedelta(years=years)
-    date_equiv_format = date_equiv.strftime(format)
-    return date_equiv_format
-
-
-def get_same_day(date, years, months=0, days=0, format="%Y-%m-%d"):
-    """
-    Description:
-        Returns the 'relative' equivalent day with the chosen delta
-        Relative means matching a Monday with a Monday.
-    Args:
-        date (str): string input of a date.
-        years (int): number of years between your date and the one you want.
-        months (int): number of months between your date and the one you want.
-        days (int): number of days between your date and the one you want.
-        format (str): output format of the returned date.
-    Returns
-        (str) Corresponding date (with the chosen delta) in the requested format
-    """
-    date_format = datetime.strptime(date, "%Y-%m-%d")
-    date_equiv = date_format + relativedelta(
-        years=years, months=months, days=days, weekday=date_format.weekday()
-    )
-    date_equiv_format = date_equiv.strftime(format)
-    return date_equiv_format

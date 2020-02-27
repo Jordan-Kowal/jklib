@@ -12,8 +12,8 @@ Functions:
 # Built-in
 from urllib.parse import urljoin
 
-# Personal
-from libraries.django.utils import get_config
+# Local
+from .utils import get_config
 
 
 # --------------------------------------------------------------------------------

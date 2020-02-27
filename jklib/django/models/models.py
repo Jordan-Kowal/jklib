@@ -12,13 +12,11 @@ Models:
 from django.db import models
 
 # Personal
-from libraries.django.images import get_image_dimensions, image_as_html
-from libraries.django.models.fields import (
-    ActiveField,
-    DateCreatedField,
-    DateUpdatedField,
-)
-from libraries.standard.files import get_size
+from jklib.std.files import get_size
+
+# Local
+from ..images import get_image_dimensions, image_as_html
+from ..models.fields import ActiveField, DateCreatedField, DateUpdatedField
 
 
 # --------------------------------------------------------------------------------
