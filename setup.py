@@ -6,12 +6,14 @@ from setuptools import setup
 # --------------------------------------------------------------------------------
 # > Main
 # --------------------------------------------------------------------------------
+VERSION = "v1.0.1"
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
+
 setup(
     # General
     name="jklib",
-    version="1.0.0",
+    version=VERSION,
     license="MIT",
     # Description
     description="Package with utility functions on many different subjects",
@@ -22,7 +24,7 @@ setup(
     author_email="kowaljordan@gmail.com",
     # URLs
     url="https://github.com/Jordan-Kowal/jklib",
-    download_url="https://github.com/Jordan-Kowal/jklib/archive/v1.0.0.tar.gz",
+    download_url=f"https://github.com/Jordan-Kowal/jklib/archive/{VERSION}.tar.gz",
     # Packages
     packages=["jklib"],
     install_requires=[],
