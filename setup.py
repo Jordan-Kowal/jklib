@@ -6,7 +6,7 @@ from setuptools import setup
 # --------------------------------------------------------------------------------
 # > Main
 # --------------------------------------------------------------------------------
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 

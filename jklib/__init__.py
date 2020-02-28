@@ -1,1 +1,1 @@
-"""Package that contains various utilify functions spread across subpackages"""
+"""Package that contains various utility functions spread across subpackages"""
