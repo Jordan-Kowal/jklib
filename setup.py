@@ -1,12 +1,13 @@
 """Setup file for the PyPi packaging"""
 
 # Third-party
-from setuptools import setup
+from setuptools import find_packages, setup
 
 # --------------------------------------------------------------------------------
 # > Main
 # --------------------------------------------------------------------------------
-VERSION = "1.0.4"
+VERSION = "1.0.5"
+packages = find_packages()
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
@@ -26,7 +27,7 @@ setup(
     url="https://github.com/Jordan-Kowal/jklib",
     download_url=f"https://github.com/Jordan-Kowal/jklib/archive/{VERSION}.tar.gz",
     # Packages
-    packages=["jklib"],
+    packages=packages,
     install_requires=[],
     # Other info
     keywords=[],
