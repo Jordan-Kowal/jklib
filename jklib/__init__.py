@@ -1,1 +1,2 @@
 """jklib package"""
+name = "jklib"
