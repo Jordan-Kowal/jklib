@@ -1,16 +1,20 @@
 """Setup file for the PyPi packaging"""
 
+
 # Third-party
 from setuptools import find_packages, setup
 
 # --------------------------------------------------------------------------------
-# > Main
+# > Variables
 # --------------------------------------------------------------------------------
-VERSION = "1.0.5"
+VERSION = "1.1.0"
 packages = find_packages()
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
+# --------------------------------------------------------------------------------
+# > Setup
+# --------------------------------------------------------------------------------
 setup(
     # General
     name="jklib",
