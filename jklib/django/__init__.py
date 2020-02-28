@@ -1,2 +1,1 @@
-"""Utility modules for the Django framework"""
-name = "django"
+"""Package that contains utilify functions for the django framework"""

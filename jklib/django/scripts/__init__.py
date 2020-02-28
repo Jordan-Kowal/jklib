@@ -1,2 +1,1 @@
-"""Useful scripts for Django"""
-name = "scripts"
+"""Package with helpful django scripts"""

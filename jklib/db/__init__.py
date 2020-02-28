@@ -1,2 +1,1 @@
-"""Package for database management and general storage"""
-name = "db"
+"""Package with utility functions for handling databases and storage packages"""

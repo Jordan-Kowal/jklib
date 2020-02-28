@@ -1,5 +1,1 @@
-"""jklib package"""
-# Local
-from . import db, django, dtsci, std, web
-
-name = "jklib"
+"""Package that contains various utilify functions spread across subpackages"""

@@ -1,2 +1,1 @@
-"""Utility modules around the standard library"""
-name = "std"
+"""Package with utility functions around the standard library"""

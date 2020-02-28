@@ -1,2 +1,1 @@
-"""Useful modules for handling Django models"""
-name = "models"
+"""Package with utility functions that focuses on django models"""

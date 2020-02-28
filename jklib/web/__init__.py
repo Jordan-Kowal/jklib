@@ -1,2 +1,1 @@
-"""Utility modules for web-oriented libraries"""
-name = "web"
+"""Package with web-related utility functions (requests, beautifulsoup, selenium, etc."""
