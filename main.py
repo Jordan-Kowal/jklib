@@ -5,6 +5,9 @@ import os
 import sys
 from shutil import rmtree
 
+# Local
+from .local_settings import PYPI_PASSWORD, PYPI_USERNAME
+
 
 # --------------------------------------------------------------------------------
 # > Functions
@@ -21,8 +24,9 @@ def package_our_code():
     rmtree("build")
     rmtree("dist")
     # Generate new build and upload it
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("python twine upload dist/*")
+    setup_cmd = "python setup.py sdist bdist_wheel"
+    upload_cmd = f"twine upload dist/* -u {PYPI_USERNAME} -p {PYPI_PASSWORD}"
+    os.system(f"{setup_cmd} & {upload_cmd}")
 
 
 # --------------------------------------------------------------------------------
