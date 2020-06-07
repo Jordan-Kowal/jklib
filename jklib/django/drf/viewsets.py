@@ -5,16 +5,18 @@ Description:
 Mixins:
     DynamicPermissionsMixin: Mixin to make the permissions dynamic, based on the action
     DynamicSerializersMixin: Mixin to make the serializers dynamic, based on the action
+    ModelMixin: Mixin that includes the 5 model mixins from DRF
     ShowAsBrowsableMixin: Explicitly blocks the "list" action to show the ViewSet in the browsable API
 Viewsets:
     DynamicViewSet: GenericViewSet from DRF with dynamic handling of serializers and permissions
+    ModelViewSet: Dynamic viewset for Django models which includes the basic CRUD
 Views:
     improved_list_view: Improved LIST action which filters and sorts data using GET parameters
 """
 
 
 # Django
-from rest_framework import status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 
 # Personal
@@ -53,6 +55,18 @@ class DynamicSerializersMixin:
         return serializer_class
 
 
+class ModelMixin(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+):
+    """Mixin that includes the 5 model mixins from DRF"""
+
+    pass
+
+
 class ShowAsBrowsableMixin:
     """
     Explicitly blocks the "list" action to show the ViewSet in the browsable API
@@ -81,6 +95,12 @@ class DynamicViewSet(
         serializer = self.get_serializer(*args, **kwargs)
         serializer.is_valid(raise_exception=True)
         return serializer
+
+
+class ModelViewSet(DynamicViewSet, ModelMixin):
+    """Dynamic viewset for Django models which includes the basic CRUD"""
+
+    pass
 
 
 # --------------------------------------------------------------------------------

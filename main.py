@@ -5,8 +5,8 @@ import os
 import sys
 from shutil import rmtree
 
-# Local
-from .local_settings import PYPI_PASSWORD, PYPI_USERNAME
+# Third-party
+from local_settings import PYPI_PASSWORD, PYPI_USERNAME
 
 
 # --------------------------------------------------------------------------------
