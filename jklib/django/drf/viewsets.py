@@ -32,26 +32,32 @@ from .permissions import BlockAll
 class DynamicPermissionsMixin:
     """
     Mixin to make the permissions dynamic, based on the action
-    'permission_class' becomes useless
-    'permissions_classes' must be defined and be a DICT: action/permissions
+    'permission_class' becomes useless and we will instead use [action].permissions
     """
 
     def get_permissions(self):
-        """Overrides the method to fetch permissions in self.permissions_classes"""
-        permission_list = self.permissions_classes.get(self.action, [BlockAll])
-        return [permission() for permission in permission_list]
+        """
+        Overrides the method to fetch permissions in [action].permissions
+        If permissions are forgotten, defaults to "BlockAll" to avoid security breaches
+        """
+        if self.action is None:
+            permissions = [BlockAll]
+        else:
+            action_object = getattr(self, self.action)
+            permissions = getattr(action_object, "permissions", [BlockAll])
+        return [permission() for permission in permissions]
 
 
 class DynamicSerializersMixin:
     """
     Mixin to make the serializers dynamic, based on the action
-    'serializer_classes' must now be a DICT: action/serializer
+    'serializer_classes' becomes useless and we will instead use [action].serializer
     """
 
     def get_serializer_class(self, *args, **kwargs):
-        """Overridden to dynamically get the serializer from our list, based on the action"""
-        kwargs["partial"] = True
-        serializer_class = self.serializer_classes[self.action]
+        """Overridden to dynamically get the serializer from [action].serializer"""
+        action_object = getattr(self, self.action)
+        serializer_class = action_object.serializer
         return serializer_class
 
 
