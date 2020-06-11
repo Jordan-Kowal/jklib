@@ -41,9 +41,15 @@ class Service:
         Returns:
             (HttpResponse): Response from Django
         """
-        try:
-            method = self.request.method.lower()
-            process_service = getattr(self, method, self.service)
-        except AttributeError:
-            raise exceptions.MethodNotAllowed()
+        method = self.request.method.lower()
+        process_service = getattr(self, method, self.service)
         return process_service()
+
+    def service(self):
+        """
+        Either override this method, or provide specific action methods like "post", "get", etc.
+        By default, return a "403 Method not allowed"
+        Returns:
+            (HttpResponse): Response from Django
+        """
+        raise exceptions.MethodNotAllowed()
