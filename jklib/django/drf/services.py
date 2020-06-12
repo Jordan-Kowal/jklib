@@ -10,9 +10,12 @@ from rest_framework import exceptions
 class Service:
     """
     Service class for handling the execution of a DRF service call. Provides various utility functions.
-    To execute/run the service, call the "process" function. It will run either:
-        - The function whose name matches the method (post, get, ...)
-        - The default "service" function
+    Here's the desired workflow for creating a service
+        - Create a new class that inherits from this Service class
+        - Adds either the "service" function or a protocol (post/get/put/...) function
+        - (That function should take care of handling the Request and returning the Response)
+        - In the viewset, create a new action
+        - That action should simply call "OurService.process()"
     """
 
     def __init__(self, viewset, request, *args, **kwargs):
@@ -37,6 +40,7 @@ class Service:
 
     def process(self):
         """
+        Main function to use within the viewset action definition
         Runs either the function with the same name as the action (post, get, ...) or the default "service" function
         Returns:
             (HttpResponse): Response from Django
@@ -53,3 +57,22 @@ class Service:
             (HttpResponse): Response from Django
         """
         raise exceptions.MethodNotAllowed()
+
+    def service_from_super_view(self, action_name):
+        """
+        Calls an action from the parent viewset with the initial arguments
+        Args:
+            action_name (string): Name of the method to call
+        Returns:
+            (*) The results from the function call
+        """
+        parent_viewset_service = getattr(self.super_view(), action_name)
+        return parent_viewset_service(self.request, *self.args, **self.kwargs)
+
+    def super_view(self):
+        """
+        Equivalent to calling super() on the viewset
+        Returns:
+            (Viewset) The parent class of the viewset
+        """
+        return super(type(self.viewset), self.viewset)
