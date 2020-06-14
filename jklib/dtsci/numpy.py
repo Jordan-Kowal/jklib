@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Contains useful functions for numpy processing
+Contains useful functions for numpy processing
 Functions:
     get_unique_from_numpy: Returns the unique values from a numpy array while keeping its original order
 """
@@ -16,9 +14,8 @@ import numpy as np
 # --------------------------------------------------------------------------------
 def get_unique_from_numpy(arr):
     """
-    Description:
-        Returns the unique values from a numpy array while keeping its original order
-        (Because numpy.unique automatically re-sort the data)
+    Returns the unique values from a numpy array while keeping its original order
+    (Because numpy.unique automatically re-sort the data)
     Args:
         arr (ndarray): A numpy array
     Returns:

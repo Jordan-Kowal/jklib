@@ -1,13 +1,8 @@
-# coding: utf-8
 """
-Description:
-    Contains useful functions for pandas
+Contains useful functions for pandas
 Functions:
     sorted_groupby: Will groupby and aggregate values in a dataframe, while keeping a specific sort/order
 """
-
-# Third-party
-import pandas as pd
 
 
 # --------------------------------------------------------------------------------
@@ -15,8 +10,7 @@ import pandas as pd
 # --------------------------------------------------------------------------------
 def sorted_groupby(df, sorted_column, groupby_fields, agg_fields, agg_options):
     """
-    Description:
-        Will groupby and aggregate values in a dataframe, while keeping a specific sort/order
+    Will groupby and aggregate values in a dataframe, while keeping a specific sort/order
     Args:
         df (DataFrame): An already sorted dataframe
         sorted_column (str): The column which unique values we will use as sorting reference

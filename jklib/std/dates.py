@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Contains useful function for handling dates
+Contains useful function for handling dates
 Functions:
     get_all_dates: Creates a list of tuples with date info for all the dates between 'start' and 'end'
 """
@@ -16,14 +14,13 @@ from datetime import datetime, timedelta
 # --------------------------------------------------------------------------------
 def get_all_dates(start, end):
     """
-    Description:
-        Creates a list of tuples with date info for all the dates between 'start' and 'end'
-        A tuple contains (year, month, week, day) which are either strings or integers
+    Creates a list of tuples with date info for all the dates between 'start' and 'end'
+    A tuple contains (year, month, week, day) which are either strings or integers
     Args:
         start (date): start date of the dashboard
         end (date): end date of the dashboard
     Returns:
-        list: list of tuples (year, month, week, day)
+        (list) list of tuples (year, month, week, day)
     """
     months = [
         "Janvier",

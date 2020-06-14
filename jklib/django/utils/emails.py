@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    This file contains useful functions used specifically for this app
+Contains useful functions for handling emails in Django
 Functions:
     extract_email_addresses: Returns a list of emails from either a string or a list
     get_css_content: Returns the content of a css file (AVOID using " or ' in the file)
@@ -18,7 +16,13 @@ from django.core.mail import EmailMessage
 # > Functions
 # --------------------------------------------------------------------------------
 def extract_email_addresses(emails):
-    """Returns a list of emails from either a string or a list"""
+    """
+    Transforms a string of multiple email adresses (separated by commas) into a list
+    Args:
+        emails (string): Long string of emails separated with commas
+    Returns:
+        (list) A list of email addresses
+    """
     if type(emails) == str:
         emails = emails.split(",")
         emails = list(map(lambda x: x.strip(), emails))
@@ -27,8 +31,11 @@ def extract_email_addresses(emails):
 
 def get_css_content(relative_path):
     """
-    Returns the content of a css file (AVOID using " or ' in the file)
-    The 'relative_path' is the same you would use in a django template with {% static %}
+    Gets and returns the content of a css file (AVOID using " or ' in the file)
+    Args:
+        relative_path (str): Relative path to the CSS file (the path you'd use in a django template with {% static %})
+    Returns:
+        (str) The content of the CSS file
     """
     css_file = finders.find(relative_path)
     with open(css_file, "r", encoding="utf-8") as f:
@@ -38,8 +45,7 @@ def get_css_content(relative_path):
 
 def send_html_email(subject, body, to=None, cc=None, sender=None):
     """
-    Description:
-        Sends an HTML email with the given arguments
+    Sends an HTML email with the given arguments
     Args:
         subject (str): Subject of the email
         body (str): Body/Content of the email
