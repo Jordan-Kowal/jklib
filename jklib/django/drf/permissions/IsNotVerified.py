@@ -8,7 +8,7 @@ from rest_framework import permissions
 class IsNotVerified(permissions.BasePermission):
     """User must be authenticated but not yet verified"""
 
-    message = "Ce compte a déjà été vérifié"
+    message = "Your account must not be verified"
 
     def has_permission(self, request, view):
         """Returns True if user is logged in and not verified"""

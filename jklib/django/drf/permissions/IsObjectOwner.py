@@ -8,7 +8,7 @@ from rest_framework import permissions
 class IsObjectOwner(permissions.BasePermission):
     """Object must be attached to the user, or be the user itself"""
 
-    message = "Vous n'êtes pas le propriétaire"
+    message = "Access restricted"
 
     def has_object_permission(self, request, view, obj):
         """Checks if user is owner or is object"""

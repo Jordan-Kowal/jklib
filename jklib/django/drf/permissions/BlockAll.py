@@ -8,7 +8,7 @@ from rest_framework import permissions
 class BlockAll(permissions.BasePermission):
     """Blocks all incoming traffic"""
 
-    message = "Accès refusé pour tous"
+    message = "Access restricted"
 
     def has_permission(self, request, view):
         """Always denied"""
