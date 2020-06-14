@@ -1,4 +1,3 @@
-# coding: utf8
 """
 Functions to easily work with emails and email servers
 Functions:

@@ -1,4 +1,3 @@
-# coding: utf8
 """
 Functions for using a headless-browser through Selenium
 Classes:

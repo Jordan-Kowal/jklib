@@ -1,5 +1,5 @@
 """
-Contains useful function for managing JSON files.
+Contains useful functions for managing JSON files.
 Functions:
     sort_json: Overwrites and sorts a JSON file to make it cleaner / more readable
 """

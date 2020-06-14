@@ -1,5 +1,5 @@
 """
-Contains useful function for managing files and folders.
+Contains useful functions for managing files and folders.
 Functions:
     convert_size: Converts bytes from one unit to another, rounded up to 2 decimals
     create_dirs: For each given folder path, check if it exists. If not, it will create it

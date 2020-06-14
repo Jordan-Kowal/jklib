@@ -1,5 +1,5 @@
 """
-Contains useful function for network management
+Contains useful functions for network management within Django
 Functions:
     build_url: Builds a complete URL using the current host, a relative URL, and GET params
     get_client_ip: Returns the IP address of the current user

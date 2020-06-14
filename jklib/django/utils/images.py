@@ -1,5 +1,5 @@
 """
-Contains useful function for managing image files, mostly through "pillow".
+Contains useful functions for managing image files, mostly through "pillow".
 Functions:
     downsize_image: Downsizes an image to a maximum width/height, while keeping its aspect ratio
     get_image_dimensions: Returns the dimensions of an image, either as a string or a tuple

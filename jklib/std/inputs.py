@@ -1,5 +1,5 @@
 """
-Contains utility function around the "input" mechanic
+Contains utility functions around the "input" mechanic
 Functions:
     choose_from_dict: The user must choose a value by inputting the associated key
     input_must_match_regex: The user must type an input that matches a regex. Return his input

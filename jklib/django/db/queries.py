@@ -1,7 +1,12 @@
 """
 Contains utility functions for making queries in the database
 Useful for filtering, sorting, and ordering the data
-Functions:
+
+Simple Getters:
+    get_object_or_none: Tries to get an object in the database, or returns None
+    get_object_or_this: Tries to get an object in the database, or return 'this'
+
+Advanced Queries:
     filter_on_text: Filters a queryset by searching for a text value in different fields, using OR logic
     single_sort_by: Orders and returns the queryset using the GET parameters of a request
 """
@@ -12,8 +17,57 @@ from django.db.models import Q
 
 
 # --------------------------------------------------------------------------------
-# > Models
+# > Simple Getters
 # --------------------------------------------------------------------------------
+def get_object_or_none(model, *args, **kwargs):
+    """
+    Tries to get an object in the database, or returns None
+    Args:
+        model (Model): The class model from django you want to query
+        *args: Args that will be passed to model.objects.get()
+        **kwargs: Kwargs that will be passed to model.objects.get()
+    Returns:
+        (*) A model instance or None
+    """
+    try:
+        item = model.objects.get(*args, **kwargs)
+    except model.DoesNotExist:
+        return None
+    return item
+
+
+def get_object_or_this(model, this=None, *args, **kwargs):
+    """
+    Tries to get an object in the database, or return 'this'
+    Args:
+        model (Model): The class model from django you want to query
+        this (*): The alternative value if the object is not found. Defaults to None
+        *args: Args that will be passed to model.objects.get()
+        **kwargs: Kwargs that will be passed to model.objects.get()
+    Returns:
+        (*) A model instance or 'this'
+    """
+    obj = get_object_or_none(model, *args, **kwargs)
+    if obj is None:
+        return this
+    return obj
+
+
+# --------------------------------------------------------------------------------
+# > Advanced Queries
+# --------------------------------------------------------------------------------
+# TODO: Add a new query that allows for improved list output
+#   Filtering:
+#       Fieldname + list of exact values (OR)
+#       If several filters, relationship of (AND)
+#       If same field, overrides
+#   Search:
+#       Like filtering but: you provide a TEXT and a list of FIELDS that could have it
+#       We look for "present in" with OR relationships
+#   Sort: Order based on several fields, in given order, [{name: XXX, order: ASC}, ...]
+#   Pagination: Quantity of elements, which page number
+
+
 def filter_on_text(queryset, searched_text, min_length, *fields):
     """
     Filters a queryset by searching for a text value in different fields, using OR logic

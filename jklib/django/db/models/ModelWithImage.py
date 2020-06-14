@@ -8,7 +8,7 @@ from django.db import models
 from jklib.std.files import get_size
 
 # Local
-from ...images import get_image_dimensions, image_as_html
+from ...utils.images import get_image_dimensions, image_as_html
 
 
 class ModelWithImage(models.Model):

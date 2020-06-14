@@ -1,5 +1,5 @@
 """
-Contains useful functions used specifically for this app
+Contains useful functions for handling emails in Django
 Functions:
     extract_email_addresses: Returns a list of emails from either a string or a list
     get_css_content: Returns the content of a css file (AVOID using " or ' in the file)

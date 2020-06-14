@@ -1,4 +1,3 @@
-# coding: utf8
 """
 Functions for manipulating and changing string instances and texts
 Functions:
