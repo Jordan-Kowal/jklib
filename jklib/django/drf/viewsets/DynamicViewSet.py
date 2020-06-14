@@ -22,13 +22,13 @@ class DynamicViewSet(
         serializer.is_valid(raise_exception=True)
         return serializer
 
-    def call_service(self, service_class):
+    def run_action(self, action_class):
         """
-        Creates a Service instance with the initial arguments and runs its "process" method
+        Creates an Action instance with the initial arguments and runs its "process" method
         Args:
-            service_class (Service): Service class from the "service.py" file
+            action_class (Action): Action class that inherits from our BaseAction class
         Returns:
             (HttpResponse): Response from the service
         """
-        service_instance = service_class(self, self.request, *self.args, **self.kwargs)
-        return service_instance.process()
+        action_instance = action_class(self, self.request, *self.args, **self.kwargs)
+        return action_instance.run()
