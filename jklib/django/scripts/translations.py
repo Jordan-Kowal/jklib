@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Scripts for handling translations within Django
 Functions:

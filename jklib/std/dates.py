@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains useful function for handling dates
 Functions:

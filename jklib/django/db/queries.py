@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains utility functions for making queries in the database
 Useful for filtering, sorting, and ordering the data

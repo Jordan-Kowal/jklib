@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains useful function for managing files and folders.
 Functions:

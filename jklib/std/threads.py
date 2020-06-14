@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Functions to deal with threads
 Classes:

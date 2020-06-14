@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains utility function around the "input" mechanic
 Functions:

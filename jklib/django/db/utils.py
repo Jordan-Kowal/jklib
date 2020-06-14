@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains utility functions for model management
 Functions:

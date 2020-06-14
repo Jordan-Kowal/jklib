@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Utility functions related to maths
 Functions:

@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Useful scripts for Django
 Functions:

@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Functions to transform objects into other shapes
 Functions:

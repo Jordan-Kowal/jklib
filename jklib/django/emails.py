@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains useful functions used specifically for this app
 Functions:

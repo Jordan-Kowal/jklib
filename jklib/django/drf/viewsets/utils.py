@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 # Personal
-from jklib.django.models.queries import filter_on_text, single_sort_by
+from jklib.django.db.queries import filter_on_text, single_sort_by
 
 
 # --------------------------------------------------------------------------------

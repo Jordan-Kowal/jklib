@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Contains useful function for managing image files, mostly through "pillow".
 Functions:
