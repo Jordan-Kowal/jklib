@@ -11,7 +11,7 @@ Functions:
 from urllib.parse import urljoin
 
 # Local
-from .utils import get_config
+from .settings import get_config
 
 
 # --------------------------------------------------------------------------------
