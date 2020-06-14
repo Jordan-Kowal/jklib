@@ -55,7 +55,7 @@ class Action:
         """
         Calls an action from the parent viewset with the initial arguments
         Args:
-            action_name (string): Name of the method to call
+            action_name (str): Name of the method to call
         Returns:
             (*) The results from the function call
         """

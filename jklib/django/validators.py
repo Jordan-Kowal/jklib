@@ -1,7 +1,6 @@
 # coding: utf-8
 """
-Description:
-    Utility functions for validating model data
+Utility functions for validating model data
 Functions:
     validate_past_date: Checks the given date is not in the future
     validate_postal_code: Checks the format of the postal code

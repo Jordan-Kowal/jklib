@@ -52,8 +52,7 @@ def check_missing_fields(serializer, validated_data):
 
 def check_unique_for_user(serializer, message, **params):
     """
-    Description:
-        Checks if an element already exists for our user with the given parameters
+    Checks if an element already exists for our user with the given parameters
     Args:
         serializer (Serializer): Serializer instance from DRF
         message (str): The error message to display if an error is raised
@@ -74,16 +73,15 @@ def check_unique_for_user(serializer, message, **params):
 
 def is_empty(field, message):
     """
-    Description:
-        Removes the spaces before/after and checks if the field is empty
-        Returns the stripped field or raises an error
+    Removes the spaces before/after and checks if the field is empty
+    Returns the stripped field or raises an error
     Args:
         field (str): A string variable
         message (str): The error message to display if the field is empty
     Raises:
         serializers.ValidationError: Triggered when the field is empty
     Returns:
-        str: The field stripped of its before/after spaces
+        (str) The field stripped of its before/after spaces
     """
     field = field.strip()
     if not field:

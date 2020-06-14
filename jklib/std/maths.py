@@ -1,7 +1,6 @@
 # coding: utf-8
 """
-Description:
-    Utility functions related to maths
+Utility functions related to maths
 Functions:
     precise_round: Improved round() function
 """
@@ -16,12 +15,13 @@ from decimal import Decimal
 # --------------------------------------------------------------------------------
 def precise_round(value, points: int):
     """
-    Description:
-        Improved round() function
-        Using the Decimal module, we get rid of the infinite floating point caused by round()
+    Improved round() function
+    Using the Decimal module, we get rid of the infinite floating point caused by round()
     Args:
         value (int, float): the value the round
         points (int): the number of decimals you want
+    Returns:
+        (Decimal) The rounded value as a Decimal instance
     """
     pass
     rounded_value = round(value, points)

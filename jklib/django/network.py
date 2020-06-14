@@ -1,7 +1,6 @@
 # coding: utf-8
 """
-Description:
-    Contains useful function for network management
+Contains useful function for network management
 Functions:
     build_url: Builds a complete URL using the current host, a relative URL, and GET params
     get_client_ip: Returns the IP address of the current user
@@ -21,13 +20,12 @@ from .utils import get_config
 # --------------------------------------------------------------------------------
 def build_url(relative_url, params):
     """
-    Description:
-        Builds a complete URL using the current host, a relative URL, and GET params
+    Builds a complete URL using the current host, a relative URL, and GET params
     Args:
         relative_url (str): Relative URL, usually from the reverse() function
         params (dict): Contains list of GET parameters
     Returns:
-        str: The complete URL
+        (str) The complete URL
     """
     domain = get_server_domain()
     if len(params) > 0:
@@ -42,16 +40,12 @@ def build_url(relative_url, params):
 
 def get_client_ip(request):
     """
-    Description:
-        Returns the IP address of the current user
-        Based on the environment, the address can be different thing
-        - FORWARDED_FOR
-        - REAL_IP
-        - REMOTE_ADDR
+    Returns the IP address of the current user
+    Based on the environment, the address can be different thing: FORWARDED_FOR, REAL_IP, REMOTE_ADDR
     Args:
         request (HttpRequest): HttpRequest from django
     Returns:
-        str: The IP address as string
+        (str) The IP address as string
     """
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:

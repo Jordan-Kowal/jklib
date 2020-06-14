@@ -14,5 +14,9 @@ class ShowAsBrowsableMixin:
 
     @staticmethod
     def list(request, *args, **kwargs):
-        """Explicitly block the list() action"""
+        """
+        Registers and explicitly blocks the list() action
+        Returns:
+            (HttpResponse) Response from DRF with 405 status code
+        """
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

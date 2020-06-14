@@ -15,6 +15,8 @@ class DynamicPermissionsMixin:
         """
         Overrides the method to fetch permissions in [action].permissions
         If permissions are forgotten, defaults to "BlockAll" to avoid security breaches
+        Returns:
+            (list) List of Permission instances from DRF
         """
         if self.action is None:
             permissions = [BlockAll]

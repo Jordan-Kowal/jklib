@@ -1,7 +1,6 @@
 # coding: utf-8
 """
-Description:
-    Contains useful function for managing models.
+Contains useful function for managing models.
 Managers:
     NoBulkManager: Prevents the use of the bulk_create method
 """

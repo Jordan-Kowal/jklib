@@ -28,7 +28,7 @@ def improved_list_view(viewset, *searchable_fields):
         page_size   The amount of element per page
     Args:
         viewset (ViewSet): ViewSet instance from DRF
-        *searchable_fields (string): Field names of our model that will be searched
+        *searchable_fields (str): Field names of our model that will be searched
     Returns:
         (HttpResponse) HttpResponse instance from DRF
     """
