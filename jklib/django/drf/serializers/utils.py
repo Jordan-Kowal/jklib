@@ -1,8 +1,10 @@
-# coding: utf-8
 """
-Description:
-    Custom validator functions used throughout our API
-Functions:
+Utility functions for Serializers
+
+Utilities:
+    get_required_fields: Returns the list of fieldnames that are required
+
+Validators:
     check_missing_fields: Checks if all the required fields are in the request data
     check_unique_for_user: Checks if an element already exists for our user with the given parameters
     is_empty: Removes the spaces before/after and checks if the field is empty
@@ -13,12 +15,27 @@ Functions:
 from django.db.models import Q
 from rest_framework import serializers
 
-# Local
-from .serializers import get_required_fields
+
+# --------------------------------------------------------------------------------
+# > Utilities
+# --------------------------------------------------------------------------------
+def get_required_fields(serializer):
+    """
+    Returns the list of fieldnames that are required
+    Args:
+        serializer (Serializer): Serializer instance from DRF
+    Returns:
+        (list) List of fieldnames
+    """
+    required_fields = []
+    for key, kwargs in serializer.fields.items():
+        if kwargs.required:
+            required_fields.append(key)
+    return required_fields
 
 
 # --------------------------------------------------------------------------------
-# > Functions
+# > Validators
 # --------------------------------------------------------------------------------
 def check_missing_fields(serializer, validated_data):
     """

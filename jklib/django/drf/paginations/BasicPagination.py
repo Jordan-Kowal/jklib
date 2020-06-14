@@ -1,19 +1,9 @@
-# coding: utf-8
-"""
-Description:
-    Custom pagination classes used throughout the API
-Permissions:
-    BasicPagination: Basic pagination handler used in common API
-"""
-
+"""BasicPagination"""
 
 # Django
 from rest_framework.pagination import PageNumberPagination
 
 
-# --------------------------------------------------------------------------------
-# > Pagination
-# --------------------------------------------------------------------------------
 class BasicPagination(PageNumberPagination):
     """Basic pagination handler used in common API"""
 

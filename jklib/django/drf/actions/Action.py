@@ -1,4 +1,5 @@
-"""Contains the Service class, for handling various services/action in a viewset"""
+"""Action"""
+
 
 # Django
 from rest_framework import exceptions
@@ -7,7 +8,7 @@ from rest_framework import exceptions
 # --------------------------------------------------------------------------------
 # > Classes
 # --------------------------------------------------------------------------------
-class Service:
+class Action:
     """
     Service class for handling the execution of a DRF service call. Provides various utility functions.
     Here's the desired workflow for creating a service
@@ -38,27 +39,19 @@ class Service:
         self.data = request.data
         self.method = request.method
 
-    def process(self):
+    def run(self):
         """
-        Main function to use within the viewset action definition
-        Runs either the function with the same name as the action (post, get, ...) or the default "service" function
+        Process the service request by calling the appropriate method
+        It will look for a function matching the [method] name and will default to the "main" function
+        This should before the actual processing of the initial request and return a Response object
         Returns:
             (HttpResponse): Response from Django
         """
         method = self.request.method.lower()
-        process_service = getattr(self, method, self.service)
-        return process_service()
+        action_to_run = getattr(self, method, self.main)
+        return action_to_run()
 
-    def service(self):
-        """
-        Either override this method, or provide specific action methods like "post", "get", etc.
-        By default, return a "403 Method not allowed"
-        Returns:
-            (HttpResponse): Response from Django
-        """
-        raise exceptions.MethodNotAllowed()
-
-    def service_from_super_view(self, action_name):
+    def run_action_from_super_view(self, action_name):
         """
         Calls an action from the parent viewset with the initial arguments
         Args:
@@ -66,8 +59,8 @@ class Service:
         Returns:
             (*) The results from the function call
         """
-        parent_viewset_service = getattr(self.super_view(), action_name)
-        return parent_viewset_service(self.request, *self.args, **self.kwargs)
+        parent_viewset_action = getattr(self.super_view(), action_name)
+        return parent_viewset_action(self.request, *self.args, **self.kwargs)
 
     def super_view(self):
         """
@@ -76,3 +69,8 @@ class Service:
             (Viewset) The parent class of the viewset
         """
         return super(type(self.viewset), self.viewset)
+
+    @staticmethod
+    def main():
+        """Default function for the service processing"""
+        return exceptions.MethodNotAllowed()
