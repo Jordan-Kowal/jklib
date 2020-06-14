@@ -1,4 +1,4 @@
-"""Action"""
+"""BaseAction"""
 
 
 # Django
@@ -8,21 +8,26 @@ from rest_framework import exceptions
 # --------------------------------------------------------------------------------
 # > Classes
 # --------------------------------------------------------------------------------
-class Action:
+class BaseAction:
     """
-    Service class for handling the execution of a DRF service call. Provides various utility functions.
-    Here's the desired workflow for creating a service
-        - Create a new class that inherits from this Service class
-        - Adds either the "service" function or a protocol (post/get/put/...) function
-        - (That function should take care of handling the Request and returning the Response)
-        - In the viewset, create a new action
-        - That action should simply call "OurService.process()"
+    Class for easier handling of viewset actions
+
+    THINGS TO KNOW:
+        You should call .run() to execute your action
+        That will look up and run the method with the same name as the action method (post, get, etc.)
+        If it doesn't exist, it will run .main()
+
+    HOW TO USE:
+        Create a new class that inherits from our Action class
+        Override the "main" method or create specific method(s) based on action methods (post, get, etc.)
+        Either way, that method should return a Response object (from DRF)
+        In the viewset, create a new action like you normally would
+        That action should simply returns YourActionClass.run()
     """
 
     def __init__(self, viewset, request, *args, **kwargs):
         """
-        Sets up the attributes for later use
-        These are the 4 parameters receive when a DRF service is called
+        Initialize the instance  and sets up its attributes for later use
         Args:
             viewset (Viewset): Viewset object from DRF
             request (HttpRequest): Request object from Django
@@ -37,18 +42,16 @@ class Action:
         # Useful shortcuts
         self.user = request.user
         self.data = request.data
-        self.method = request.method
+        self.method = request.method.lower()
 
     def run(self):
         """
         Process the service request by calling the appropriate method
         It will look for a function matching the [method] name and will default to the "main" function
-        This should before the actual processing of the initial request and return a Response object
         Returns:
-            (HttpResponse): Response from Django
+            (HttpResponse): Response from DRF
         """
-        method = self.request.method.lower()
-        action_to_run = getattr(self, method, self.main)
+        action_to_run = getattr(self, self.method, self.main)
         return action_to_run()
 
     def run_action_from_super_view(self, action_name):

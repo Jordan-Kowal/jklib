@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 # --------------------------------------------------------------------------------
 # > Variables
 # --------------------------------------------------------------------------------
-VERSION = "1.1.2"
+VERSION = "2.0.0"
 packages = find_packages()
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
