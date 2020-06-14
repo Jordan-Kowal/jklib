@@ -7,6 +7,6 @@ from .DynamicViewSet import DynamicViewSet
 
 
 class DynamicModelViewSet(DynamicViewSet, ModelMixin):
-    """Dynamic viewset for Django models which includes the basic CRUD"""
+    """DynamicViewSet with built-in CRUD actions"""
 
     pass

@@ -12,8 +12,11 @@ class DynamicViewSet(
     DynamicPermissionsMixin, DynamicSerializersMixin, viewsets.GenericViewSet
 ):
     """
-    GenericViewSet from DRF with dynamic handling of serializers and permissions
-    Provides functions to interact with our Service class and other various utility functions
+    GenericViewSet from DRF with the following improvements:
+        Dynamic serializers (1 per action)
+        Dynamic permissions (1 list per action)
+        Methods to interact with our Action classes
+        Various utility methods
     """
 
     def get_valid_serializer(self, *args, **kwargs):
