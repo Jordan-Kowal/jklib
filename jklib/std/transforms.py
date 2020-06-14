@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Functions to transform objects into other shapes
+Functions to transform objects into other shapes
 Functions:
     array2d_to_dict: Transforms a 2d array into a dict, with one of the fields as primary key
     array2d_to_dict_cols: Creates a dict where each key holds a list that contains 1 value from each list
@@ -13,8 +11,7 @@ Functions:
 # --------------------------------------------------------------------------------
 def array2d_to_dict(array, pk):
     """
-    Description:
-        Transforms a 2d array into a dict, with one of the fields as primary key
+    Transforms a 2d array into a dict, with one of the fields as primary key
     Args:
         array (list): List of lists
         pk (int): The column index to use as a key
@@ -32,10 +29,9 @@ def array2d_to_dict(array, pk):
 
 def array2d_to_dict_cols(array, cols):
     """
-    Description:
-        Creates a dict where each key holds a list that contains 1 value from each list
-        Before: [[x1, ..., xn], [y1, ... yn]]
-        After: {1: [x1, y1], 2: [x2, y2]}
+    Creates a dict where each key holds a list that contains 1 value from each list
+    Before: [[x1, ..., xn], [y1, ... yn]]
+    After: {1: [x1, y1], 2: [x2, y2]}
     Args:
         array (list): List of lists. Each sublist should be of similar length
         cols (list): List of column names. Should be the same length as the nested lists

@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    This file contains useful decorators for Django
+Contains useful decorators for Django
 Functions:
     render_to: Decorator that renders a django view to a specific template
 """
@@ -17,9 +15,8 @@ from django.shortcuts import render
 # --------------------------------------------------------------------------------
 def render_to(template):
     """
-    Description:
-        Decorator that renders a django view to a specific template
-        Functions using the decorator must simply return the context dict
+    Decorator that renders a django view to a specific template
+    Functions using the decorator must simply return the context dict
     Args:
         template (str): The template path
     Returns:

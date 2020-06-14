@@ -1,7 +1,5 @@
-# coding: utf8
 """
-Description:
-    Functions to easily work with emails and email servers
+Functions to easily work with emails and email servers
 Functions:
     attach_pdfs: Attaches our files to our EmailMessage instance (only if they are PDF or images)
     choose_smtp_class: Choose the right SMTP class to connect to the server based on the given port
@@ -23,8 +21,7 @@ from email.message import EmailMessage
 # --------------------------------------------------------------------------------
 def attach_files(message, path):
     """
-    Description:
-        Attaches our files to our EmailMessage instance (only if they are PDF or images)
+    Attaches our files to our EmailMessage instance (only if they are PDF or images)
     Args:
         message (EmailMessage): Our current EmailMessage instance
         path (str): Path of the folder that contains our files
@@ -54,8 +51,7 @@ def attach_files(message, path):
 
 def choose_smtp_class(port):
     """
-    Description:
-        Choose the right SMTP class to connect to the server based on the given port
+    Choose the right SMTP class to connect to the server based on the given port
     Args:
         port (int): Port on which to connect
     Returns:
@@ -72,8 +68,7 @@ def choose_smtp_class(port):
 
 def connect_without_ssl(server):
     """
-    Description:
-        Tries to connect to the smtp server without SSL, using TLS or not security protocol at all
+    Tries to connect to the smtp server without SSL, using TLS or not security protocol at all
     Args:
         server (SMTP or SMTP_SSL): A type of smtp instance from smtplib
     """
@@ -87,9 +82,8 @@ def connect_without_ssl(server):
 
 def create_message():
     """
-    Description:
-        Creates and returns an EmailMessage instance
-        This is the email we will send at the end of the process
+    Creates and returns an EmailMessage instance
+    This is the email we will send at the end of the process
     Returns:
         (EmailMessage) A ready-to-send EmailMessage with information and attachments
     """
@@ -109,9 +103,8 @@ def create_message():
 
 def email_auth(server, ssl):
     """
-    Description:
-        Authenticates with the server, using either SSL, TLS, or no security protocol
-        Will return a bool indicating if authentification was successful
+    Authenticates with the server, using either SSL, TLS, or no security protocol
+    Will return a bool indicating if authentification was successful
     Args:
         server (SMTP or SMTP_SSL): A type of smtp instance from smtplib
         ssl (bool): Indicates whether we can use SSL
@@ -133,13 +126,12 @@ def email_auth(server, ssl):
 
 def get_template(path):
     """
-    Description:
-        Gets the HTML template and replaces patterns in a "template-like" manner
-        Returns the updated HTML template
+    Gets the HTML template and replaces patterns in a "template-like" manner
+    Returns the updated HTML template
     Args:
         path (str): Path to the initial HTML template/file
     Returns:
-        str: The updated HTML content as string
+        (str) The updated HTML content as string
     """
     with open(path, "r", encoding="utf-8") as f:
         f_content = f.read()

@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Scripts for handling translations within Django
+Scripts for handling translations within Django
 Functions:
     update_translations: Updates the translations for the given languages
 """
@@ -16,9 +14,8 @@ import os
 # --------------------------------------------------------------------------------
 def update_translations(languages):
     """
-    Description:
-        Updates the translations for the given languages
-        The languages must be in the shape of their relative folders: fr_FR, en_US, etc.
+    Updates the translations for the given languages
+    The languages must be in the shape of their relative folders: fr_FR, en_US, etc.
     Args:
         languages (list): List of strings that represent the languages
     """

@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Contains useful function for managing JSON files.
+Contains useful functions for managing JSON files.
 Functions:
     sort_json: Overwrites and sorts a JSON file to make it cleaner / more readable
 """
@@ -17,8 +15,7 @@ import os
 # --------------------------------------------------------------------------------
 def sort_json(path):
     """
-    Description:
-        Overwrites and sorts a JSON file to make it cleaner / more readable
+    Overwrites and sorts a JSON file to make it cleaner / more readable
     Args:
         path (str): Path to the JSON file
     Raises:

@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Contains useful decorators
+Contains useful decorators
 Functions:
     time_it: Times a function and prints its time in the console
 """

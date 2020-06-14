@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Functions to deal with threads
+Functions to deal with threads
 Classes:
     BasicThread: Basic thread class to use threads with an action attribute
 Functions:
@@ -45,8 +43,7 @@ class BasicThread(Thread):
 # --------------------------------------------------------------------------------
 def run_all_threads(threads):
     """
-    Description:
-        Runs all the generated threads at once, and then joins them
+    Runs all the generated threads at once, and then joins them
     Args:
         threads (list): List of Thread instances we want to run
     """

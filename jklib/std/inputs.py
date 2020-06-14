@@ -1,7 +1,5 @@
-# coding: utf-8
 """
-Description:
-    Contains utility function around the "input" mechanic
+Contains utility functions around the "input" mechanic
 Functions:
     choose_from_dict: The user must choose a value by inputting the associated key
     input_must_match_regex: The user must type an input that matches a regex. Return his input
@@ -18,8 +16,7 @@ import re
 # --------------------------------------------------------------------------------
 def choose_from_dict(**kwargs):
     """
-    Description:
-        The user must choose a value by inputting the associated key
+    The user must choose a value by inputting the associated key
     Args:
         **kwargs (str): param names will be the accepted inputs
     Returns:
@@ -44,8 +41,7 @@ def choose_from_dict(**kwargs):
 
 def input_must_match_regex(regex, error_message):
     """
-    Description:
-        The user must type an input that matches a regex. Return his input
+    The user must type an input that matches a regex. Return his input
     Args:
         regex (regex): Regular expression object
         error_message (str): The error message that must be displayed
@@ -62,7 +58,11 @@ def input_must_match_regex(regex, error_message):
 
 
 def yes_or_no():
-    """The user must answer with Y or N. Returns a bool"""
+    """
+    The user must answer with Y or N. Returns a bool
+    Returns:
+        (bool) The answer in boolean format
+    """
     answer = None
     while answer is None:
         answer = input().upper()
