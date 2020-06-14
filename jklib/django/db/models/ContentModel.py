@@ -19,7 +19,7 @@ class ContentModel(models.Model):
     # Fields
     # ----------------------------------------
     active = ActiveField()
-    create_at = DateCreatedField()
+    created_at = DateCreatedField()
     updated_at = DateUpdatedField()
 
     # ----------------------------------------
