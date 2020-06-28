@@ -2,8 +2,8 @@
 
 
 # Local
-from .BlockAll import BlockAll
-from .IsNotAuthenticated import IsNotAuthenticated
-from .IsNotVerified import IsNotVerified
-from .IsObjectOwner import IsObjectOwner
-from .IsVerified import IsVerified
+from .block_all import BlockAll
+from .is_not_authenticated import IsNotAuthenticated
+from .is_not_verified import IsNotVerified
+from .is_object_owner import IsObjectOwner
+from .is_verified import IsVerified

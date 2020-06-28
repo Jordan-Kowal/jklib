@@ -1,5 +1,5 @@
 """Centralizes the serializer classes for easier imports"""
 
 # Local
-from .NotEmptySerializer import NotEmptySerializer
-from .OnlyActiveSerializer import OnlyActiveSerializer
+from .not_empty_serializer import NotEmptySerializer
+from .only_active_serializer import OnlyActiveSerializer

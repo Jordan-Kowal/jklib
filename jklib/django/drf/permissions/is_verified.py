@@ -16,6 +16,6 @@ class IsVerified(permissions.BasePermission):
         if not user.is_authenticated:
             return False
         profile = user.profile
-        if not profile.verified:
+        if not profile.is_verified:
             return False
         return True

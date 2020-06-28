@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-class ShowAsBrowsableMixin:
+class BrowsableMixin:
     """
     Explicitly blocks the "list" action to show the ViewSet in the browsable API
     (To be in the browsable API, a ViewSet must have either create() or list())

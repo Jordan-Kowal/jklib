@@ -3,7 +3,7 @@
 
 # Local
 from ..mixins import ModelMixin
-from .DynamicViewSet import DynamicViewSet
+from .dynamic_viewset import DynamicViewSet
 
 
 class DynamicModelViewSet(DynamicViewSet, ModelMixin):

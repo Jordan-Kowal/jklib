@@ -1,4 +1,4 @@
 """Centralizes the pagination classes for easier imports"""
 
 # Local
-from .BasicPagination import BasicPagination
+from .basic_pagination import BasicPagination

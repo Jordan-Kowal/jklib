@@ -1,8 +1,5 @@
-"""ModelWithImage"""
+"""Model classes and mixins for Django"""
 
-
-# Django
-from django.db import models
 
 # Personal
 from jklib.std.files import get_size
@@ -11,19 +8,8 @@ from jklib.std.files import get_size
 from ...utils.images import get_image_dimensions, image_as_html
 
 
-class ModelWithImage(models.Model):
-    """
-    Abstract model that provides 3 dynamic properties for the "image" field
-    It should be used whenever a model has an ImageField
-    """
-
-    # ----------------------------------------
-    # META, str, save, get_absolute_url
-    # ----------------------------------------
-    class Meta:
-        """Metadata to configure our model in the database"""
-
-        abstract = True
+class WithImageMixin:
+    """Model mixin that provides custom property for a field named "image"""
 
     # ----------------------------------------
     # Custom Properties

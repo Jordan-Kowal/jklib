@@ -17,23 +17,23 @@ from .settings import get_config
 # --------------------------------------------------------------------------------
 # > Content
 # --------------------------------------------------------------------------------
-def build_url(relative_url, params):
+def build_url(root_url, relative_url, params):
     """
     Builds a complete URL using the current host, a relative URL, and GET params
     Args:
+        root_url (str): Root URL, usually from the reverse() function
         relative_url (str): Relative URL, usually from the reverse() function
         params (dict): Contains list of GET parameters
     Returns:
         (str) The complete URL
     """
-    domain = get_server_domain()
     if len(params) > 0:
         serialized_params = "?"
         for key, value in params.items():
             serialized_params += f"{key}={value}&"
         serialized_params = serialized_params[:-1]
         relative_url += serialized_params
-    complete_url = urljoin(domain, relative_url)
+    complete_url = urljoin(root_url, relative_url)
     return complete_url
 
 

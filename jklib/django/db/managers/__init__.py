@@ -2,4 +2,4 @@
 
 
 # Local
-from .NoBulkCreateManager import NoBulkCreateManager
+from .no_bulk_create_manager import NoBulkCreateManager

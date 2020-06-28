@@ -2,5 +2,5 @@
 
 
 # Local
-from .ContentModel import ContentModel
-from .ModelWithImage import ModelWithImage
+from .life_cycle_mixin import LifeCycleMixin
+from .with_image_mixin import WithImageMixin

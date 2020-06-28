@@ -5,7 +5,7 @@
 from django.db import models
 
 
-def NotEmptyCharField(*args, **kwargs):
+def RequiredCharField(*args, **kwargs):
     """
     Custom Charfield that cannot be null nor an empty string
     Returns:
