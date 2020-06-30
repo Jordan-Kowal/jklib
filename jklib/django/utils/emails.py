@@ -1,5 +1,5 @@
 """
-Contains useful functions for handling emails in Django
+Contains useful functions for handling emails in django
 Functions:
     extract_email_addresses: Returns a list of emails from either a string or a list
     get_css_content: Returns the content of a css file (AVOID using " or ' in the file)
@@ -51,7 +51,7 @@ def send_html_email(subject, body, to=None, cc=None, sender=None):
         body (str): Body/Content of the email
         to ([str, list], optional): List or comma-separated string of emails. Defaults to None.
         cc ([str, list], optional): List or comma-separated string of emails. Defaults to None.
-        sender (str, optional): The sender. Defaults to Django configuration.
+        sender (str, optional): The sender. Defaults to django configuration.
     """
     to = extract_email_addresses(to)
     cc = extract_email_addresses(cc)

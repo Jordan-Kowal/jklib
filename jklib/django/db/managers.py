@@ -1,10 +1,13 @@
-"""NoBulkCreateManager"""
+"""Classes and mixins for django managers"""
 
 
 # Django
 from django.db import models
 
 
+# --------------------------------------------------------------------------------
+# > Managers
+# --------------------------------------------------------------------------------
 class NoBulkCreateManager(models.Manager):
     """Prevents the use of the bulk_create method"""
 

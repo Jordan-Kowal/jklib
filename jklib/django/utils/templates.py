@@ -1,5 +1,5 @@
 """
-Contains useful functions for templating in Django
+Contains useful functions for templating in django
 Functions:
     render_template: Renders an HTML page using a given template and a given context
 """

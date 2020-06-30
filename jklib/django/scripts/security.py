@@ -1,5 +1,5 @@
 """
-Useful scripts for Django
+Useful scripts for django
 Functions:
     generate_secret_key: Creates a string usable as a "Secret key" using django crypto module
 """

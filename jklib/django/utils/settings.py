@@ -1,5 +1,5 @@
 """
-Contains useful functions for interacting with Django settings
+Contains useful functions for interacting with django settings
 Functions:
     get_config: Tries to get the data from django settings, or returns the default value
 """

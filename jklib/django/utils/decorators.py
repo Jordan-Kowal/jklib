@@ -1,5 +1,5 @@
 """
-Contains useful decorators for Django
+Contains useful decorators for django
 Functions:
     render_to: Decorator that renders a django view to a specific template
 """

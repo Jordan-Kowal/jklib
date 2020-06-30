@@ -59,7 +59,7 @@ def image_as_html(image_field, max_width=300, max_height=300):
         max_width (int, optional): Maximum display width. Defaults to 300.
         max_height (int, optional): Maximum display height. Defaults to 300.
     Returns:
-        (str) HTML string marked as safe for Django
+        (str) HTML string marked as safe for django
     """
     html = ""
     relative_path = image_field.name

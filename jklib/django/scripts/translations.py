@@ -1,5 +1,5 @@
 """
-Scripts for handling translations within Django
+Scripts for handling translations within django
 Functions:
     update_translations: Updates the translations for the given languages
 """

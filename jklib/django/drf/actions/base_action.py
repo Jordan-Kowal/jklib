@@ -30,7 +30,7 @@ class BaseAction:
         Initialize the instance  and sets up its attributes for later use
         Args:
             viewset (Viewset): Viewset object from DRF
-            request (HttpRequest): Request object from Django
+            request (HttpRequest): Request object from django
             *args (*): Any additional arg(s)
             **kwargs (*): Any additional kwarg(s)
         """

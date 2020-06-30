@@ -1,11 +1,23 @@
-"""Model classes and mixins for Django"""
+"""Classes and mixins for django models"""
 
-
-# Personal
-from jklib.std.files import get_size
 
 # Local
-from ...utils.images import get_image_dimensions, image_as_html
+from ...std.files import get_size
+from ..utils.images import get_image_dimensions, image_as_html
+from .fields import DateCreatedField, DateUpdatedField
+
+
+# --------------------------------------------------------------------------------
+# > Models
+# --------------------------------------------------------------------------------
+class LifeCycleMixin:
+    """Model mixin that provides lifecycle fields for creation and update"""
+
+    # ----------------------------------------
+    # Fields
+    # ----------------------------------------
+    created_at = DateCreatedField()
+    updated_at = DateUpdatedField()
 
 
 class WithImageMixin:
@@ -17,8 +29,8 @@ class WithImageMixin:
     def image_dimensions(self):
         """
         Gets the dimensions of the image, either as a string or a tuple
-        Returns:
-            (str|tuple) Dimensions of the image
+        :return: Dimensions of the image
+        :rtype: str or tuple
         """
         return get_image_dimensions(self.image.path)
 
@@ -27,8 +39,8 @@ class WithImageMixin:
     def image_size(self):
         """
         Returns the size of the image as KB
-        Returns:
-            (str) Image size with KB units
+        :return: Size of the image in KB
+        :rtype: str
         """
         size = get_size(self.image.path)
         message = f"{size} KB"
@@ -39,8 +51,8 @@ class WithImageMixin:
     def view_image(self):
         """
         Returns HTML code to display the image in a web browser
-        Returns:
-            (str) HTML snippet to display the image
+        :return: HTML code snippet to display the image
+        :rtype: str
         """
         return image_as_html(self.image)
 

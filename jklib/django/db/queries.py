@@ -2,13 +2,9 @@
 Contains utility functions for making queries in the database
 Useful for filtering, sorting, and ordering the data
 
-Simple Getters:
-    get_object_or_none: Tries to get an object in the database, or returns None
-    get_object_or_this: Tries to get an object in the database, or return 'this'
-
-Advanced Queries:
-    filter_on_text: Filters a queryset by searching for a text value in different fields, using OR logic
-    single_sort_by: Orders and returns the queryset using the GET parameters of a request
+Split into sub-categories:
+    Simple Getters: Shortcut to get an object
+    Advanced Queries: Getters with several parameters and improved searches
 """
 
 
@@ -22,12 +18,11 @@ from django.db.models import Q
 def get_object_or_none(model, *args, **kwargs):
     """
     Tries to get an object in the database, or returns None
-    Args:
-        model (Model): The class model from django you want to query
-        *args: Args that will be passed to model.objects.get()
-        **kwargs: Kwargs that will be passed to model.objects.get()
-    Returns:
-        (*) A model instance or None
+    :param Model model: The class model from django you want to query
+    :param args: Args that will be passed to model.objects.get()
+    :param kwargs: Kwargs that will be passed to model.objects.get()
+    :return: Either the model instance or None
+    :rtype: Model or None
     """
     try:
         item = model.objects.get(*args, **kwargs)
@@ -36,20 +31,19 @@ def get_object_or_none(model, *args, **kwargs):
     return item
 
 
-def get_object_or_this(model, this=None, *args, **kwargs):
+def get_object_or_this(model, default=None, *args, **kwargs):
     """
     Tries to get an object in the database, or return 'this'
-    Args:
-        model (Model): The class model from django you want to query
-        this (*): The alternative value if the object is not found. Defaults to None
-        *args: Args that will be passed to model.objects.get()
-        **kwargs: Kwargs that will be passed to model.objects.get()
-    Returns:
-        (*) A model instance or 'this'
+    :param Model model: The class model from django you want to query
+    :param default: The value returned if the model is not found
+    :param args: Args that will be passed to model.objects.get()
+    :param kwargs: Kwargs that will be passed to model.objects.get()
+    :return: Either the model instance or the default value
+    :rtype: Model or *
     """
     obj = get_object_or_none(model, *args, **kwargs)
     if obj is None:
-        return this
+        return default
     return obj
 
 
@@ -71,13 +65,13 @@ def get_object_or_this(model, this=None, *args, **kwargs):
 def filter_on_text(queryset, searched_text, min_length, *fields):
     """
     Filters a queryset by searching for a text value in different fields, using OR logic
-    Args:
-        queryset (queryset): A queryset object from a django model
-        searched_text (str): The text we are looking for
-        min_length (int): The query will execute only if "search_text" length is equal or greater than this
-        *fields (list of str): Fields where the text will be searched (SYNTAX: client.name becomes client__name)
-    Returns:
-        (queryset) The filtered and updated queryset
+    :param queryset queryset: A queryset object from a django model which will be our starting point
+    :param str searched_text: The text we are looking for
+    :param int min_length: The query will execute only if "search_text" length is equal or greater than this
+    :param fields: Fields where the text will be searched (SYNTAX: client.name becomes client__name)
+    :type fields: list or str
+    :return: The filtered and updated queryset
+    :rtype: queryset
     """
     if len(searched_text) >= min_length:
         q = Q()
@@ -94,11 +88,10 @@ def single_sort_by(queryset, params):
     """
     Orders and returns the queryset using the GET parameters of a request
     The function takes care of checking if the "sort_by" key exists in the dict
-    Args:
-        queryset (queryset): A queryset object from a django model
-        params (dict): Dict containing the request params
-    Returns:
-        (queryset) The sorted and updated queryset
+    :param queryset queryset: A queryset object from a django model
+    :param dict params: Dict containing the request params
+    :return: The sorted and updated queryset
+    :rtype: queryset
     """
     sort_by = params.get("sort_by", None)
     if sort_by:
