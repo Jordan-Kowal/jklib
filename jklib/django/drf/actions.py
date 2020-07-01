@@ -1,4 +1,4 @@
-"""BaseAction"""
+"""Classes to make building actions/endpoints in DRF easier"""
 
 
 # Django
@@ -6,7 +6,7 @@ from rest_framework import exceptions
 
 
 # --------------------------------------------------------------------------------
-# > Classes
+# > Actions
 # --------------------------------------------------------------------------------
 class BaseAction:
     """
@@ -28,11 +28,10 @@ class BaseAction:
     def __init__(self, viewset, request, *args, **kwargs):
         """
         Initialize the instance  and sets up its attributes for later use
-        Args:
-            viewset (Viewset): Viewset object from DRF
-            request (HttpRequest): Request object from django
-            *args (*): Any additional arg(s)
-            **kwargs (*): Any additional kwarg(s)
+        :param ViewSet viewset: Viewset from DRF where our action will take place
+        :param HttpRequest request: The request object from django that called our action
+        :param args: Additional args automatically passed to our action
+        :param kwargs: Additional kwargs automatically passed to our action
         """
         # Storing args
         self.viewset = viewset
@@ -48,8 +47,8 @@ class BaseAction:
         """
         Process the service request by calling the appropriate method
         It will look for a function matching the [method] name and will default to the "main" function
-        Returns:
-            (HttpResponse): Response from DRF
+        :return: Response instance from DRF, containing our results
+        :rtype: Response
         """
         action_to_run = getattr(self, self.method, self.main)
         return action_to_run()
@@ -57,10 +56,8 @@ class BaseAction:
     def run_action_from_super_view(self, action_name):
         """
         Calls an action from the parent viewset with the initial arguments
-        Args:
-            action_name (str): Name of the method to call
-        Returns:
-            (*) The results from the function call
+        :param str action_name: Name of the method to call from the parent viewset
+        :return: The results from the parent function we called
         """
         parent_viewset_action = getattr(self.super_view(), action_name)
         return parent_viewset_action(self.request, *self.args, **self.kwargs)
@@ -68,8 +65,8 @@ class BaseAction:
     def super_view(self):
         """
         Equivalent to calling super() on the viewset
-        Returns:
-            (Viewset) The parent class of the viewset
+        :return: The parent class of the viewset
+        :rtype: ViewSet
         """
         return super(type(self.viewset), self.viewset)
 
