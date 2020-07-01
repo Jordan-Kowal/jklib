@@ -1,10 +1,4 @@
-"""
-Contains useful functions for network management within django
-Functions:
-    build_url: Builds a complete URL using the current host, a relative URL, and GET params
-    get_client_ip: Returns the IP address of the current user
-    get_server_domain: Returns the server domain/url
-"""
+"""Functions for network management within django"""
 
 
 # Built-in
@@ -15,17 +9,16 @@ from .settings import get_config
 
 
 # --------------------------------------------------------------------------------
-# > Content
+# > Functions
 # --------------------------------------------------------------------------------
 def build_url(root_url, relative_url, params):
     """
     Builds a complete URL using the current host, a relative URL, and GET params
-    Args:
-        root_url (str): Root URL, usually from the reverse() function
-        relative_url (str): Relative URL, usually from the reverse() function
-        params (dict): Contains list of GET parameters
-    Returns:
-        (str) The complete URL
+    :param str root_url: Root URL, usually from the reverse() function
+    :param str relative_url: Relative URL, usually from the reverse() function
+    :param dict params: Contains the get parameters
+    :return: The computed URL
+    :rtype: str
     """
     if len(params) > 0:
         serialized_params = "?"
@@ -41,10 +34,9 @@ def get_client_ip(request):
     """
     Returns the IP address of the current user
     Based on the environment, the address can be different thing: FORWARDED_FOR, REAL_IP, REMOTE_ADDR
-    Args:
-        request (HttpRequest): HttpRequest from django
-    Returns:
-        (str) The IP address as string
+    :param request: HttpRequest from django
+    :return: The user's IP address
+    :rtype: str
     """
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
@@ -60,7 +52,11 @@ def get_client_ip(request):
 
 
 def get_server_domain():
-    """Returns the server domain/url"""
+    """
+    Fetches the django server address from the settings
+    :return: The server domain/url
+    :rtype: str
+    """
     hosts = get_config("ALLOWED_HOSTS")
     domain = hosts[0] if hosts else "http://127.0.0.1:8000/"
     return domain

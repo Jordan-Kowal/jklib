@@ -1,8 +1,4 @@
-"""
-Contains useful functions for templating in django
-Functions:
-    render_template: Renders an HTML page using a given template and a given context
-"""
+"""Functions for managing templates in django"""
 
 
 # Django
@@ -15,11 +11,10 @@ from django.template import loader
 def render_template(template_path, context):
     """
     Renders an HTML page using a given template and a given context
-    Args:
-        template_path (str): path to the template (app/template_name)
-        context (dict): dict to be used as context
-    Returns:
-        (str) String containing the dynamically-generated HTML
+    :param str template_path: Path to the template (app/template_name)
+    :param dict context: The context values
+    :return: The dynamically-generated HTML
+    :rtype: str
     """
     template = loader.get_template(template_path)
     rendered = template.render(context)

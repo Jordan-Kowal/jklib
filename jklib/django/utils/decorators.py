@@ -1,8 +1,4 @@
-"""
-Contains useful decorators for django
-Functions:
-    render_to: Decorator that renders a django view to a specific template
-"""
+"""Decorators for django"""
 
 
 # Django
@@ -17,10 +13,9 @@ def render_to(template):
     """
     Decorator that renders a django view to a specific template
     Functions using the decorator must simply return the context dict
-    Args:
-        template (str): The template path
-    Returns:
-        (HttpResponse) Renders the page with the given template and context
+    :param template: The django path to our template
+    :return: Our rendered template in a HttpResponse
+    :rtype: HttpResponse
     """
 
     def renderer(function):
