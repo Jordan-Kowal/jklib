@@ -1,4 +1,4 @@
-"""Functions for managing image files, mostly through the "pillow" library"""
+"""Functions for managing image files, mostly through the pillow/PIL library"""
 
 
 # Django
