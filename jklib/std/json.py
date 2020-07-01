@@ -1,8 +1,4 @@
-"""
-Contains useful functions for managing JSON files.
-Functions:
-    sort_json: Overwrites and sorts a JSON file to make it cleaner / more readable
-"""
+"""Utility functions for working with JSON files"""
 
 
 # Built-in
@@ -16,10 +12,8 @@ import os
 def sort_json(path):
     """
     Overwrites and sorts a JSON file to make it cleaner / more readable
-    Args:
-        path (str): Path to the JSON file
-    Raises:
-        TypeError: The 'path' must lead to a JSON file
+    :param path: Path to the JSON file
+    :raises TypeError: If the given path does not exist
     """
     ext = os.path.splitext(path)[1]
     if ext != ".json":

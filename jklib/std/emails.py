@@ -1,13 +1,4 @@
-"""
-Functions to easily work with emails and email servers
-Functions:
-    attach_pdfs: Attaches our files to our EmailMessage instance (only if they are PDF or images)
-    choose_smtp_class: Choose the right SMTP class to connect to the server based on the given port
-    connect_without_ssl: Tries to connect to the smtp server without SSL, using TLS or not security protocol at all
-    create_message: Creates and returns an EmailMessage instance
-    email_auth: Authenticates with the server, using either SSL, TLS, or no security protocol
-    get_template: Gets the HTML template and replaces patterns in a "template-like" manner
-"""
+"""Utility functions to deal with emails"""
 
 
 # Built-in
@@ -22,11 +13,10 @@ from email.message import EmailMessage
 def attach_files(message, path):
     """
     Attaches our files to our EmailMessage instance (only if they are PDF or images)
-    Args:
-        message (EmailMessage): Our current EmailMessage instance
-        path (str): Path of the folder that contains our files
-    Returns:
-        (EmailMessage) The updated EmailMessage instance, now with files attached
+    :param EmailMessage message: Our current EmailMessage instance
+    :param str path: Path of the folder that contains our files
+    :return: The updated EmailMessage instance, now with files attached
+    :rtype: EmailMessage
     """
     files = [os.path.join(path, f) for f in os.listdir(path)]
     for file in files:
@@ -51,11 +41,10 @@ def attach_files(message, path):
 
 def choose_smtp_class(port):
     """
-    Choose the right SMTP class to connect to the server based on the given port
-    Args:
-        port (int): Port on which to connect
-    Returns:
-        (tuple) The correct SMTP class and a bool to indicate if we are in SSL
+    Chooses the right SMTP class to connect to the server based on the given port
+    :param int port: Port on which to connect
+    :return: The correct SMTP class and a bool to indicate if we are in SSL
+    :rtype: tuple(SMTP, bool)
     """
     if port == 465:
         smtp = smtplib.SMTP_SSL
@@ -69,8 +58,7 @@ def choose_smtp_class(port):
 def connect_without_ssl(server):
     """
     Tries to connect to the smtp server without SSL, using TLS or not security protocol at all
-    Args:
-        server (SMTP or SMTP_SSL): A type of smtp instance from smtplib
+    :param SMTP server: A type of smtp instance from smtplib
     """
     try:
         server.starttls()
@@ -84,8 +72,8 @@ def create_message():
     """
     Creates and returns an EmailMessage instance
     This is the email we will send at the end of the process
-    Returns:
-        (EmailMessage) A ready-to-send EmailMessage with information and attachments
+    :return: A ready-to-send EmailMessage with information and attachments
+    :rtype: EmailMessage
     """
     message = EmailMessage()
     message["Subject"] = ""
@@ -103,13 +91,12 @@ def create_message():
 
 def email_auth(server, ssl):
     """
-    Authenticates with the server, using either SSL, TLS, or no security protocol
-    Will return a bool indicating if authentification was successful
-    Args:
-        server (SMTP or SMTP_SSL): A type of smtp instance from smtplib
-        ssl (bool): Indicates whether we can use SSL
-    Returns:
-        (bool) Indicates whether the authentification was successful
+     Authenticates with the server, using either SSL, TLS, or no security protocol
+     Will return a bool indicating if authentification was successful
+    :param SMTP server: A type of smtp instance from smtplib
+    :param bool ssl: Indicates whether we can use SSL
+    :return: Whether the authentification was successful
+    :rtype: bool
     """
     if not ssl:
         connect_without_ssl(server)
@@ -127,11 +114,9 @@ def email_auth(server, ssl):
 def get_template(path):
     """
     Gets the HTML template and replaces patterns in a "template-like" manner
-    Returns the updated HTML template
-    Args:
-        path (str): Path to the initial HTML template/file
-    Returns:
-        (str) The updated HTML content as string
+    :param str path: Path to the initial HTML template/file
+    :return: The updated HTML content as string
+    :rtype: str
     """
     with open(path, "r", encoding="utf-8") as f:
         f_content = f.read()

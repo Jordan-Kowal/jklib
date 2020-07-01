@@ -1,8 +1,4 @@
-"""
-Contains useful decorators
-Functions:
-    time_it: Times a function and prints its time in the console
-"""
+"""Generic decorators for various uses"""
 
 
 # Built-in
@@ -13,7 +9,7 @@ from time import perf_counter
 # > Functions
 # --------------------------------------------------------------------------------
 def time_it(function):
-    """Times a function and prints its time in the console"""
+    """Times a function and prints its runtime in the console"""
 
     def run_it(*args, **kwargs):
         time_before = perf_counter()
