@@ -122,6 +122,9 @@ class DynamicViewSet(viewsets.GenericViewSet):
         "destroy",
     ]
 
+    known_actions = {}
+    extra_actions = {}
+
     @classmethod
     def _create_actions_from_config(cls):
         """Dynamically creates and sets the ViewSet actions based on the class settings"""
@@ -139,7 +142,7 @@ class DynamicViewSet(viewsets.GenericViewSet):
         """
         for name, handler_class in cls.model_actions.items():
             # Check the reserved names
-            if name not in cls.MODEL_ACTION_NAMES:
+            if name not in cls.KNOWN_ACTION_NAMES:
                 raise ValueError(
                     f"Invalid known action name '{name}'. Must be one of: {', '.join(cls.KNOWN_ACTION_NAMES)}"
                 )
@@ -162,7 +165,7 @@ class DynamicViewSet(viewsets.GenericViewSet):
         """
         for action_name, action_settings in cls.extra_actions.items():
             # Check the reserved names
-            if action_name in cls.MODEL_ACTION_NAMES:
+            if action_name in cls.KNOWN_ACTION_NAMES:
                 raise ValueError(
                     f"Invalid configuration: '{action_name}' action should be in the known_actions, not extra_actions"
                 )
@@ -285,9 +288,9 @@ class DynamicViewSet(viewsets.GenericViewSet):
         :return:
         """
         if action_name in cls.KNOWN_ACTION_NAMES:
-            return cls.known_actions.get("action_name", None)
+            return cls.known_actions.get(action_name, None)
         else:
-            action_settings = cls.extra_actions.get("action_name", {})
+            action_settings = cls.extra_actions.get(action_name, {})
             return action_settings.get("handler", None)
 
 
