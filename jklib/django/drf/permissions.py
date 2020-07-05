@@ -73,3 +73,20 @@ class IsObjectOwner(BasePermission):
             return owner == user
         else:
             return obj == user
+
+
+class IsVerified(BasePermission):
+    """User must be authenticated but not yet verified"""
+
+    message = "Your account must be verified"
+
+    @staticmethod
+    def has_permission(request, view):
+        """Returns True if user is logged in and not verified"""
+        user = request.user
+        if not user.is_authenticated:
+            return False
+        profile = user.profile
+        if profile.is_verified:
+            return True
+        return False

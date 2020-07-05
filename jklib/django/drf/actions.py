@@ -4,26 +4,43 @@
 # Django
 from rest_framework import exceptions
 
+# Local
+from .permissions import BlockAll
+
 
 # --------------------------------------------------------------------------------
 # > Actions
 # --------------------------------------------------------------------------------
-class BaseAction:
+class ActionHandler:
     """
-    Class for easier handling of viewset actions
+    ---------- DESCRIPTION ----------
+    Custom class for processing action calls, and also provides more flexibility for action customization
+    This class must be used within the DynamicViewSet class we've created
 
-    THINGS TO KNOW:
-        You should call .run() to execute your action
-        That will look up and run the method with the same name as the action method (post, get, etc.)
-        If it doesn't exist, it will run .main()
+    Permissions and Serializers must be defined at the class level, respectively in 'permissions' and 'serializers'
+    Both can either directly contain the value, or be a dictionary with 1 value per method (get, post, ...)
 
-    HOW TO USE:
-        Create a new class that inherits from our Action class
-        Override the "main" method or create specific method(s) based on action methods (post, get, etc.)
-        Either way, that method should return a Response object (from DRF)
-        In the viewset, create a new action like you normally would
-        That action should simply returns YourActionClass.run()
+    To process the action, call the .run() method. It will either:
+        Call the [.get(), .post(), ...] function based on the action method
+        Fallback on the .main() function if none of the above is found
+
+    When initialized, the instance will store all the data from the request call, making it accessible at all times
+    Also provides utility with .super_view() and .run_action_from_super_view()
+
+    ---------- HOW TO SETUP ----------
+    Make sure to define the following elements:
+        permissions (direct or dict)
+        serializers (direct or dict)
+        [.get(), .post(), ...] if your action has several valid protocol/methods
+        .main() if your action has a single method
+
+    ---------- HOW TO USE: with DynamicViewSet ----------
+    Simply match your actions with your ActionHandler classes, as described in the DynamicViewSet documentation
+    The viewset will then take care of the rest
     """
+
+    permissions = (BlockAll,)
+    serializers = None
 
     def __init__(self, viewset, request, *args, **kwargs):
         """
