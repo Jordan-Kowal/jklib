@@ -1,6 +1,7 @@
 """
 Serializer and mixins classes for DRF
 Split into sub-categories:
+    Utility: Utility functions for serializers
     Mixins: Provide utility functions for serializers (but do not inherit from them)
     Serializers: Improved DRF serializers through custom mixins and utility functions
 """
@@ -9,6 +10,18 @@ Split into sub-categories:
 # Django
 from django.db.models import Q
 from rest_framework import serializers
+
+
+# --------------------------------------------------------------------------------
+# > Utility
+# --------------------------------------------------------------------------------
+def required():
+    """
+    To be used in a serializer's field customization. Makes the field mandatory
+    :return: Dict to set required, allow_blank, and allow_null to the right values
+    :rtype: dict
+    """
+    return {"required": True, "allow_blank": False, "allow_null": False}
 
 
 # --------------------------------------------------------------------------------

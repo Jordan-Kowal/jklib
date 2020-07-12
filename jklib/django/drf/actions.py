@@ -2,7 +2,7 @@
 
 
 # Django
-from rest_framework import exceptions
+from rest_framework.exceptions import MethodNotAllowed
 
 # Local
 from .permissions import BlockAll
@@ -90,4 +90,4 @@ class ActionHandler:
     @staticmethod
     def main():
         """Default function for the service processing"""
-        return exceptions.MethodNotAllowed()
+        return MethodNotAllowed()

@@ -7,11 +7,15 @@ Split into sub-categories:
 
 
 # Django
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
+from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED
+from rest_framework.viewsets import GenericViewSet
+
+# Personal
+from jklib.std.classes import is_subclass
 
 # Local
 from .permissions import BlockAll
@@ -36,7 +40,7 @@ class BrowsableMixin:
         :return: HTTP error with code 405 because this method has been blocked
         :rtype: Response
         """
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return Response(status=HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class ModelMixin(
@@ -54,7 +58,7 @@ class ModelMixin(
 # --------------------------------------------------------------------------------
 # > Viewsets
 # --------------------------------------------------------------------------------
-class DynamicViewSet(viewsets.GenericViewSet):
+class DynamicViewSet(GenericViewSet):
     """
     ---------- DESCRIPTION ----------
     Dynamic viewset that completely changes the way of writing DRF viewsets.
@@ -64,8 +68,8 @@ class DynamicViewSet(viewsets.GenericViewSet):
         Instead, you will provide 2 dictionaries with settings, and actions will be generated from them
         For each action, you'll have to declare its ActionHandler class
         The ActionHandler will take care of processing the request/response
-        Permissions and serializers will be fetched from the ActionHandler
-        They both can be set at the method level (post, get, etc.)
+        Permissions are declared at the ACTION level, in the viewset
+        Serializers are declared at the ENDPOINT (action+method) level, in the ActionHandler
 
     Basically, your viewset should only contain:
         'known_actions'   -->     Dict for configuring the DRF known actions
@@ -78,10 +82,16 @@ class DynamicViewSet(viewsets.GenericViewSet):
 
     ---------- SETUP: known_actions ----------
     'known_actions' are the 6 already-existing actions of DRF (create, retrieve, ...)
-    The dict should be a simple {name: handler} shape. Here's an example:
+    The dict should be a simple {name: {handler, permissions}} shape. Here's an example:
         {
-            "create": ActionHandler1,
-            "list": ActionHandler2,
+            "create": {
+                "handler": ActionHandler1,
+                "permissions": (MyPermission, )
+            }
+            "list": {
+                "handler": ActionHandler2,
+                "permissions": (MyPermission, )
+            }
         }
 
     ---------- SETUP: extra_actions ----------
@@ -90,10 +100,12 @@ class DynamicViewSet(viewsets.GenericViewSet):
         {
             "report": {
                 "handler": ActionHandler1,
+                "permissions": (MyPermission,)
                 "methods": ["post", "get"],
             },
             "postpone": {
                 "handler": ActionHandler2,
+                "permissions": (MyPermission,)
                 "methods": ["post",],
                 "url_path": "postponing",
                 "detail": True,
@@ -137,24 +149,16 @@ class DynamicViewSet(viewsets.GenericViewSet):
     def _create_known_actions_from_config(cls):
         """
         Dynamically creates and sets KNOWN actions based on the 'known_actions' attribute
-        Because these are KNOWN actions, we cannot use the @action decorator
         Please refer to the class docstring for more info on the 'known_actions' expected dict shape
+        We use a sub-function to register each individual action due to closure/scope issues
         """
-        for name, handler_class in cls.model_actions.items():
-            # Check the reserved names
+        for name, action_settings in cls.known_actions.items():
             if name not in cls.KNOWN_ACTION_NAMES:
                 raise ValueError(
                     f"Invalid known action name '{name}'. Must be one of: {', '.join(cls.KNOWN_ACTION_NAMES)}"
                 )
 
-            # Create the handler
-            def action_method(self, request, *args, **kwargs):
-                self.call_action_handler(handler_class)
-
-            # Register and configure the method for the router
-            setattr(cls, name, action_method)
-            registered_action = getattr(cls, name)
-            registered_action.__name__ = name
+            cls._register_known_action(name, action_settings)
 
     @classmethod
     def _create_extra_actions_from_config(cls):
@@ -162,101 +166,113 @@ class DynamicViewSet(viewsets.GenericViewSet):
         Dynamically creates and sets EXTRA actions based on the 'extra_actions' attribute
         Please refer to the class docstring for more info on the 'extra_actions' expected dict shape
         Each method must be configured with the right sub-attributes to match the DefaultRouter expectations
+        We use a sub-function to register each individual action due to closure/scope issues
         """
         for action_name, action_settings in cls.extra_actions.items():
-            # Check the reserved names
             if action_name in cls.KNOWN_ACTION_NAMES:
                 raise ValueError(
                     f"Invalid configuration: '{action_name}' action should be in the known_actions, not extra_actions"
                 )
+            cls._register_extra_action(action_name, action_settings)
 
-            # Prepare the @action decorator
-            action_params = {
-                "name": action_name,
-                "url_name": action_settings.get("url_name", action_name),
-                "url_path": action_settings.get("url_path", None),
-                "methods": action_settings.get("methods", None),
-                "detail": action_settings.get("detail", False),
-            }
+    @classmethod
+    def _register_known_action(cls, name, action_settings):
+        """Registers an known action and setups its attributes"""
+        detail = (
+            True
+            if name in {"retrieve", "update", "partial_update", "delete"}
+            else False
+        )
 
-            # Create the handler
-            @action(**action_params)
-            def action_method(self, request, *args, **kwargs):
-                handler_class = action_settings["handler"]
-                self.call_action_handler(handler_class)
+        """Registers a known action, therefore skipping the @action decorator"""
 
-            # Register and configure the method for the router
-            setattr(cls, action_name, action_method)
-            registered_action = getattr(cls, action_name)
-            registered_action.__name__ = action_name
-            registered_action.mapping = {}
-            for method in action_params["methods"]:
-                registered_action.mapping[method] = action_name
+        def action_method(self, request, *args, **kwargs):
+            return self.call_action_handler(action_settings["handler"])
+
+        setattr(cls, name, action_method)
+        registered_action = getattr(cls, name)
+        registered_action.permissions = action_settings.get("permissions", (BlockAll,))
+        registered_action.detail = detail
+        registered_action.__name__ = name
+
+    @classmethod
+    def _register_extra_action(cls, action_name, action_settings):
+        """Registers an extra action using the @action decorator and setups its attributes"""
+        # Prepare the action decorator
+        detail = action_settings.get("detail", False)
+        decorator_kwargs = {
+            "name": action_name,
+            "url_name": action_settings.get("url_name", action_name),
+            "url_path": action_settings.get("url_path", None),
+            "methods": action_settings.get("methods", None),
+            "detail": detail,
+        }
+
+        # Create the handler
+        @action(**decorator_kwargs)
+        def action_method(self, request, *args, **kwargs):
+            handler_class = action_settings["handler"]
+            return self.call_action_handler(handler_class)
+
+        # Register and configure the method for the router
+        setattr(cls, action_name, action_method)
+        registered_action = getattr(cls, action_name)
+        registered_action.__name__ = action_name
+        registered_action.mapping = {}
+        registered_action.detail = detail
+        registered_action.permissions = action_settings.get("permissions", (BlockAll,))
+        for method in decorator_kwargs["methods"]:
+            registered_action.mapping[method] = action_name
 
     # --------------------------------------------------------------------------------
     # > For action calls
     # --------------------------------------------------------------------------------
+    def check_permissions(self, request):
+        """
+        Checks the permissions associated to our action
+        An extra check has been added based on whether a permission is limited to "detail" actions
+        """
+        action_method = getattr(self, self.action)
+        for permission in self.get_permissions():
+            # Detail-only permissions cannot access non-detail actions
+            if not action_method.detail and permission.detail_only:
+                self.permission_denied(
+                    request, message=getattr(permission, "message", None)
+                )
+            # Otherwise, check the permission
+            elif not permission.has_permission(request, self):
+                self.permission_denied(
+                    request, message=getattr(permission, "message", None)
+                )
+
     def get_permissions(self):
         """
-        Overridden to dynamically get the permission list based on the action and the method
-        It will be retrieved from the corresponding ActionHandler class, in its 'permissions' attribute.
-        It can either be:
-            permissions = (Permission1, ...)
-            permissions = {'get': (Permission1, ...), 'post': (Permission1, ...), ...}
-        Only valid permission classes will be returned, and it defaults to [BlockAll()]
+        Overridden to dynamically get the permission list based on the action called
+        The action should have an attribute named 'permissions' that returns the list of permission classes
         :return: List of permission instances for our action
         :rtype: list(Permission)
         """
-        default_permission = BlockAll
-
-        # If no handler, we block all incoming traffic
-        handler_class = self._get_handler_class(self.action)
-        if handler_class is None:
-            return [default_permission()]
-
-        # Fetch the permissions
-        permissions = getattr(handler_class, "permissions", [default_permission])
-        if type(permissions) in [list, tuple]:
-            pass
-        elif type(permissions) == dict:
-            method = self.method.lower()
-            permissions = permissions.get(method, [default_permission])
-        else:
-            permissions = [default_permission]
-
-        # Keep only actual Permission classes
-        valid_permissions = [
-            cls for cls in permissions if issubclass(cls, BasePermission)
-        ]
-        if len(valid_permissions) == 0:
-            return [default_permission()]
-        return [permission() for permission in valid_permissions]
+        handler = getattr(self, self.action)
+        if not handler.permissions:
+            return [BlockAll()]
+        return [permission() for permission in handler.permissions]
 
     def get_serializer_class(self):
         """
         Overridden to dynamically get the permission list based on the action and the method
         It will be retrieved from the corresponding ActionHandler class, in its 'serializers' attribute.
-            serializers = Serializer1
-            serializers = {'get': Serializer1, 'post': Serializer2, ...}
-        If no serializer class is found, returns None
+            serializer = Serializer1
+            serializer = {'get': Serializer1, 'post': Serializer2, ...}
         :return: Serializer class attached for our action
         :rtype: Serializer or None
         """
-        # If no handler, we block all incoming traffic
         handler_class = self._get_handler_class(self.action)
-        if handler_class is None:
-            return None
-
-        # Fetch the serializer
         serializer = handler_class.serializer
         if type(serializer) == dict:
             method = self.method.lower()
-            serializer = serializer.get(method, None)
-
-        # Check if it is an actual serializer
-        if issubclass(serializer, BaseSerializer):
+            return serializer.get(method, None)
+        if is_subclass(serializer, BaseSerializer):
             return serializer
-        return None
 
     def get_valid_serializer(self, *args, **kwargs):
         """
@@ -284,14 +300,17 @@ class DynamicViewSet(viewsets.GenericViewSet):
     @classmethod
     def _get_handler_class(cls, action_name):
         """
-        Fetches the ActionHandler class attached to our action, base on the viewset settings
-        :return:
+        Fetches the ActionHandler class attached to our endpoind (action+method), based on the viewset settings
+        :return: The ActionHandler for this endpoint
+        :rtype: ActionHandler
         """
-        if action_name in cls.KNOWN_ACTION_NAMES:
-            return cls.known_actions.get(action_name, None)
-        else:
-            action_settings = cls.extra_actions.get(action_name, {})
-            return action_settings.get("handler", None)
+        attribute = (
+            "known_actions"
+            if action_name in cls.KNOWN_ACTION_NAMES
+            else "extra_actions"
+        )
+        settings = getattr(cls, attribute).get(action_name, {})
+        return settings["handler"]
 
 
 class DynamicModelViewSet(DynamicViewSet, ModelMixin):
