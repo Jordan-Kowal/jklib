@@ -3,9 +3,8 @@
 
 # Django
 from rest_framework.exceptions import MethodNotAllowed
-
-# Local
-from .permissions import BlockAll
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 
 # --------------------------------------------------------------------------------
@@ -39,8 +38,7 @@ class ActionHandler:
     The viewset will then take care of the rest
     """
 
-    permissions = (BlockAll,)
-    serializers = None
+    serializer = None
 
     def __init__(self, viewset, request, *args, **kwargs):
         """
@@ -91,3 +89,104 @@ class ActionHandler:
     def main():
         """Default function for the service processing"""
         return MethodNotAllowed()
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Shortcut to get the serializer from the viewset
+        :return: The serializer attached to our current action
+        :rtype: Serializer
+        """
+        return self.viewset.get_serializer(*args, **kwargs)
+
+    def get_valid_serializer(self, *args, **kwargs):
+        """
+        Shortcut to get and validate the serializer from the viewset
+        :return: The validated serializer attached to our current action
+        :rtype: Serializer
+        """
+        return self.viewset.get_valid_serializer(*args, **kwargs)
+
+
+class ModelActionHandler(ActionHandler):
+    """
+    Extension of ActionHandler that provides utility for Model-related viewset actions
+    Includes all the CRUD functions equivalent to the DRF viewset model mixins
+    """
+
+    def get_object(self):
+        """
+        Shortcut to fetch an model instance
+        :return: A Django instance model
+        :rtype: Model
+        """
+        return self.viewset.get_object()
+
+    def model_create(self):
+        """
+        Creates and saves a model instance
+        :return: A JSON response with 200 status code and the serializer data
+        :rtype: Response
+        """
+        serializer = self.get_valid_serializer(data=self.data)
+        serializer.save()
+        return Response(serializer.data, status=HTTP_201_CREATED)
+
+    def model_retrieve(self):
+        """
+        Fetches a single model instance based on the provided serializer
+        :return: A JSON response with 200 status code and the serializer data
+        :rtype: Response
+        """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def model_list(self):
+        """
+        Fetches, filters, paginates, and returns a list of instances for a given model
+        :return: A JSON response with 200 status code and the serializer data
+        :rtype: Response
+        """
+        viewset = self.viewset
+        queryset = viewset.filter_queryset(viewset.get_queryset())
+        page = viewset.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return viewset.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def model_update(self):
+        """
+        Updates and saves a model instance using the provided serializer
+        :return: A JSON response with 200 status code and the serializer data
+        :rtype: Response
+        """
+        partial = self.kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=self.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        # Invalidate the pre-fetched cache if it had been applied
+        if getattr(instance, "_prefetched_objects_cache", None):
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def model_partial_update(self):
+        """
+        Sets the 'partial' kwarg to partial before calling the .model_update() method
+        :return: A JSON response with 200 status code and the serializer data
+        :rtype: Response
+        """
+        self.kwargs["partial"] = True
+        return self.model_update()
+
+    def model_destroy(self):
+        """
+        Deletes a model instance from the database
+        :return: A JSON response with 204 status code and no data
+        :rtype: Response
+        """
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
