@@ -269,7 +269,7 @@ class DynamicViewSet(GenericViewSet):
         handler_class = self._get_handler_class(self.action)
         serializer = handler_class.serializer
         if type(serializer) == dict:
-            method = self.method.lower()
+            method = self.request.method.lower()
             return serializer.get(method, None)
         if is_subclass(serializer, BaseSerializer):
             return serializer
