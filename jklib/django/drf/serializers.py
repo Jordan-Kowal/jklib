@@ -34,7 +34,7 @@ class NotEmptyMixin:
     def validate(validated_data):
         """Raises an error if validated_data is empty"""
         if not validated_data:
-            message = "Aucune donnée n'a été fournie"
+            message = "No data was provided"
             raise serializers.ValidationError(message)
         return validated_data
 
@@ -42,6 +42,18 @@ class NotEmptyMixin:
 # --------------------------------------------------------------------------------
 # > Serializers
 # --------------------------------------------------------------------------------
+class NotEmptySerializer(NotEmptyMixin, serializers.Serializer):
+    """Serializer whose request payload cannot be empty"""
+
+    pass
+
+
+class NotEmptyModelSerializer(NotEmptyMixin, serializers.ModelSerializer):
+    """ModelSerializer whose request payload cannot be empty"""
+
+    pass
+
+
 class ImprovedSerializer(serializers.Serializer):
     """Improved version of the DRF Serializer class with utility functions"""
 

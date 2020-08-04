@@ -229,21 +229,13 @@ class DynamicViewSet(GenericViewSet):
     # --------------------------------------------------------------------------------
     def check_permissions(self, request):
         """
-        Checks the permissions associated to our action
-        An extra check has been added based on whether a permission is limited to "detail" actions
+        Adds the 'is_detail_action' boolean to the request before checking the permissions
+        Useful for our custom permissions that may be restricted to "detail" actions
+        :param Request request: The request object from the API call
         """
         action_method = getattr(self, self.action)
-        for permission in self.get_permissions():
-            # Detail-only permissions cannot access non-detail actions
-            if not action_method.detail and permission.detail_only:
-                self.permission_denied(
-                    request, message=getattr(permission, "message", None)
-                )
-            # Otherwise, check the permission
-            elif not permission.has_permission(request, self):
-                self.permission_denied(
-                    request, message=getattr(permission, "message", None)
-                )
+        request.is_detail_action = action_method.detail
+        super().check_permissions(request)
 
     def get_permissions(self):
         """

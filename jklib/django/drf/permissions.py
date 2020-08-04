@@ -11,7 +11,7 @@ We made the following changes to the workflow:
     Created a new 'ImprovedBasePermission' class and rebuilt all DRF classes from it
     'has_object_permission' will default to 'has_permission'
     'detail_only' has been added to flag a permission has "only usable in detailed actions"
-    Our DynamicViewSet handles detail_only during the permission check
+    Our DynamicViewSet adds the 'detail' information into the request before the permission check
 """
 
 
@@ -25,17 +25,19 @@ from rest_framework.permissions import BasePermission
 class ImprovedBasePermission(BasePermission):
     """
     Improved version of the DRF BasePermission class:
-        (no change)     'has_permission' defaults to True
-        (new)           'has_object_permission' falls back on 'has_permission' if not explicitly implemented
-        (new)           'detail_only' can be used to limit a permission to detail views
+        'detail_only' can be used to limit a permission to detail views
+        The default 'has_permission' checks the 'detail_only' requirement for permissions
+        The default 'has_object_permission' falls back on 'has_permission' if not explicitly implemented
     """
 
     detail_only = False
 
-    @staticmethod
-    def has_permission(request, view):
-        """Defaults to True"""
-        return True
+    def has_permission(self, request, view):
+        """True by default, except for detail-only permissions when the action is not detail"""
+        if self.detail_only:
+            return request.is_detail_action  # Added in viewset.check_permissions
+        else:
+            return True
 
     def has_object_permission(self, request, view, obj):
         """Falls back to the 'has_permission' method"""
