@@ -1,6 +1,9 @@
 """Classes and mixins for django models"""
 
 
+# Django
+from django.db.models import Model
+
 # Local
 from ...std.files import get_size
 from ..utils.images import get_image_dimensions, image_as_html
@@ -10,7 +13,7 @@ from .fields import DateCreatedField, DateUpdatedField
 # --------------------------------------------------------------------------------
 # > Models
 # --------------------------------------------------------------------------------
-class LifeCycleMixin:
+class LifeCycleModel(Model):
     """Model mixin that provides lifecycle fields for creation and update"""
 
     # ----------------------------------------
@@ -19,8 +22,13 @@ class LifeCycleMixin:
     created_at = DateCreatedField()
     updated_at = DateUpdatedField()
 
+    class Meta:
+        """Makes the model abstract"""
 
-class WithImageMixin:
+        abstract = True
+
+
+class ModelWithImage(Model):
     """Model mixin that provides custom property for a field named "image"""
 
     # ----------------------------------------
@@ -57,3 +65,8 @@ class WithImageMixin:
         return image_as_html(self.image)
 
     view_image.short_description = "Image actuelle"
+
+    class Meta:
+        """Makes the model abstract"""
+
+        abstract = True
