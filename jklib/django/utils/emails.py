@@ -1,5 +1,7 @@
 """Utility functions for email management in django"""
 
+# Built-in
+from threading import Thread
 
 # Django
 from django.contrib.staticfiles import finders
@@ -54,3 +56,19 @@ def send_html_email(subject, body, sep=",", to=None, cc=None, sender=None):
     email = EmailMessage(subject=subject, body=body, to=to, cc=cc, from_email=sender,)
     email.content_subtype = "html"
     email.send()
+
+
+def send_html_email_async(subject, body, sep=",", to=None, cc=None, sender=None):
+    """
+    Similar to 'send_html_email', but uses a Thread instance to send it asynchronously
+    :param str subject: Subject of the email
+    :param str body: Body/content of the email
+    :param str sep: The separator used in the emails parameter. Defaults to ','
+    :param to: List or character-separated string of emails. Defaults to None.
+    :type to: list(str) or str
+    :param cc: List or character-separated string of emails. Defaults to None.
+    :type cc: list(str) or str
+    :param str sender: The sender. Defaults to django configuration.
+    """
+    thread = Thread(target=send_html_email, args=(subject, body, sep, to, cc, sender))
+    thread.start()
