@@ -1,9 +1,6 @@
 """Functions for network management within django"""
 
 
-# Built-in
-from urllib.parse import urljoin
-
 # Local
 from .settings import get_config
 
@@ -26,7 +23,7 @@ def build_url(root_url, relative_url, params):
             serialized_params += f"{key}={value}&"
         serialized_params = serialized_params[:-1]
         relative_url += serialized_params
-    complete_url = urljoin(root_url, relative_url)
+    complete_url = f"{root_url}/{relative_url}".replace("//", "/")
     return complete_url
 
 
