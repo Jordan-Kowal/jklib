@@ -8,22 +8,26 @@ from .settings import get_config
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def build_url(root_url, relative_url, params):
+def build_url_with_params(url, params):
     """
     Builds a complete URL using the current host, a relative URL, and GET params
-    :param str root_url: Root URL, usually from the reverse() function
-    :param str relative_url: Relative URL, usually from the reverse() function
-    :param dict params: Contains the get parameters
+    :param str url: Main URL without params
+    :param dict params: The GET params for the url
     :return: The computed URL
     :rtype: str
     """
-    if len(params) > 0:
-        serialized_params = "?"
-        for key, value in params.items():
-            serialized_params += f"{key}={value}&"
-        serialized_params = serialized_params[:-1]
-        relative_url += serialized_params
-    complete_url = f"{root_url}/{relative_url}".replace("//", "/")
+    # Exit if no params
+    if len(params) == 0:
+        return url
+    # Format params
+    serialized_params = "?"
+    for key, value in params.items():
+        serialized_params += f"{key}={value}&"
+    serialized_params = serialized_params[:-1]
+    # Remove extra "/"
+    if url[-1] == "/":
+        url = url[:-1]
+    complete_url = f"{url}{serialized_params}"
     return complete_url
 
 
