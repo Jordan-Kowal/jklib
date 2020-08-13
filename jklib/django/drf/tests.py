@@ -1,6 +1,7 @@
 """Useful constants, functions, and classes for test management in DRF"""
 
 # Django
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient, APITestCase
 
 # Local
@@ -70,6 +71,31 @@ class ActionTestCase(APITestCase):
     # ----------------------------------------
     # Utilities
     # ----------------------------------------
+    def create_user(self, authenticate=False, **kwargs):
+        """
+        Creates a user using the User object, and forces the username to match the email
+        :param bool authenticate: Whether to authenticate the user
+        :param kwargs: Fields/Values for the User model
+        :return: The created user
+        :rtype: User
+        """
+        kwargs.pop("username", None)
+        email = kwargs.pop("email")
+        user = User.objects.create_user(username=email, email=email, **kwargs)
+        if authenticate:
+            self.client.force_authenticate(user)
+        return user
+
+    def create_admin_user(self, authenticate=False, **kwargs):
+        """
+        Creates a staff user. Simply call self.create_user() with "is_staff" set to true
+        :return: The created admin user
+        :rtype: User
+        """
+        kwargs["is_staff"] = True
+        user = self.create_user(authenticate, **kwargs)
+        return user
+
     def detail_url(self, object_id):
         """
         Builds a detail URL for an instance model
