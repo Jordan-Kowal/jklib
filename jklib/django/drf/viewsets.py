@@ -180,7 +180,7 @@ class DynamicViewSet(GenericViewSet):
         """Registers an known action and setups its attributes"""
         detail = (
             True
-            if name in {"retrieve", "update", "partial_update", "delete"}
+            if name in {"retrieve", "update", "partial_update", "destroy"}
             else False
         )
 
