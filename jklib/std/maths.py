@@ -17,7 +17,6 @@ def precise_round(value, points: int):
     :return: The rounded value as a Decimal instance
     :rtype: Decimal
     """
-    pass
     rounded_value = round(value, points)
     precision = f".{'0'*(points-1)}1"
     return Decimal(rounded_value).quantize(Decimal(precision))
