@@ -45,7 +45,7 @@ class ActionTestCase(APITestCase):
     # ----------------------------------------
     # Assertions
     # ----------------------------------------
-    def assert_fields_are_required(self, handler, url, valid_payload):
+    def assert_fields_are_required(self, handler, url, valid_payload, fields=None):
         """
         Tests that the provided fields are required for a request.
         For each field, we will:
@@ -55,11 +55,12 @@ class ActionTestCase(APITestCase):
             Expect a 400 HTTP status and an error for our field
         :param function handler:
         :param str url: The service url
-        :param fields: The list of fields that are required
-        :type fields: [str]
         :param dict valid_payload: A valid payload for the service
+        :param [str] fields: List of fields to check. Defaults to self.required_fields
         """
-        for field in self.required_fields:
+        if fields is None:
+            fields = self.required_fields
+        for field in fields:
             request_payload = valid_payload.copy()
             request_payload[field] = None
             response = handler(url, request_payload)
