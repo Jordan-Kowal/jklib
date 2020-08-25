@@ -3,9 +3,11 @@
 # Built-in
 from random import choices, seed
 from string import ascii_letters, digits
+from time import sleep
 
 # Django
 from django.contrib.auth.models import User
+from django.core import mail
 from rest_framework.test import APIClient, APITestCase
 
 # Local
@@ -35,16 +37,21 @@ class ActionTestCase(APITestCase):
     existing_random_values = set()
 
     # ----------------------------------------
-    # Behavior
-    # ----------------------------------------
-    @classmethod
-    def setup_class(cls):
-        """Initializes the API client"""
-        cls.client = APIClient()
-
-    # ----------------------------------------
     # Assertions
     # ----------------------------------------
+    @staticmethod
+    def assert_email_was_sent(subject, async_=True):
+        """
+        Checks that ONE specific email has been sent (and is the only one sent)
+        :param str subject: Subject of the email, used to find it in the mailbox
+        :param bool async_: Whether it was sent asynchronously
+        """
+        if async_:
+            sleep(0.2)
+        email = mail.outbox[0]
+        assert len(mail.outbox) == 1
+        assert email.subject == subject
+
     def assert_fields_are_required(self, handler, url, valid_payload, fields=None):
         """
         Tests that the provided fields are required for a request.
