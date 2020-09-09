@@ -24,13 +24,13 @@ class Color:
     """Class to define the color used in Operation and OperationTask printed messages"""
 
     # Hierarchy
-    operation = Fore.MAGENTA
+    operation = Fore.WHITE
     task = Fore.CYAN
     reset = Fore.RESET
 
     # Workflow
     success = Fore.GREEN
-    info = Fore.WHITE
+    info = Fore.MAGENTA
     warning = Fore.YELLOW
     error = Fore.RED
 
@@ -144,11 +144,11 @@ class Operation:
         print(
             f"{Color.error}Operation '{self.name}' could not be run entirely.{Color.reset}"
         )
-        print(f"{Color.error}Please check the log above.{Color.reset}\n")
+        print(f"{Color.error}Please check the log above.{Color.reset}")
 
     def print_operation_success(self):
         """Prints a success message indicating that all tasks were run successfully"""
-        print(f"{Color.error}Operation '{self.name}' was a success.{Color.reset}\n")
+        print(f"{Color.success}Operation '{self.name}' was a success.{Color.reset}")
 
 
 class OperationTask:
