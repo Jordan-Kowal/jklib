@@ -44,6 +44,18 @@ class ImprovedBasePermission(BasePermission):
         """Falls back to the 'has_permission' method"""
         return self.has_permission(request, view)
 
+    # TODO: Include other fieldnames life create_by, owner, owned_by
+    def is_object_owner(self, request, obj):
+        """Checks if the user is or owns the object"""
+        try:
+            return (
+                self.user_is_valid(request)
+                and request.user.is_authenticated
+                and (request.user == obj or request.user == obj.user)
+            )
+        except AttributeError:
+            return False
+
     @staticmethod
     def user_is_valid(request):
         """Checks if the user is valid"""
@@ -78,6 +90,18 @@ class IsAdminUser(ImprovedBasePermission):
 # --------------------------------------------------------------------------------
 # > Custom Permissions
 # --------------------------------------------------------------------------------
+class IsAdminOrOwner(ImprovedBasePermission):
+    """Equivalent to the following permission: (IsObjectOwner | IsAdminUser,)"""
+
+    detail_only = True
+    message = "Access denied"
+
+    def has_object_permission(self, request, view, obj):
+        """User must either be the owner or an admin"""
+        is_admin = bool(self.user_is_valid(request) and request.user.is_staff)
+        return self.is_object_owner(request, obj) or is_admin
+
+
 class BlockAll(ImprovedBasePermission):
     """Blocks all incoming traffic. Equivalent to ~AllowAny, but makes it explicit"""
 
@@ -118,17 +142,9 @@ class IsObjectOwner(ImprovedBasePermission):
     detail_only = True
     message = "Access denied"
 
-    # TODO: Include other fieldnames life create_by, owner, owned_by
     def has_object_permission(self, request, view, obj):
         """Checks if user is owner or is object"""
-        try:
-            return (
-                self.user_is_valid(request)
-                and request.user.is_authenticated
-                and (request.user == obj or request.user == obj.user)
-            )
-        except AttributeError:
-            return False
+        return self.is_object_owner(request, obj)
 
 
 class IsSuperUser(ImprovedBasePermission):

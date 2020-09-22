@@ -252,19 +252,29 @@ class DynamicViewSet(GenericViewSet):
     def get_serializer_class(self):
         """
         Overridden to dynamically get the permission list based on the action and the method
-        It will be retrieved from the corresponding ActionHandler class, in its 'serializers' attribute.
-            serializer = Serializer1
-            serializer = {'get': Serializer1, 'post': Serializer2, ...}
+        It will be retrieved from the corresponding ActionHandler class, in its 'serializer' attribute.
+        There are 4 possible shapes for the "serializer" attribute:
+            normal      directly returns a serializer
+            method      dict where each method has a serializer
+            user        dict with a different serializer for "user" and for "admin"
+            both        dict with user/admin, then methods for serializers
         :return: Serializer class attached for our action
         :rtype: Serializer or None
         """
         handler_class = self._get_handler_class(self.action)
-        serializer = handler_class.serializer
-        if type(serializer) == dict:
-            method = self.request.method.lower()
-            return serializer.get(method, None)
-        if is_subclass(serializer, BaseSerializer):
-            return serializer
+        user_type = "admin" if self.request.user.is_staff else "user"
+        method = self.request.method.lower()
+        mode = handler_class.serializer_mode
+        if mode == "normal":
+            return handler_class.serializer
+        elif mode == "method":
+            return handler_class.serializer[method]
+        elif mode == "user":
+            return handler_class.serializer[user_type]
+        elif mode == "both":
+            return handler_class.serializer[user_type][method]
+        else:
+            raise ValueError(f"Invalid serializer_mode for {handler_class.__name__}")
 
     def get_valid_serializer(self, *args, **kwargs):
         """

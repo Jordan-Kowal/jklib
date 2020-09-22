@@ -28,8 +28,12 @@ class ActionHandler:
 
     ---------- HOW TO SETUP ----------
     Make sure to define the following elements:
-        permissions (direct or dict)
-        serializers (direct or dict)
+        serializer_mode (normal, method, user, both)
+        serializer
+            normal      directly returns a serializer
+            method      dict where each method has a serializer
+            user        dict with a different serializer for "user" and for "admin"
+            both        dict with user/admin, then methods for serializers
         [.get(), .post(), ...] if your action has several valid protocol/methods
         .main() if your action has a single method
 
@@ -38,6 +42,7 @@ class ActionHandler:
     The viewset will then take care of the rest
     """
 
+    serializer_mode = "normal"  # normal / method / user / both
     serializer = None
 
     def __init__(self, viewset, request, *args, **kwargs):
