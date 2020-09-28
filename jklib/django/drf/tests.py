@@ -11,7 +11,7 @@ from django.core import mail
 from rest_framework.test import APIClient, APITestCase
 
 # Local
-from ..utils.network import build_url_with_params
+from ..utils.network import build_url
 
 # --------------------------------------------------------------------------------
 # > Constants
@@ -31,8 +31,8 @@ class ActionTestCase(APITestCase):
     # ----------------------------------------
     # Properties
     # ----------------------------------------
-    service_url = None
-    append_slash = True
+    service_base_url = ""  # Before the model id
+    service_extra_url = ""  # After the model id
     required_fields = []
     existing_random_values = set()
 
@@ -147,12 +147,10 @@ class ActionTestCase(APITestCase):
         :return: The detail URL for this service and instance
         :rtype: str
         """
-        url = self.service_url
-        url = url[:-1] if url[-1] == "/" else url
-        url = f"{url}/{object_id}"
-        if self.append_slash:
-            url += "/"
-        return url
+        id_ = str(object_id)
+        parts = [self.service_base_url, id_, self.service_extra_url]
+        url = build_url(parts, end_slash=True)
+        return f"/{url}"
 
     def detail_url_with_params(self, object_id, params):
         """
@@ -162,11 +160,10 @@ class ActionTestCase(APITestCase):
         :return: The detail URL with GET params
         :rtype: str
         """
-        url = self.detail_url(object_id)
-        url = build_url_with_params(url, params)
-        if self.append_slash:
-            url += "/"
-        return url
+        id_ = str(object_id)
+        parts = [self.service_base_url, id_, self.service_extra_url]
+        url = build_url(parts, params=params, end_slash=True)
+        return f"/{url}"
 
     def service_url_with_params(self, params):
         """
@@ -175,10 +172,9 @@ class ActionTestCase(APITestCase):
         :return: The service URL with GET params
         :rtype: str
         """
-        url = build_url_with_params(self.service_url, params)
-        if self.append_slash:
-            url += "/"
-        return
+        parts = [self.service_base_url]
+        url = build_url(parts, params=params, end_slash=True)
+        return f"/{url}"
 
     # ----------------------------------------
     # Others

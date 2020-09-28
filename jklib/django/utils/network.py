@@ -1,6 +1,9 @@
 """Functions for network management within django"""
 
 
+# Built-in
+from urllib.parse import urlencode
+
 # Local
 from .settings import get_config
 
@@ -8,27 +11,32 @@ from .settings import get_config
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def build_url_with_params(url, params):
+def build_url(parts, params=None, end_slash=False):
     """
-    Builds a complete URL using the current host, a relative URL, and GET params
-    :param str url: Main URL without params
+    Builds a complete URL by joining its parts and adding params at the end
+    :param list parts: Ordered list of paths to join
     :param dict params: The GET params for the url
+    :param bool end_slash: Whether we should add a / at the end
     :return: The computed URL
     :rtype: str
     """
-    # Exit if no params
-    if len(params) == 0:
-        return url
-    # Format params
-    serialized_params = "?"
-    for key, value in params.items():
-        serialized_params += f"{key}={value}&"
-    serialized_params = serialized_params[:-1]
-    # Remove extra "/"
-    if url[-1] == "/":
-        url = url[:-1]
-    complete_url = f"{url}{serialized_params}"
-    return complete_url
+    # Remove extra slashes
+    cleaned_parts = []
+    for part in parts:
+        if part == "":
+            continue
+        if part[0] == "/":
+            part = part[1:]
+        if part[-1] == "/":
+            part = part[:-1]
+        cleaned_parts.append(part)
+    # Build URL
+    url = "/".join(cleaned_parts)
+    if params is not None:
+        url += urlencode(params)
+    if end_slash:
+        url += "/"
+    return url.replace("//", "/")
 
 
 def get_client_ip(request):
