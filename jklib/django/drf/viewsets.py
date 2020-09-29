@@ -18,7 +18,7 @@ from rest_framework.viewsets import GenericViewSet
 from jklib.std.classes import is_subclass
 
 # Local
-from .permissions import BlockAll
+from .permissions import BlockAll, IsAdminUser
 
 
 # --------------------------------------------------------------------------------
@@ -231,23 +231,31 @@ class DynamicViewSet(GenericViewSet):
         """
         Adds the 'is_detail_action' boolean to the request before checking the permissions
         Useful for our custom permissions that may be restricted to "detail" actions
+        The 'action' might be None when checking the DRF API interface
         :param Request request: The request object from the API call
         """
-        action_method = getattr(self, self.action)
-        request.is_detail_action = action_method.detail
+        if self.action is not None:
+            action_method = getattr(self, self.action)
+            request.is_detail_action = action_method.detail
         super().check_permissions(request)
 
     def get_permissions(self):
         """
         Overridden to dynamically get the permission list based on the action called
         The action should have an attribute named 'permissions' that returns the list of permission classes
+            No action               Might happen when checking the DRF API interface. We default to Admin
+            Missing permissions     Should not be allowed. We default to BlockAll
+            Permissions             We use the provided permissions
+        The 'action' might be None when checking the DRF API interface, in that case we default to Admin
         :return: List of permission instances for our action
         :rtype: list(Permission)
         """
-        handler = getattr(self, self.action)
-        if not handler.permissions:
+        if self.action is not None:
+            handler = getattr(self, self.action)
+            if handler.permissions:
+                return [permission() for permission in handler.permissions]
             return [BlockAll()]
-        return [permission() for permission in handler.permissions]
+        return [IsAdminUser()]
 
     def get_serializer_class(self):
         """
