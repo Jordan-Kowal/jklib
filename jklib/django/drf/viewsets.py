@@ -5,20 +5,18 @@ Split into sub-categories:
     Viewsets: Improved DRF ViewSets through custom mixins and utility functions
 """
 
-
 # Django
+from django.conf import settings
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.serializers import BaseSerializer
+from rest_framework.settings import api_settings
 from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED
 from rest_framework.viewsets import GenericViewSet
 
-# Personal
-from jklib.std.classes import is_subclass
-
 # Local
-from .permissions import BlockAll, IsAdminUser
+from .actions import SerializerMode
+from .permissions import BlockAll
 
 
 # --------------------------------------------------------------------------------
@@ -68,8 +66,9 @@ class DynamicViewSet(GenericViewSet):
         Instead, you will provide 2 dictionaries with settings, and actions will be generated from them
         For each action, you'll have to declare its ActionHandler class
         The ActionHandler will take care of processing the request/response
-        Permissions are declared at the ACTION level, in the viewset
-        Serializers are declared at the ENDPOINT (action+method) level, in the ActionHandler
+        Permissions are declared at 3 levels: global, viewset, and actions
+        Permissions are cumulative: those 3 levels are merged with 'AND' relationships
+        Serializers are declared in the ActionHandler and based on the action 'serializer_mode'
 
     Basically, your viewset should only contain:
         'known_actions'   -->     Dict for configuring the DRF known actions
@@ -112,6 +111,8 @@ class DynamicViewSet(GenericViewSet):
             },
         }
     """
+
+    viewset_permissions = None
 
     # --------------------------------------------------------------------------------
     # > Server setup
@@ -225,7 +226,7 @@ class DynamicViewSet(GenericViewSet):
             registered_action.mapping[method] = action_name
 
     # --------------------------------------------------------------------------------
-    # > For action calls
+    # > Action Permissions
     # --------------------------------------------------------------------------------
     def check_permissions(self, request):
         """
@@ -242,30 +243,78 @@ class DynamicViewSet(GenericViewSet):
     def get_permissions(self):
         """
         Overridden to dynamically get the permission list based on the action called
-        The action should have an attribute named 'permissions' that returns the list of permission classes
-            No action               Might happen when checking the DRF API interface. We default to Admin
-            Missing permissions     Should not be allowed. We default to BlockAll
-            Permissions             We use the provided permissions
-        The 'action' might be None when checking the DRF API interface, in that case we default to Admin
-        :return: List of permission instances for our action
+        It fetches permissions from 3 different spots:
+            Global permissions set in the settings
+            Viewset permissions set in our current ViewSet
+            Action permissions set in our ActionHandler
+        Those 3 lists are then merged together with an 'AND' relation
+        If no permission is found, we use the default one
+        :return: List of permission INSTANCES for our action
+        :rtype: list(Permission)
+        """
+        global_permissions = self._get_global_permissions()
+        viewset_permissions = self._get_viewset_permissions()
+        action_permissions = self._get_action_permissions()
+        permissions = (
+            list(global_permissions)
+            + list(viewset_permissions)
+            + list(action_permissions)
+        )
+        if len(permissions) == 0:
+            permissions = api_settings.DEFAULT_PERMISSION_CLASSES
+        return [permission() for permission in permissions]
+
+    @staticmethod
+    def _get_global_permissions():
+        """
+        Fetches the global permission list declared in the settings
+        :return: List of permission CLASSES apply to the entire application
+        :rtype: list(Permission)
+        """
+        permissions = getattr(settings, "DRF_GLOBAL_PERMISSIONS", None)
+        if permissions is None:
+            permissions = []
+        return permissions
+
+    def _get_viewset_permissions(self):
+        """
+        Fetches the viewset-wide permissions declared in our action's viewset
+        :return: List of permission CLASSES for our viewset
+        :rtype: list(Permission)
+        """
+        permissions = getattr(self, "viewset_permissions", None)
+        if permissions is None:
+            permissions = []
+        return permissions
+
+    def _get_action_permissions(self):
+        """
+        Fetches the permissions attached to our action handler
+        If no permission is given, we default to 'BlockAll'
+        This forces developers to explicitly state permissions for actions
+        :return: List of permission CLASSES for our action
         :rtype: list(Permission)
         """
         if self.action is not None:
             handler = getattr(self, self.action)
             if handler.permissions:
-                return [permission() for permission in handler.permissions]
-            return [BlockAll()]
-        return [IsAdminUser()]
+                return handler.permissions
+            return [BlockAll]
+        return []
 
+    # --------------------------------------------------------------------------------
+    # > Action Serializers
+    # --------------------------------------------------------------------------------
     def get_serializer_class(self):
         """
         Overridden to dynamically get the permission list based on the action and the method
         It will be retrieved from the corresponding ActionHandler class, in its 'serializer' attribute.
         There are 4 possible shapes for the "serializer" attribute:
-            normal      directly returns a serializer
-            method      dict where each method has a serializer
-            user        dict with a different serializer for "user" and for "admin"
-            both        dict with user/admin, then methods for serializers
+            NONE                    returns None
+            UNIQUE                  directly returns a serializer
+            METHOD_BASED            dict where each method has a serializer
+            ROLE_BASED              dict with a different serializer for "user" and for "admin"
+            ROLE_AND_METHOD_BASED   dict with user/admin, then methods for serializers
         :return: Serializer class attached for our action
         :rtype: Serializer or None
         """
@@ -273,16 +322,19 @@ class DynamicViewSet(GenericViewSet):
         user_type = "admin" if self.request.user.is_staff else "user"
         method = self.request.method.lower()
         mode = handler_class.serializer_mode
-        if mode == "normal":
+        # Fetches the serializer based on the 'serializer_mode'
+        if mode == SerializerMode.NONE:
+            return None
+        elif mode == SerializerMode.UNIQUE:
             return handler_class.serializer
-        elif mode == "method":
+        elif mode == SerializerMode.METHOD_BASED:
             return handler_class.serializer[method]
-        elif mode == "user":
+        elif mode == SerializerMode.ROLE_BASED:
             return handler_class.serializer[user_type]
-        elif mode == "both":
+        elif mode == SerializerMode.ROLE_AND_METHOD_BASED:
             return handler_class.serializer[user_type][method]
         else:
-            raise ValueError(f"Invalid serializer_mode for {handler_class.__name__}")
+            raise ValueError(f"Invalid 'serializer_mode' for {handler_class.__name__}")
 
     def get_valid_serializer(self, *args, **kwargs):
         """
@@ -297,6 +349,9 @@ class DynamicViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         return serializer
 
+    # --------------------------------------------------------------------------------
+    # > Other Action Helpers
+    # --------------------------------------------------------------------------------
     def call_action_handler(self, handler_class):
         """
         Creates an ActionHandler instance with the initial arguments and runs it

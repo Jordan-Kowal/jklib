@@ -84,9 +84,10 @@ def ForeignKeyNull(to, *args, **kwargs):
     return models.ForeignKey(to, *args, **kwargs)
 
 
-def RequiredCharField(*args, **kwargs):
+def RequiredField(field, *args, **kwargs):
     """
     Custom CharField that cannot be null nor an empty string
+    :param Field field: Field class from Django
     :param args: Same args as the django Field class
     :param kwargs: Same kwargs as the django Field class
     :return: Instance from the django Field model
@@ -94,4 +95,4 @@ def RequiredCharField(*args, **kwargs):
     """
     kwargs["blank"] = False
     kwargs["null"] = False
-    return models.CharField(*args, **kwargs)
+    return field(*args, **kwargs)

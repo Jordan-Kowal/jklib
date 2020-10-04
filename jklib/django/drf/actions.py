@@ -1,10 +1,28 @@
 """Classes to make building actions/endpoints in DRF easier"""
 
+# Built-in
+from enum import Enum
 
 # Django
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+
+
+# --------------------------------------------------------------------------------
+# > Enums
+# --------------------------------------------------------------------------------
+class SerializerMode(Enum):
+    """
+    List of available serializer modes for an action
+    Refer to DynamicViewSet.get_serializer_class() to see how they resolve serializers
+    """
+
+    NONE = 1
+    UNIQUE = 2
+    METHOD_BASED = 3
+    ROLE_BASED = 4
+    ROLE_AND_METHOD_BASED = 5
 
 
 # --------------------------------------------------------------------------------
@@ -28,12 +46,13 @@ class ActionHandler:
 
     ---------- HOW TO SETUP ----------
     Make sure to define the following elements:
-        serializer_mode (normal, method, user, both)
+        serializer_mode (NONE, UNIQUE, METHOD_BASED, ROLE_BASED, ROLE_AND_METHOD_BASED)
         serializer
-            normal      directly returns a serializer
-            method      dict where each method has a serializer
-            user        dict with a different serializer for "user" and for "admin"
-            both        dict with user/admin, then methods for serializers
+            if NONE                     -->     returns None
+            if UNIQUE                   -->     directly returns a serializer
+            if METHOD_BASED             -->     dict where each method has a serializer
+            if ROLE_BASED               -->     dict with a different serializer for "user" and for "admin"
+            if ROLE_AND_METHOD_BASED    -->     dict with user/admin, then methods for serializers
         [.get(), .post(), ...] if your action has several valid protocol/methods
         .main() if your action has a single method
 
@@ -42,7 +61,7 @@ class ActionHandler:
     The viewset will then take care of the rest
     """
 
-    serializer_mode = "normal"  # normal / method / user / both
+    serializer_mode = SerializerMode.UNIQUE
     serializer = None
 
     def __init__(self, viewset, request, *args, **kwargs):
