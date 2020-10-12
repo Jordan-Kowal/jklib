@@ -81,7 +81,7 @@ class ImprovedSerializer(serializers.Serializer):
         """
         # Defaulting some parameters
         if message is None:
-            f"A similar item already exists and is attach to your profile"
+            "A similar item already exists and is attached to your profile"
         if model is None:
             model = self.Meta.model
         # Building the query
