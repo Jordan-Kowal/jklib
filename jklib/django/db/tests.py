@@ -2,7 +2,7 @@
 
 
 # Django
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 # Local
 from ..utils.tests import ImprovedTestCase
@@ -37,13 +37,14 @@ class ModelTestCase(ImprovedTestCase):
         :param dict valid_payload: A valid payload for the service
         :param [str] fields: List of fields to check. Defaults to self.required_fields
         """
-        if fields is None:
-            fields = self.required_fields
-        for field in fields:
-            payload = valid_payload.copy()
-            payload[field] = None
-            with self.assertRaises(IntegrityError):
-                self.model_class(**payload).save()
+        with transaction.atomic():
+            if fields is None:
+                fields = self.required_fields
+            for field in fields:
+                payload = valid_payload.copy()
+                payload[field] = None
+                with self.assertRaises(IntegrityError):
+                    self.model_class(**payload).save()
 
     def assert_instance_count_equals(self, n):
         """Tests the number of instances in the database for our model"""
