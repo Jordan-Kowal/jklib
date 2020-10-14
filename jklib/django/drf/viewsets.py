@@ -7,6 +7,7 @@ Split into sub-categories:
 
 # Django
 from django.conf import settings
+from django.utils.module_loading import import_string
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -268,10 +269,12 @@ class DynamicViewSet(GenericViewSet):
     def _get_global_permissions():
         """
         Fetches the global permission list declared in the settings
+        Note that those permissions are strings that must be turned into class
         :return: List of permission CLASSES apply to the entire application
         :rtype: list(Permission)
         """
         permissions = getattr(settings, "DRF_GLOBAL_PERMISSIONS", None)
+        permissions = [import_string(permission) for permission in permissions]
         if permissions is None:
             permissions = []
         return permissions
