@@ -3,10 +3,12 @@
 # Built-in
 from random import choices, seed
 from string import ascii_letters, digits
+from time import sleep
 
 # Django
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.core import mail
+from django.test import RequestFactory, TestCase
 
 # --------------------------------------------------------------------------------
 # > Constants
@@ -19,7 +21,8 @@ CHARS = ascii_letters + digits
 # --------------------------------------------------------------------------------
 class ImprovedTestCase(TestCase):
     """
-    Improvement from TestCase with various utility functions:
+    Improvement from TestCase with various utilities:
+        Assertion functions
         Several ways to create users
         Random data generation (data is stored to avoid generating the same value twice)
     """
@@ -29,6 +32,22 @@ class ImprovedTestCase(TestCase):
     # ----------------------------------------
     required_fields = []
     existing_random_values = set()
+
+    # ----------------------------------------
+    # Assertions
+    # ----------------------------------------
+    @staticmethod
+    def assert_email_was_sent(subject, async_=True):
+        """
+        Checks that ONE specific email has been sent (and is the only one sent)
+        :param str subject: Subject of the email, used to find it in the mailbox
+        :param bool async_: Whether it was sent asynchronously
+        """
+        if async_:
+            sleep(0.2)
+        email = mail.outbox[0]
+        assert len(mail.outbox) == 1
+        assert email.subject == subject
 
     # ----------------------------------------
     # User fixtures
@@ -80,6 +99,20 @@ class ImprovedTestCase(TestCase):
     # ----------------------------------------
     # Others
     # ----------------------------------------
+    @staticmethod
+    def build_fake_request(method="get", path="/", data=None):
+        """
+        Creates and returns a fake request object
+        :param str method: The name of the HTTP method to call in our factory
+        :param str path: Target URL for the request
+        :param dict data: Data to pass in the request
+        :return: Returns a fake Request object
+        :rtype: Request
+        """
+        factory = RequestFactory()
+        factory_call = getattr(factory, method.lower())
+        return factory_call(path, data=data)
+
     def generate_random_string(self, *instructions):
         """
         Generates a random string based on the given instructions. There are 2 types of instructions:
