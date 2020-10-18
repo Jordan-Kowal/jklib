@@ -37,10 +37,10 @@ class ModelTestCase(ImprovedTestCase):
         :param dict valid_payload: A valid payload for the service
         :param [str] fields: List of fields to check. Defaults to self.required_fields
         """
-        with transaction.atomic():
-            if fields is None:
-                fields = self.required_fields
-            for field in fields:
+        if fields is None:
+            fields = self.required_fields
+        for field in fields:
+            with transaction.atomic():
                 payload = valid_payload.copy()
                 payload[field] = None
                 with self.assertRaises(IntegrityError):
