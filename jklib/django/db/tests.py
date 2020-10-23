@@ -43,7 +43,7 @@ class ModelTestCase(ImprovedTestCase):
             with transaction.atomic():
                 payload = valid_payload.copy()
                 payload[field] = None
-                with self.assertRaises(IntegrityError):
+                with self.assertRaises((IntegrityError, ValueError)):
                     self.model_class(**payload).save()
 
     def assert_instance_count_equals(self, n):

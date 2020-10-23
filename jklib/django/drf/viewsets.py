@@ -17,7 +17,6 @@ from rest_framework.viewsets import GenericViewSet
 
 # Local
 from .actions import SerializerMode
-from .permissions import BlockAll
 
 
 # --------------------------------------------------------------------------------
@@ -193,7 +192,7 @@ class DynamicViewSet(GenericViewSet):
 
         setattr(cls, name, action_method)
         registered_action = getattr(cls, name)
-        registered_action.permissions = action_settings.get("permissions", (BlockAll,))
+        registered_action.permissions = action_settings.get("permissions", None)
         registered_action.detail = detail
         registered_action.__name__ = name
 
@@ -222,7 +221,7 @@ class DynamicViewSet(GenericViewSet):
         registered_action.__name__ = action_name
         registered_action.mapping = {}
         registered_action.detail = detail
-        registered_action.permissions = action_settings.get("permissions", (BlockAll,))
+        registered_action.permissions = action_settings.get("permissions", None)
         for method in decorator_kwargs["methods"]:
             registered_action.mapping[method] = action_name
 
@@ -263,6 +262,7 @@ class DynamicViewSet(GenericViewSet):
         )
         if len(permissions) == 0:
             permissions = api_settings.DEFAULT_PERMISSION_CLASSES
+        permissions = list(set(permissions))
         return [permission() for permission in permissions]
 
     @staticmethod
@@ -293,17 +293,16 @@ class DynamicViewSet(GenericViewSet):
     def _get_action_permissions(self):
         """
         Fetches the permissions attached to our action handler
-        If no permission is given, we default to 'BlockAll'
         This forces developers to explicitly state permissions for actions
         :return: List of permission CLASSES for our action
         :rtype: list(Permission)
         """
+        permissions = []
         if self.action is not None:
             handler = getattr(self, self.action)
             if handler.permissions:
-                return handler.permissions
-            return [BlockAll]
-        return []
+                permissions = handler.permissions
+        return permissions
 
     # --------------------------------------------------------------------------------
     # > Action Serializers
