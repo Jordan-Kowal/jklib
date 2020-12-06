@@ -274,10 +274,10 @@ class DynamicViewSet(GenericViewSet):
         :rtype: list(Permission)
         """
         permissions = getattr(settings, "DRF_GLOBAL_PERMISSIONS", None)
-        permissions = [import_string(permission) for permission in permissions]
         if permissions is None:
-            permissions = []
-        return permissions
+            return []
+        else:
+            return [import_string(permission) for permission in permissions]
 
     def _get_viewset_permissions(self):
         """

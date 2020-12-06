@@ -2,6 +2,7 @@
 
 
 # Django
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
 # Local
@@ -24,6 +25,14 @@ class ModelTestCase(ImprovedTestCase):
     # ----------------------------------------
     model_class = None
 
+    @property
+    def common_errors(self):
+        """
+        :return: A list of common error classes
+        :rtype: ValueError, ValidationError, IntegrityError
+        """
+        return ValueError, ValidationError, IntegrityError
+
     # ----------------------------------------
     # Assertions
     # ----------------------------------------
@@ -43,7 +52,7 @@ class ModelTestCase(ImprovedTestCase):
             with transaction.atomic():
                 payload = valid_payload.copy()
                 payload[field] = None
-                with self.assertRaises((IntegrityError, ValueError)):
+                with self.assertRaises(self.common_errors):
                     self.model_class(**payload).save()
 
     def assert_instance_count_equals(self, n):

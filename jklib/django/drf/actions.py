@@ -1,4 +1,9 @@
-"""Classes to make building actions/endpoints in DRF easier"""
+"""
+Classes to make building actions/endpoints in DRF easier
+Split in 2 sub-sections:
+    Enums:                      Data management with enums
+    Base Handlers:              The parent/base class for action handles
+"""
 
 # Built-in
 from enum import Enum
@@ -26,7 +31,7 @@ class SerializerMode(Enum):
 
 
 # --------------------------------------------------------------------------------
-# > Actions
+# > Base Handlers
 # --------------------------------------------------------------------------------
 class ActionHandler:
     """
