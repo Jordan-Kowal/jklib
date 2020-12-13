@@ -1,6 +1,8 @@
 """
 Custom fields for django models
-We use instances instead of classes so that django can detect changes and automatically build migrations
+Split in the following categories:
+    Shortcuts:      Function-based fields that simply defaults various kwargs for Django fields
+    Custom Fields:  Actual class-based fields for our custom needs
 """
 
 
@@ -9,7 +11,7 @@ from django.db import models
 
 
 # --------------------------------------------------------------------------------
-# > Fields
+# > Shortcuts
 # --------------------------------------------------------------------------------
 def ActiveField(*args, **kwargs):
     """
@@ -96,3 +98,58 @@ def RequiredField(field, *args, **kwargs):
     kwargs["blank"] = False
     kwargs["null"] = False
     return field(*args, **kwargs)
+
+
+# --------------------------------------------------------------------------------
+# > Custom Fields
+# --------------------------------------------------------------------------------
+class TrimCharField(models.CharField):
+    """CharField with automatic trimming"""
+
+    description = (
+        "CharField that automatically removes leading and trailing whitespaces"
+    )
+
+    def get_prep_value(self, value):
+        """
+        Overridden to simply apply trim to the parent method
+        :param str value: Value of the field
+        :return: The trimmed value
+        :rtype: str
+        """
+        return super(TrimCharField, self).get_prep_value(value).strip()
+
+    def pre_save(self, model_instance, add):
+        """
+        :param Model model_instance: The model instance where our field is
+        :param bool add: Whether the instance does not yet exist in the database
+        :return: The trimmed value
+        :rtype: str
+        """
+        return super(TrimCharField, self).pre_save(model_instance, add).strip()
+
+
+class TrimTextField(models.TextField):
+    """TextField with automatic trimming"""
+
+    description = (
+        "TextField that automatically removes leading and trailing whitespaces"
+    )
+
+    def get_prep_value(self, value):
+        """
+        Overridden to simply apply trim to the parent method
+        :param str value: Value of the field
+        :return: The trimmed value
+        :rtype: str
+        """
+        return super(TrimTextField, self).get_prep_value(value).strip()
+
+    def pre_save(self, model_instance, add):
+        """
+        :param Model model_instance: The model instance where our field is
+        :param bool add: Whether the instance does not yet exist in the database
+        :return: The trimmed value
+        :rtype: str
+        """
+        return super(TrimTextField, self).pre_save(model_instance, add).strip()
