@@ -1,8 +1,8 @@
 """
 Classes to make building actions/endpoints in DRF easier
 Split in 2 sub-sections:
-    Enums:                      Data management with enums
-    Base Handlers:              The parent/base class for action handles
+    Enums:                  Data management with enums
+    Base Handlers:          The parent/base class for action handles
 """
 
 # Built-in
@@ -11,7 +11,12 @@ from enum import Enum
 # Django
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_404_NOT_FOUND,
+)
 
 
 # --------------------------------------------------------------------------------
@@ -153,7 +158,7 @@ class ModelActionHandler(ActionHandler):
     def model_create(self):
         """
         Creates and saves a model instance
-        :return: A JSON response with 200 status code and the serializer data
+        :return: HTTP 200 with the created instance data
         :rtype: Response
         """
         serializer = self.get_valid_serializer(data=self.data)
@@ -163,7 +168,7 @@ class ModelActionHandler(ActionHandler):
     def model_retrieve(self):
         """
         Fetches a single model instance based on the provided serializer
-        :return: A JSON response with 200 status code and the serializer data
+        :return: HTTP 200 with the instance data
         :rtype: Response
         """
         instance = self.get_object()
@@ -173,7 +178,7 @@ class ModelActionHandler(ActionHandler):
     def model_list(self):
         """
         Fetches, filters, paginates, and returns a list of instances for a given model
-        :return: A JSON response with 200 status code and the serializer data
+        :return: HTTP 200 with the list of instances
         :rtype: Response
         """
         viewset = self.viewset
@@ -188,7 +193,7 @@ class ModelActionHandler(ActionHandler):
     def model_update(self):
         """
         Updates and saves a model instance using the provided serializer
-        :return: A JSON response with 200 status code and the serializer data
+        :return: HTTP 200 with the updated instance data
         :rtype: Response
         """
         partial = self.kwargs.pop("partial", False)
@@ -204,7 +209,7 @@ class ModelActionHandler(ActionHandler):
     def model_partial_update(self):
         """
         Sets the 'partial' kwarg to partial before calling the .model_update() method
-        :return: A JSON response with 200 status code and the serializer data
+        :return: HTTP 200 with the partially updated instance data
         :rtype: Response
         """
         self.kwargs["partial"] = True
@@ -213,9 +218,25 @@ class ModelActionHandler(ActionHandler):
     def model_destroy(self):
         """
         Deletes a model instance from the database
-        :return: A JSON response with 204 status code and no data
+        :return: HTTP 204 response without data
         :rtype: Response
         """
         instance = self.get_object()
         instance.delete()
         return Response(status=HTTP_204_NO_CONTENT)
+
+    def model_bulk_destroy(self):
+        """
+        Filters the viewset queryset with the provided IDs and removes the instances found
+        Expects the serializer to have an "ids" list field
+        :return: HTTP 204 response without data
+        :rtype: Response
+        """
+        serializer = self.get_valid_serializer(data=self.data)
+        ids_to_delete = serializer.validated_data.pop("ids")
+        instances = self.viewset.get_queryset().filter(id__in=ids_to_delete)
+        if len(instances) == 0:
+            return Response(None, status=HTTP_404_NOT_FOUND)
+        else:
+            instances.delete()
+            return Response(None, status=HTTP_204_NO_CONTENT)

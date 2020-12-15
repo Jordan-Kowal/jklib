@@ -1,9 +1,10 @@
 """
 Serializer and mixins classes for DRF
 Split into sub-categories:
-    Utility: Utility functions for serializers
-    Mixins: Provide utility functions for serializers (but do not inherit from them)
-    Serializers: Improved DRF serializers through custom mixins and utility functions
+    Utility:                    Utility functions for serializers
+    Mixins:                     Provide utility functions for serializers (but do not inherit from them)
+    Base Serializers:           Improved DRF serializers through custom mixins and utility functions
+    Ready-to-use Serializers:   Specific and re-usable serializers for common actions
 """
 
 
@@ -40,7 +41,7 @@ class NotEmptyMixin:
 
 
 # --------------------------------------------------------------------------------
-# > Serializers
+# > Base Serializers
 # --------------------------------------------------------------------------------
 class NotEmptySerializer(NotEmptyMixin, serializers.Serializer):
     """Serializer whose request payload cannot be empty"""
@@ -124,3 +125,14 @@ class ImprovedSerializer(serializers.Serializer):
             if kwargs.required:
                 required_fields.append(key)
         return required_fields
+
+
+# --------------------------------------------------------------------------------
+# > Ready-to-use Serializers
+# --------------------------------------------------------------------------------
+class IdListSerializer(ImprovedSerializer):
+    """Simple serializer that expects a list of IDs"""
+
+    ids = serializers.ListField(
+        child=serializers.IntegerField(min_value=1), allow_null=False
+    )
