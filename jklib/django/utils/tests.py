@@ -123,6 +123,7 @@ class ImprovedTestCase(TestCase):
         If not unique, it is deleted and we try again
         :param instructions: Integers or strings to be used to generate our string
         :type instructions: int or str
+        :raises TypeError: If an instruction is neither a string or an integer
         :return: The randomly generated and unique string
         :rtype: str
         """

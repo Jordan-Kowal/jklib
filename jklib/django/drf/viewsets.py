@@ -152,6 +152,7 @@ class DynamicViewSet(GenericViewSet):
         Dynamically creates and sets KNOWN actions based on the 'known_actions' attribute
         Please refer to the class docstring for more info on the 'known_actions' expected dict shape
         We use a sub-function to register each individual action due to closure/scope issues
+        :raises ValueError: If the action name is not in the allowed names
         """
         for name, action_settings in cls.known_actions.items():
             if name not in cls.KNOWN_ACTION_NAMES:
@@ -168,6 +169,7 @@ class DynamicViewSet(GenericViewSet):
         Please refer to the class docstring for more info on the 'extra_actions' expected dict shape
         Each method must be configured with the right sub-attributes to match the DefaultRouter expectations
         We use a sub-function to register each individual action due to closure/scope issues
+        :raises ValueError: If the name matches one of the allowed 'known' action names
         """
         for action_name, action_settings in cls.extra_actions.items():
             if action_name in cls.KNOWN_ACTION_NAMES:
@@ -317,6 +319,7 @@ class DynamicViewSet(GenericViewSet):
             METHOD_BASED            dict where each method has a serializer
             ROLE_BASED              dict with a different serializer for "user" and for "admin"
             ROLE_AND_METHOD_BASED   dict with user/admin, then methods for serializers
+        :raises ValueError: When you do not provide a valid serializer mode in the action handler
         :return: Serializer class attached for our action
         :rtype: Serializer or None
         """

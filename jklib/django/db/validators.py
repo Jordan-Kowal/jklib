@@ -19,7 +19,10 @@ def length_validator(min_=None, max_=None, trim=True):
     """
 
     def check(value):
-        """Performs the actual check with the provided arguments"""
+        """
+        Performs the actual check with the provided arguments
+        :raises ValidationError: If the text is not within the allowed ranges
+        """
         if trim:
             value = value.strip()
         length = len(value)

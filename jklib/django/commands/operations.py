@@ -170,6 +170,7 @@ class OperationTask:
         """
         Main function that will be called during an Operation. Must be overridden
         Should return a boolean (indicating success or failure)
+        :raises NotImplementedError: If the method is not overridden
         """
         raise NotImplementedError()
 

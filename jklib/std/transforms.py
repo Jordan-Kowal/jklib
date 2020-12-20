@@ -31,12 +31,13 @@ def array2d_to_dict_cols(array2d, cols):
     :type array2d: list(list)
     :param cols: List of column names. Should be the same length as the nested lists
     :type cols: list(str)
+    :raises ValueError: When both lists don't have the same number of elements
     :return: Dict of lists with "cols" as keys, with values from each nested list
     :rtype: dict(list)
     """
     for line in array2d:
         if len(line) != len(cols):
-            raise TypeError("Both lists must contain the same number of elements")
+            raise ValueError("Both lists must contain the same number of elements")
     new_dict = {}
     i = 0
     for col in cols:

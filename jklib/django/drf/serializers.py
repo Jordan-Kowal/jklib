@@ -33,7 +33,10 @@ class NotEmptyMixin:
 
     @staticmethod
     def validate(validated_data):
-        """Raises an error if validated_data is empty"""
+        """
+        Overrides the 'validate" method to prevent empty payloads
+        :raises ValidationError: If not data is provided
+        """
         if not validated_data:
             message = "No data was provided"
             raise serializers.ValidationError(message)
@@ -101,6 +104,7 @@ class ImprovedSerializer(serializers.Serializer):
         :param str fieldname: Name of the field
         :param str value: Current value of the field
         :param str message: The error message to display if the field is empty
+        :raises ValidationError: If the field is empty
         :return: The not-empty trimmed string
         :rtype: str
         """
