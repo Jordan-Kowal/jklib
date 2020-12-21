@@ -1,10 +1,4 @@
-"""
-Contains utility functions around the "input" mechanic
-Functions:
-    choose_from_dict: The user must choose a value by inputting the associated key
-    input_must_match_regex: The user must type an input that matches a regex. Return his input
-    yes_or_no: The user must answer with Y or N. Returns a bool
-"""
+"""Utility functions around the "input" mechanic"""
 
 
 # Built-in
@@ -14,16 +8,14 @@ import re
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def choose_from_dict(**kwargs):
+def choose_from_dict(choices):
     """
     The user must choose a value by inputting the associated key
-    Args:
-        **kwargs (str): param names will be the accepted inputs
-    Returns:
-        (str) The user input
+    :param dict choices: Dict of value/label the user can pick from
+    :return: The selected key
     """
     # Displays the initial choices
-    input_dict = {x: y for (x, y) in kwargs.items()}
+    input_dict = {x: y for (x, y) in choices.items()}
     input_list = sorted(input_dict.keys())
     input_set = set(input_list)
     messages = [f"{key}: {input_dict[key]}" for key in input_list]
@@ -42,11 +34,10 @@ def choose_from_dict(**kwargs):
 def input_must_match_regex(regex, error_message):
     """
     The user must type an input that matches a regex. Return his input
-    Args:
-        regex (regex): Regular expression object
-        error_message (str): The error message that must be displayed
-    Returns:
-        (str) The user's valid answer
+    :param regex regex: Regular expression object
+    :param str error_message: The error message that must be displayed
+    :return: The user's valid answer
+    :rtype: str
     """
     answer = None
     while answer is None:
@@ -60,8 +51,8 @@ def input_must_match_regex(regex, error_message):
 def yes_or_no():
     """
     The user must answer with Y or N. Returns a bool
-    Returns:
-        (bool) The answer in boolean format
+    :return: The answer in boolean format
+    :rtype: bool
     """
     answer = None
     while answer is None:

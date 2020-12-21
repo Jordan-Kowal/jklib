@@ -1,11 +1,7 @@
-"""
-Contains useful functions for handling emails in Django
-Functions:
-    extract_email_addresses: Returns a list of emails from either a string or a list
-    get_css_content: Returns the content of a css file (AVOID using " or ' in the file)
-    send_html_email: Sends an HTML email with the given arguments
-"""
+"""Utility functions for email management in django"""
 
+# Built-in
+from threading import Thread
 
 # Django
 from django.contrib.staticfiles import finders
@@ -15,13 +11,13 @@ from django.core.mail import EmailMessage
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def extract_email_addresses(emails):
+def extract_email_addresses(emails, sep=","):
     """
     Transforms a string of multiple email adresses (separated by commas) into a list
-    Args:
-        emails (string): Long string of emails separated with commas
-    Returns:
-        (list) A list of email addresses
+    :param str emails: Single string of emails separated by a specific character
+    :param str sep: The separator used in the emails parameter. Defaults to ','
+    :return: A list of email addresses
+    :rtype: list(str)
     """
     if type(emails) == str:
         emails = emails.split(",")
@@ -31,11 +27,11 @@ def extract_email_addresses(emails):
 
 def get_css_content(relative_path):
     """
-    Gets and returns the content of a css file (AVOID using " or ' in the file)
-    Args:
-        relative_path (str): Relative path to the CSS file (the path you'd use in a django template with {% static %})
-    Returns:
-        (str) The content of the CSS file
+    Gets and returns the content of a css file
+    Please make your that CSS file do not use " or '
+    :param relative_path: Relative path to the CSS file (the same as the one you'd use in {% static %})
+    :return: The content of the CSS file
+    :rtype: str
     """
     css_file = finders.find(relative_path)
     with open(css_file, "r", encoding="utf-8") as f:
@@ -43,18 +39,36 @@ def get_css_content(relative_path):
     return content
 
 
-def send_html_email(subject, body, to=None, cc=None, sender=None):
+def send_html_email(subject, body, sep=",", to=None, cc=None, sender=None):
     """
     Sends an HTML email with the given arguments
-    Args:
-        subject (str): Subject of the email
-        body (str): Body/Content of the email
-        to ([str, list], optional): List or comma-separated string of emails. Defaults to None.
-        cc ([str, list], optional): List or comma-separated string of emails. Defaults to None.
-        sender (str, optional): The sender. Defaults to Django configuration.
+    :param str subject: Subject of the email
+    :param str body: Body/content of the email
+    :param str sep: The separator used in the emails parameter. Defaults to ','
+    :param to: List or character-separated string of emails. Defaults to None.
+    :type to: list(str) or str
+    :param cc: List or character-separated string of emails. Defaults to None.
+    :type cc: list(str) or str
+    :param str sender: The sender. Defaults to django configuration.
     """
     to = extract_email_addresses(to)
     cc = extract_email_addresses(cc)
     email = EmailMessage(subject=subject, body=body, to=to, cc=cc, from_email=sender,)
     email.content_subtype = "html"
     email.send()
+
+
+def send_html_email_async(subject, body, sep=",", to=None, cc=None, sender=None):
+    """
+    Similar to 'send_html_email', but uses a Thread instance to send it asynchronously
+    :param str subject: Subject of the email
+    :param str body: Body/content of the email
+    :param str sep: The separator used in the emails parameter. Defaults to ','
+    :param to: List or character-separated string of emails. Defaults to None.
+    :type to: list(str) or str
+    :param cc: List or character-separated string of emails. Defaults to None.
+    :type cc: list(str) or str
+    :param str sender: The sender. Defaults to django configuration.
+    """
+    thread = Thread(target=send_html_email, args=(subject, body, sep, to, cc, sender))
+    thread.start()

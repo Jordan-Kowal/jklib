@@ -1,8 +1,4 @@
-"""
-Contains useful functions for numpy processing
-Functions:
-    get_unique_from_numpy: Returns the unique values from a numpy array while keeping its original order
-"""
+"""Utility functions for the numpy library"""
 
 
 # Third-party
@@ -16,10 +12,9 @@ def get_unique_from_numpy(arr):
     """
     Returns the unique values from a numpy array while keeping its original order
     (Because numpy.unique automatically re-sort the data)
-    Args:
-        arr (ndarray): A numpy array
-    Returns:
-        (list) List of uniques values from the ndarray
+    :param ndarray arr: A numpy array
+    :return: List of uniques values from the ndarray
+    :rtype: list
     """
     unique_index = np.unique(arr, return_index=True)[1]
     unique_index.sort()

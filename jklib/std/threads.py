@@ -1,41 +1,8 @@
-"""
-Functions to deal with threads
-Classes:
-    BasicThread: Basic thread class to use threads with an action attribute
-Functions:
-    run_all_threads: Runs all the generated threads at once, and then joins them
-"""
+"""Utility functions and classes for threads"""
 
 
 # Built-in
 from threading import Thread
-
-
-# --------------------------------------------------------------------------------
-# > Classes
-# --------------------------------------------------------------------------------
-class BasicThread(Thread):
-    """Basic thread class to use threads with an action attribute"""
-
-    # ----------------------------------------
-    # Magic methods
-    # ----------------------------------------
-    def __init__(self, action):
-        """The action param can be used to choose different run methods"""
-        Thread.__init__(self)
-        self.action = action
-
-    # ----------------------------------------
-    # Public methods
-    # ----------------------------------------
-    def run(self):
-        """Runs the thread"""
-        if self.action == "":
-            pass
-        elif self.action == "":
-            pass
-        else:
-            pass
 
 
 # --------------------------------------------------------------------------------
@@ -44,8 +11,8 @@ class BasicThread(Thread):
 def run_all_threads(threads):
     """
     Runs all the generated threads at once, and then joins them
-    Args:
-        threads (list): List of Thread instances we want to run
+    :param threads: List of Thread instances we want to run
+    :type threads: list(Thread)
     """
     for thread in threads:
         thread.start()

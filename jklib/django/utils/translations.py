@@ -1,8 +1,4 @@
-"""
-Scripts for handling translations within Django
-Functions:
-    update_translations: Updates the translations for the given languages
-"""
+"""Scripts for handling translations within django"""
 
 
 # Built-in
@@ -15,9 +11,8 @@ import os
 def update_translations(languages):
     """
     Updates the translations for the given languages
-    The languages must be in the shape of their relative folders: fr_FR, en_US, etc.
-    Args:
-        languages (list): List of strings that represent the languages
+    :param languages: List of strings that represent the languages (fr_FR, en_US, etc.)
+    :type languages: list(str)
     """
     # Get the directory with manage.py
     project_root = os.getcwd()

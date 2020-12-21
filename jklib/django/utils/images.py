@@ -1,11 +1,4 @@
-"""
-Contains useful functions for managing image files, mostly through "pillow".
-Functions:
-    downsize_image: Downsizes an image to a maximum width/height, while keeping its aspect ratio
-    get_image_dimensions: Returns the dimensions of an image, either as a string or a tuple
-    image_as_html: Returns the necessary HTML to display our image, with a maximum width/height
-    image_list_as_html: Returns a HTML snippet with several <img> tags to display our images
-"""
+"""Functions for managing image files, mostly through the pillow/PIL library"""
 
 
 # Django
@@ -21,10 +14,9 @@ from PIL import Image
 def downsize_image(file_path, width, height):
     """
     Downsizes an image to a maximum width/height, while keeping its aspect ratio
-    Args:
-        file_path (str): Path to the image file
-        width (int): Maximum width
-        height (int): Maximum height
+    :param str file_path: Path to the image file
+    :param int width: Maximum width
+    :param int height: Maximum height
     """
     img = Image.open(file_path)
     if (img.height > height) or (img.width > width):
@@ -36,11 +28,10 @@ def downsize_image(file_path, width, height):
 def get_image_dimensions(path, string=True):
     """
     Returns the dimensions of an image, either as a string or a tuple
-    Args:
-        path (str): Path to the image file
-        string (bool, optional): Indicates whether to return a str or a tuple. Defaults to True.
-    Returns:
-        (str/tuple) Either a string like "(width)x(height)px" or a tuple (width, height)
+    :param str path: Path to the image file
+    :param bool string: Indicates whether to return a str or a tuple. Defaults to True.
+    :return: Either a string like "(width)x(height)px" or a tuple (width, height)
+    :rtype: tuple(int, int) or str
     """
     img = Image.open(path)
     if string:
@@ -54,12 +45,11 @@ def image_as_html(image_field, max_width=300, max_height=300):
     Returns the necessary HTML to display our image, with a maximum width/height.
     This function keeps the aspect-ratio when resizing.
     Resizing is done in CSS. The actual file remains unchanged.
-    Args:
-        image_field (str): ImageField instance from our model
-        max_width (int, optional): Maximum display width. Defaults to 300.
-        max_height (int, optional): Maximum display height. Defaults to 300.
-    Returns:
-        (str) HTML string marked as safe for Django
+    :param str image_field: The name of the image field in our model instance
+    :param int max_width: Maximum display width. Defaults to 300.
+    :param int max_height: Maximum display height. Defaults to 300.
+    :return: HTML string marked as safe for django
+    :rtype: str
     """
     html = ""
     relative_path = image_field.name

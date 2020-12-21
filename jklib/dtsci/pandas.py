@@ -1,30 +1,28 @@
-"""
-Contains useful functions for pandas
-Functions:
-    sorted_groupby: Will groupby and aggregate values in a dataframe, while keeping a specific sort/order
-"""
+"""Utility functions for the pandas library"""
 
 
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def sorted_groupby(df, sorted_column, groupby_fields, agg_fields, agg_options):
+def sorted_group_by(df, sorted_column, group_by_fields, agg_fields, agg_options):
     """
-    Will groupby and aggregate values in a dataframe, while keeping a specific sort/order
-    Args:
-        df (DataFrame): An already sorted dataframe
-        sorted_column (str): The column which unique values we will use as sorting reference
-        groupby_fields (str, list): The fields by which we groupby
-        agg_fields (str, list): The fields we will aggregate
-        agg_options (str, dict): The arguments passed to the .agg() method
-    Returns:
-        (DataFrame)
+    Will 'group by' and aggregate values in a DataFrame, while keeping a specific sort/order
+    :param DataFrame df: An already sorted dataframe
+    :param str sorted_column: The column which unique values we will use as sorting reference
+    :param group_by_fields: The fields by which we groupby
+    :type group_by_fields: list(str) or str
+    :param agg_fields: The fields we will aggregate by
+    :type agg_fields: list(str) or str
+    :param agg_options: The arguments passed to the .agg() method
+    :type agg_fields: dict or str
+    :return: The 'grouped by', aggregated, and sorted DataFrame
+    :rtype: DataFrame
     """
     # Creates the sort reference
     uniques = df[sorted_column].unique()
     sorter_index = {value: i for (i, value) in enumerate(uniques)}
     # Aggregates the dataframe
-    df = df.groupby(groupby_fields)[agg_fields].agg(agg_options)
+    df = df.groupby(group_by_fields)[agg_fields].agg(agg_options)
     df = df.reset_index()
     # Sorts the dataframe in its original order
     df["sorting_column"] = df[sorted_column].map(sorter_index)

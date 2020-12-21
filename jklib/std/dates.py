@@ -1,8 +1,4 @@
-"""
-Contains useful function for handling dates
-Functions:
-    get_all_dates: Creates a list of tuples with date info for all the dates between 'start' and 'end'
-"""
+"""Utility function for handling dates/times of all sorts"""
 
 
 # Built-in
@@ -16,25 +12,24 @@ def get_all_dates(start, end):
     """
     Creates a list of tuples with date info for all the dates between 'start' and 'end'
     A tuple contains (year, month, week, day) which are either strings or integers
-    Args:
-        start (date): start date of the dashboard
-        end (date): end date of the dashboard
-    Returns:
-        (list) list of tuples (year, month, week, day)
+    :param date start: start date of the dashboard
+    :param date end: end date of the dashboard
+    :return: A list of tuples (year, month, week, day)
+    :rtype: list(tuple)
     """
     months = [
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Aout",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ]
     # Find all days
     delta = end - start
