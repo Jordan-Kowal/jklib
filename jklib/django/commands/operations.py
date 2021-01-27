@@ -144,7 +144,7 @@ class Operation:
         print(
             f"{Color.error}Operation '{self.name}' could not be run entirely.{Color.reset}"
         )
-        print(f"{Color.error}Please check the log above.{Color.reset}")
+        print(f"{Color.error}Please check the logs above.{Color.reset}")
 
     def print_operation_success(self):
         """Prints a success message indicating that all tasks were run successfully"""
