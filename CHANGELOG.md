@@ -4,10 +4,11 @@
 #### New
 #### Improvements
 #### Fixes
+- Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
+- Fixed various typos
 
 
 ## v3.0.0
-
 #### New
 - Django commands and operations handler
 - DRF new tools:
@@ -17,10 +18,8 @@
     - Improved serializers
 - TestCase classes for Django and DRF
 - Added Github action for auto-publish on release
-
 #### Improvements
 - Better docstrings with reStructedText
 - Changed the project tree arborescence
-
 #### Fixes
 - Various fixes
