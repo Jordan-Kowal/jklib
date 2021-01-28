@@ -9,7 +9,7 @@ Split into sub-categories:
 from django.conf import settings
 from django.utils.module_loading import import_string
 from rest_framework import mixins
-from rest_framework.decorators import action
+from rest_framework.decorators import MethodMapper, action
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED
@@ -224,8 +224,9 @@ class DynamicViewSet(GenericViewSet):
         registered_action.mapping = {}
         registered_action.detail = detail
         registered_action.permissions = action_settings.get("permissions", None)
-        for method in decorator_kwargs["methods"]:
-            registered_action.mapping[method] = action_name
+        registered_action.mapping = MethodMapper(
+            registered_action, decorator_kwargs["methods"]
+        )
 
     # --------------------------------------------------------------------------------
     # > Action Permissions

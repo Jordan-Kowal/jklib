@@ -3,9 +3,10 @@
 ## Next version
 #### New
 #### Improvements
+- [DRF] Updated `DynamicViewset` code to work with DRF 3.12+
 #### Fixes
-- Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
-- Fixed various typos
+- [Core] Fixed various typos
+- [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
 
 
 ## v3.0.0
