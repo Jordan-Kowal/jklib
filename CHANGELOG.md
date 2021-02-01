@@ -10,6 +10,8 @@
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
 - [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
 - [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
+- [DRF] `ActionTestCase` now instantiates an API client in its `setUpClass`. The client defaults to `APIClient` and
+can be overridden through the `client_class` attribute.
 
 
 ## [v3.0.0] - 2020-12-21

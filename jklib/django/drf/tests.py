@@ -29,6 +29,15 @@ class ActionTestCase(ImprovedTestCase):
     service_extra_url = ""  # After the model id
 
     # ----------------------------------------
+    # Behavior
+    # ----------------------------------------
+    @classmethod
+    def setUpClass(cls):
+        """Sets up the API client"""
+        cls.client = cls.client_class()
+        super(ActionTestCase, cls).setUpClass()
+
+    # ----------------------------------------
     # Assertions
     # ----------------------------------------
     def assert_fields_are_required(self, handler, url, valid_payload, fields=None):
