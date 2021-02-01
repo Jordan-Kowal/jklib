@@ -7,7 +7,7 @@ from django.db.models import Model
 # Local
 from ...std.files import get_size
 from ..utils.images import get_image_dimensions, image_as_html
-from .fields import DateCreatedField, DateUpdatedField
+from .fields import CreatedAtField, UpdatedAtField
 
 
 # --------------------------------------------------------------------------------
@@ -19,8 +19,8 @@ class LifeCycleModel(Model):
     # ----------------------------------------
     # Fields
     # ----------------------------------------
-    created_at = DateCreatedField()
-    updated_at = DateUpdatedField()
+    created_at = CreatedAtField()
+    updated_at = UpdatedAtField()
 
     class Meta:
         """Makes the model abstract"""

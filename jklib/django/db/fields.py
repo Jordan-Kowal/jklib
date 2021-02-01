@@ -28,7 +28,7 @@ def ActiveField(*args, **kwargs):
     return models.BooleanField(*args, **kwargs)
 
 
-def DateCreatedField(*args, **kwargs):
+def CreatedAtField(*args, **kwargs):
     """
     Custom DateTimeField that registers the creation datetime
     :param args: Same args as the django Field class
@@ -41,7 +41,7 @@ def DateCreatedField(*args, **kwargs):
     return models.DateTimeField(*args, **kwargs)
 
 
-def DateUpdatedField(*args, **kwargs):
+def UpdatedAtField(*args, **kwargs):
     """
     Custom DateTimeField that registers the last update datetime
     :param args: Same args as the django Field class

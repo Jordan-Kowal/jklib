@@ -206,7 +206,7 @@ class DynamicViewSet(GenericViewSet):
         decorator_kwargs = {
             "name": action_name,
             "url_name": action_settings.get("url_name", action_name),
-            "url_path": action_settings.get("url_path", None),
+            "url_path": action_settings.get("url_path", action_name),
             "methods": action_settings.get("methods", None),
             "detail": detail,
         }

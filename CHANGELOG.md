@@ -1,12 +1,15 @@
 # Changelog
 
+
 ## Next version
 ### Added
 ### Changed
 - [DRF] Updated `DynamicViewset` code to work with DRF 3.12+
 ### Fixed
 - [Core] Fixed various typos
+- [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
 - [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
+- [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
 
 
 ## [v3.0.0] - 2020-12-21
