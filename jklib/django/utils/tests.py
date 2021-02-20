@@ -17,6 +17,31 @@ CHARS = ascii_letters + digits
 
 
 # --------------------------------------------------------------------------------
+# > Functions
+# --------------------------------------------------------------------------------
+def assert_logs(logger, level):
+    """
+    Wraps the entire method into a `self.assertLogs` context
+    The context can be accessed through self.logger_context
+    :param str logger: The logger to intercept
+    :param str level: The minimum log level to look for
+    :return: Decorator
+    :rtype: func
+    """
+    level = level.upper()
+
+    def decorator(function):
+        def wrapper(self, *args, **kwargs):
+            with self.assertLogs(logger=logger, level=level) as context:
+                self.logger_context = context
+                return function(self, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+# --------------------------------------------------------------------------------
 # > Classes
 # --------------------------------------------------------------------------------
 class ImprovedTestCase(TestCase):

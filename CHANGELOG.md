@@ -3,15 +3,16 @@
 
 ## Next version
 ### Added
+- [Django] Added `assert_logs` decorator to apply the `self.assertLogs` context to an entire test case
 ### Changed
-- [DRF] Updated `DynamicViewset` code to work with DRF 3.12+
-### Fixed
-- [Core] Fixed various typos
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
-- [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
-- [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
+- [DRF] Updated `DynamicViewset` code to work with DRF 3.12+
 - [DRF] `ActionTestCase` now instantiates an API client in its `setUpClass`. The client defaults to `APIClient` and
 can be overridden through the `client_class` attribute.
+### Fixed
+- [Core] Fixed various typos
+- [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
+- [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
 
 
 ## [v3.0.0] - 2020-12-21
