@@ -6,7 +6,7 @@ from string import ascii_letters, digits
 from time import sleep
 
 # Django
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import RequestFactory, TestCase
 
@@ -62,7 +62,9 @@ class ImprovedTestCase(TestCase):
     # Assertions
     # ----------------------------------------
     @staticmethod
-    def assert_email_was_sent(subject, async_=True):
+    def assert_email_was_sent(
+        subject, index=0, size=1, to=None, cc=None, cci=None, async_=True
+    ):
         """
         Checks that ONE specific email has been sent (and is the only one sent)
         :param str subject: Subject of the email, used to find it in the mailbox
@@ -70,9 +72,18 @@ class ImprovedTestCase(TestCase):
         """
         if async_:
             sleep(0.2)
-        email = mail.outbox[0]
-        assert len(mail.outbox) == 1
+        email = mail.outbox[index]
+        assert len(mail.outbox) == size
         assert email.subject == subject
+        if to is not None:
+            assert len(to) == len(email.to)
+            assert set(to) == set(email.to)
+        if cc is not None:
+            assert len(cc) == len(email.cc)
+            assert set(cc) == set(email.cc)
+        if cci is not None:
+            assert len(cci) == len(email.cci)
+            assert set(cci) == set(email.cci)
 
     # ----------------------------------------
     # User fixtures
@@ -92,7 +103,9 @@ class ImprovedTestCase(TestCase):
         # Drops username as we'll replace it with the email
         kwargs.pop("username", None)
         email = kwargs.pop("email")
-        user = User.objects.create_user(username=email, email=email, **kwargs)
+        user = get_user_model().objects.create_user(
+            username=email, email=email, **kwargs
+        )
         return user
 
     def create_admin_user(self, **kwargs):
@@ -148,7 +161,7 @@ class ImprovedTestCase(TestCase):
         If not unique, it is deleted and we try again
         :param instructions: Integers or strings to be used to generate our string
         :type instructions: int or str
-        :raises TypeError: If an instruction is neither a string or an integer
+        :raise TypeError: If an instruction is neither a string or an integer
         :return: The randomly generated and unique string
         :rtype: str
         """

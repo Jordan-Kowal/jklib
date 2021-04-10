@@ -13,7 +13,7 @@ def sort_json(path):
     """
     Overwrites and sorts a JSON file to make it cleaner / more readable
     :param path: Path to the JSON file
-    :raises TypeError: If the given path does not exist
+    :raise TypeError: If the given path does not exist
     """
     ext = os.path.splitext(path)[1]
     if ext != ".json":

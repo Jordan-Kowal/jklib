@@ -34,9 +34,12 @@ class ImprovedBasePermission(BasePermission):
     detail_only = False
 
     def has_permission(self, request, view):
-        """True by default, except for detail-only permission when the action is not detail"""
+        """True for non-detail, conditional for detail, and False if information is missing"""
+        action_is_detail = getattr(request, "is_detail_action", None)
+        if action_is_detail is None:
+            return False
         if self.detail_only:
-            return request.is_detail_action
+            return getattr(request, "is_detail_action", False)
         else:
             return True
 
@@ -122,20 +125,6 @@ class IsNotAuthenticated(ImprovedBasePermission):
         return not bool(self.user_is_valid(request) and request.user.is_authenticated)
 
 
-class IsNotVerified(ImprovedBasePermission):
-    """User must be authenticated but not yet verified"""
-
-    message = "Your account must not be verified"
-
-    def has_permission(self, request, view):
-        """Returns True if user is logged in and not verified"""
-        return bool(
-            self.user_is_valid(request)
-            and request.user.is_authenticated
-            and not request.user.profile.is_verified
-        )
-
-
 class IsObjectOwner(ImprovedBasePermission):
     """Object must be attached to the user, or be the user itself"""
 
@@ -153,17 +142,3 @@ class IsSuperUser(ImprovedBasePermission):
     def has_permission(self, request, view):
         """Returns whether the user is a superuser"""
         return bool(self.user_is_valid(request) and request.user.is_superuser)
-
-
-class IsVerified(ImprovedBasePermission):
-    """User must be authenticated but not yet verified"""
-
-    message = "Your account must be verified"
-
-    def has_permission(self, request, view):
-        """Returns True if user is logged in and not verified"""
-        return bool(
-            self.user_is_valid(request)
-            and request.user.is_authenticated
-            and request.user.profile.is_verified
-        )

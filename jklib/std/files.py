@@ -19,7 +19,7 @@ def convert_size(size, input_unit="B", output_unit="KB"):
     :param str output_unit: The desired unit to convert to. Defaults to "KB".
     :return: The converted amount of bytes, in the desired unit, rounded to 2 digits
     :rtype: float
-    :raises IndexError: if 'input_unit' or 'output_units' are not in the valid unit list
+    :raise IndexError: if 'input_unit' or 'output_units' are not in the valid unit list
     """
     units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
     # Errors

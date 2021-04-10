@@ -1,10 +1,12 @@
 """Useful constants, functions, and classes for test management in DRF"""
 
+# Built-in
+from urllib.parse import urlencode
+
 # Django
 from rest_framework.test import APIClient
 
 # Local
-from ..utils.network import build_url
 from ..utils.tests import ImprovedTestCase
 
 
@@ -12,21 +14,13 @@ from ..utils.tests import ImprovedTestCase
 # > Classes
 # --------------------------------------------------------------------------------
 class ActionTestCase(ImprovedTestCase):
-    """
-    TestCase class specifically for testing service built with our ActionHandler class
-    Inherits from ImprovedTestCase
-    Provides the following:
-        Assertions for required fields, field errors, and emails
-        URL builder for services and detailed url
-        User generation with authentication
-    """
+    """TestCase that provides utility for testing DRF actions/endpoints"""
 
-    # ----------------------------------------
-    # Properties
-    # ----------------------------------------
-    client_class = APIClient
-    service_base_url = ""  # Before the model id
-    service_extra_url = ""  # After the model id
+    api_client_class = APIClient
+    url_template = ""  # Use {{name}} for templating
+    http_method_name = ""
+    success_code = ""
+    payload = None
 
     # ----------------------------------------
     # Behavior
@@ -34,21 +28,38 @@ class ActionTestCase(ImprovedTestCase):
     @classmethod
     def setUpClass(cls):
         """Sets up the API client"""
-        cls.client = cls.client_class()
+        cls.api_client = cls.api_client_class()
+        cls.http_method = getattr(cls.api_client, cls.http_method_name.lower())
         super(ActionTestCase, cls).setUpClass()
 
     # ----------------------------------------
     # Assertions
     # ----------------------------------------
-    def assert_fields_are_required(self, handler, url, valid_payload, fields=None):
+    def assert_admin_permissions(self, url, payload=None):
         """
-        Tests that the provided fields are required for a request.
-        For each field, we will:
-            Use a valid payload
-            Remove only the specific field
-            Call the endpoint with that payload
-            Expect a 400 HTTP status and an error for our field
-        :param function handler:
+        Checks that the service is only available to admin users
+        :param str url: The target url
+        :param dict payload: The data to pass to the request
+        """
+        admin = self.create_admin_user()
+        user = self.create_user()
+        # 401 Not authenticated
+        self.api_client.logout()
+        response = self.http_method(url, data=payload)
+        assert response.status_code == 401
+        # 403 Not admin
+        self.api_client.force_authenticate(user)
+        response = self.http_method(url, data=payload)
+        assert response.status_code == 403
+        # 201 Admin
+        self.api_client.logout()
+        self.api_client.force_authenticate(admin)
+        response = self.http_method(url, data=payload)
+        assert response.status_code == self.success_code
+
+    def assert_fields_are_required(self, url, valid_payload, fields=None):
+        """
+        Tests that the provided fields are required for a request
         :param str url: The service url
         :param dict valid_payload: A valid payload for the service
         :param [str] fields: List of fields to check. Defaults to self.required_fields
@@ -58,70 +69,41 @@ class ActionTestCase(ImprovedTestCase):
         for field in fields:
             request_payload = valid_payload.copy()
             request_payload[field] = None
-            response = handler(url, request_payload)
-            self.assert_field_has_error(response, field)
-
-    @staticmethod
-    def assert_field_has_error(response, field, code=400, n=1):
-        """
-        Tests that a specific field has raised an error by checking:
-            The error code
-            That there's an error message for this field in the response
-        :param Response response: Response from the server, following our query
-        :param str field: The field we're looking for
-        :param int code: The expected HTTP code
-        :param int n: The minimum amount of errors expected for this field
-        """
-        assert response.status_code == code
-        assert len(response.data[field]) >= n
+            response = self.http_method(url, request_payload)
+            assert response.status_code == 400
+            assert len(response.data[field]) > 0
 
     # ----------------------------------------
     # URL utilities
     # ----------------------------------------
-    def detail_url(self, object_id):
+    def url(self, context=None, params=None):
         """
-        Builds a detail URL for an instance model
-        :param int object_id: ID of our target instance
-        :return: The detail URL for this service and instance
+        Builds a URL through a templating system
+        :param dict context: Data to replace in the URL
+        :param dict params: GET parameters to add in the URL
+        :return: The generated endpoint URL
         :rtype: str
         """
-        id_ = str(object_id)
-        parts = [self.service_base_url, id_, self.service_extra_url]
-        url = build_url(parts, end_slash=True)
-        return f"/{url}"
-
-    def detail_url_with_params(self, object_id, params):
-        """
-        Builds a detail URL for an instance model with added GET parameters
-        :param int object_id: ID of our target instance
-        :param dict params: The parameters to pass in the URL
-        :return: The detail URL with GET params
-        :rtype: str
-        """
-        id_ = str(object_id)
-        parts = [self.service_base_url, id_, self.service_extra_url]
-        url = build_url(parts, params=params, end_slash=True)
-        return f"/{url}"
-
-    def service_url_with_params(self, params):
-        """
-        Adds GET parameters to the service URL
-        :param dict params: The parameters to pass in the URL
-        :return: The service URL with GET params
-        :rtype: str
-        """
-        parts = [self.service_base_url]
-        url = build_url(parts, params=params, end_slash=True)
-        return f"/{url}"
+        url = self.url_template
+        if context is not None:
+            for key, value in context.items():
+                url = url.replace(f"{{{key}}}", str(value))
+        if params is not None:
+            if url[-1] == "/":
+                url = url[:-1]
+            url += urlencode(params)
+        if url[-1] != "/":
+            url += "/"
+        if url[0] != "/":
+            url = "/" + url
+        return url.replace("//", "/")
 
     # ----------------------------------------
     # User fixtures
     # ----------------------------------------
     def create_user(self, authenticate=False, **kwargs):
         """
-        Creates a user and potentially authenticates the client with him
-        The username will be set to the email address
-        Any missing field will be randomly generated
+        Creates a user and maybe authenticates him
         :param bool authenticate: Whether to authenticate the user
         :param kwargs: Fields/Values for the User model
         :return: The created user
@@ -129,12 +111,12 @@ class ActionTestCase(ImprovedTestCase):
         """
         user = super().create_user(**kwargs)
         if authenticate:
-            self.client.force_authenticate(user)
+            self.api_client.force_authenticate(user)
         return user
 
     def create_admin_user(self, authenticate=False, **kwargs):
         """
-        Same as self.create_user() except that 'is_staff' is forced to True
+        Creates an admin ser and maybe authenticates him
         :param bool authenticate: Whether to authenticate the user
         :param kwargs: Fields/Values for the User model
         :return: The created admin user
@@ -142,5 +124,5 @@ class ActionTestCase(ImprovedTestCase):
         """
         user = super().create_admin_user(**kwargs)
         if authenticate:
-            self.client.force_authenticate(user)
+            self.api_client.force_authenticate(user)
         return user

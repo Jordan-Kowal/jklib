@@ -14,6 +14,6 @@ class NoBulkCreateManager(models.Manager):
     def bulk_create(self, objs, **kwargs):
         """
         Overrides the 'bulk_create' method to make it non-usable
-        :raises NotImplementedError: Must be overridden to be usable
+        :raise NotImplementedError: Must be overridden to be usable
         """
         raise NotImplementedError("Cannot use bulk_create on this model")

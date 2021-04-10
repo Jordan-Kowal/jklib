@@ -30,7 +30,7 @@ class LengthValidator:
         """
         Checks if the value meets the length criterion
         :param str value: The current string value of the field
-        :raises ValidationError: If the field is either too short or too long
+        :raise ValidationError: If the field is either too short or too long
         """
         if self.trim:
             value = value.strip()
