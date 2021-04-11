@@ -1,6 +1,5 @@
 """Functions for network management within django"""
 
-
 # Built-in
 from urllib.parse import urlencode
 
@@ -41,8 +40,7 @@ def build_url(parts, params=None, end_slash=False):
 
 def get_client_ip(request):
     """
-    Returns the IP address of the current user
-    Based on the environment, the address can be different thing: FORWARDED_FOR, REAL_IP, REMOTE_ADDR
+    Extract the IP address from the request (either from FORWARDED_FOR, REAL_IP, or REMOTE_ADDR)
     :param request: HttpRequest from django
     :return: The user's IP address
     :rtype: str

@@ -1,12 +1,4 @@
-"""
-Contains utility functions for making queries in the database
-Useful for filtering, sorting, and ordering the data
-
-Split into sub-categories:
-    Simple Getters: Shortcut to get an object
-    Advanced Queries: Getters with several parameters and improved searches
-"""
-
+"""Functions for performing SQL queries"""
 
 # Django
 from django.db.models import Q
@@ -50,18 +42,6 @@ def get_object_or_this(model, default=None, *args, **kwargs):
 # --------------------------------------------------------------------------------
 # > Advanced Queries
 # --------------------------------------------------------------------------------
-# TODO: Add a new query that allows for improved list output
-#   Filtering:
-#       Fieldname + list of exact values (OR)
-#       If several filters, relationship of (AND)
-#       If same field, overrides
-#   Search:
-#       Like filtering but: you provide a TEXT and a list of FIELDS that could have it
-#       We look for "present in" with OR relationships
-#   Sort: Order based on several fields, in given order, [{name: XXX, order: ASC}, ...]
-#   Pagination: Quantity of elements, which page number
-
-
 def filter_on_text(queryset, searched_text, min_length, *fields):
     """
     Filters a queryset by searching for a text value in different fields, using OR logic
@@ -71,7 +51,7 @@ def filter_on_text(queryset, searched_text, min_length, *fields):
     :param fields: Fields where the text will be searched (SYNTAX: client.name becomes client__name)
     :type fields: list or str
     :return: The filtered and updated queryset
-    :rtype: queryset
+    :rtype: QuerySet
     """
     if len(searched_text) >= min_length:
         q = Q()
@@ -84,19 +64,18 @@ def filter_on_text(queryset, searched_text, min_length, *fields):
     return queryset
 
 
-def single_sort_by(queryset, params):
+def single_sort_by(queryset, sort_by=None, ascending=False):
     """
     Orders and returns the queryset using the GET parameters of a request
     The function takes care of checking if the "sort_by" key exists in the dict
-    :param queryset queryset: A queryset object from a django model
-    :param dict params: Dict containing the request params
+    :param QuerySet queryset: A queryset object from a django model
+    :param str sort_by: The field name to sort by
+    :param bool ascending: Whether to sort in ascending order
     :return: The sorted and updated queryset
-    :rtype: queryset
+    :rtype: QuerySet
     """
-    sort_by = params.get("sort_by", None)
     if sort_by:
-        ascending = params.get("ascending", False)
-        if ascending != "true":
+        if not ascending:
             sort_by = "-" + sort_by
         queryset = queryset.order_by(sort_by)
     return queryset

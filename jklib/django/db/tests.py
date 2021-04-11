@@ -1,9 +1,8 @@
-"""Useful constants, functions, and classes for testing Django models"""
-
+"""Utilities for testing Django models"""
 
 # Django
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 
 # Local
 from ..utils.tests import ImprovedTestCase
@@ -13,12 +12,7 @@ from ..utils.tests import ImprovedTestCase
 # > Classes
 # --------------------------------------------------------------------------------
 class ModelTestCase(ImprovedTestCase):
-    """
-    TestCase class specifically for testing our models
-    Inherits from ImprovedTestCase
-    Provides the following:
-        Assertions for field constraints (unique, required, choices, etc.)
-    """
+    """Extends ImprovedTestCase to provide specific utility for testing Django models"""
 
     model_class = None
 

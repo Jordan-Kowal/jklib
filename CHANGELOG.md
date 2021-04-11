@@ -8,9 +8,12 @@
 
 ### Changed
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
+- [Django] Removed the `ModelWithImage` custom class 
 - [DRF] **ViewSets**:
     - Added `BulkDestroyMixin` to provide the `bulk_destroy` action to your viewset
-    - `DynamicViewSet` and `DynamicModelViewSet` have been replace with `ImprovedViewSet` and `ImprovedModelViewSet`
+    - `DynamicViewSet` and `DynamicModelViewSet` have been removed from the lib
+    - As a result, also removed the `ActionHandler` custom class and `SerializerMode` Enum, as they are not longer useful  
+    - Added two new viewsets: `ImprovedViewSet` and `ImprovedModelViewSet`
     - They allow you to have 1 serializer/action, and have 3 level of permissions: app-wide, viewset-wide, and per action
 - [DRF] **Serializers**:
     - New shortcuts for serializer fields attributes: `required_list, optional, optional_list`
@@ -34,12 +37,14 @@
     
 ### Fixed
 - [Core] Fixed various typos
+- [Django] Fixed `emails.extract_email_addresses` that did not take into account the `sep` arg
+- [Django] Fixed `emails.send_html_email` that did not take into account the `sep` arg
 - [DRF] Replaced custom model field validator `length_validator` with `LengthValidator` to work properly
 - [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
 - [DRF] Custom `action` without the `detail` property will have their permissions fail automatically
 - [DRF] Fixed `IdListSerializer` serializer to make its only field required
 
-
+---
 
 ## [v3.0.0] - 2020-12-21
 ### Added
@@ -60,3 +65,5 @@
 
 ### Fixed
 - [Core] Various fixes that I forgot to keep track of
+
+---

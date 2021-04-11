@@ -1,8 +1,4 @@
-"""
-Classes and mixins for django admin. Split into several categories:
-    Simple mixins: Provide one specific feature/option
-    Combo mixins: Built from several mixins often used together
-"""
+"""Custom classes and mixins for Django admins"""
 
 
 # --------------------------------------------------------------------------------

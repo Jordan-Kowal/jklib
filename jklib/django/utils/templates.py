@@ -1,6 +1,5 @@
 """Functions for managing templates in django"""
 
-
 # Django
 from django.template import loader
 

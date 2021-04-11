@@ -1,6 +1,5 @@
 """Functions for interacting with django settings"""
 
-
 # Django
 from django.conf import settings
 

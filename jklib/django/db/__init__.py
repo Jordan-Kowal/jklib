@@ -1,1 +1,1 @@
-"""Package with utility functions that focuses on django models"""
+"""Utilities for the Django database and ORM"""

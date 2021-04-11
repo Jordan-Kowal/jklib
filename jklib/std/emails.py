@@ -71,7 +71,6 @@ def connect_without_ssl(server):
 def create_message():
     """
     Creates and returns an EmailMessage instance
-    This is the email we will send at the end of the process
     :return: A ready-to-send EmailMessage with information and attachments
     :rtype: EmailMessage
     """
@@ -91,8 +90,7 @@ def create_message():
 
 def email_auth(server, ssl):
     """
-     Authenticates with the server, using either SSL, TLS, or no security protocol
-     Will return a bool indicating if authentification was successful
+    Authenticates with the server, using either SSL, TLS, or no security protocol
     :param SMTP server: A type of smtp instance from smtplib
     :param bool ssl: Indicates whether we can use SSL
     :return: Whether the authentification was successful

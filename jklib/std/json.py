@@ -1,6 +1,5 @@
 """Utility functions for working with JSON files"""
 
-
 # Built-in
 import json
 import os

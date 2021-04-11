@@ -1,6 +1,5 @@
 """Scripts for handling translations within django"""
 
-
 # Built-in
 import os
 

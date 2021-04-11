@@ -1,6 +1,5 @@
 """Utility functions for maths and working with numbers in general"""
 
-
 # Built-in
 from decimal import Decimal
 

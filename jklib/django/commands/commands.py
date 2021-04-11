@@ -9,12 +9,7 @@ from django.core.management.base import BaseCommand
 # > Classes
 # --------------------------------------------------------------------------------
 class ImprovedCommand(BaseCommand):
-    """
-    Extends the existing BaseCommand class and provides the following:
-        Integrations with our Operation class to handle the command processing/action
-        Provides utility functions
-    Make sure to declare your "operation_class" or else it will not work
-    """
+    """Extends BaseCommand to work with Operation instances"""
 
     operation_class = None
 

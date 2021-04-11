@@ -1,4 +1,4 @@
-"""Classes and mixins for django managers"""
+"""Custom managers for Django models"""
 
 
 # Django

@@ -14,9 +14,6 @@ class WebBrowser:
     """
     Wrapper around any Selenium browser instance, that acts as a CONTEXT MANAGER
     Adds a 2s implicit wait time (maximum time to find elements on the page)
-    Returns:
-        WebBrowser: The class returns a WebBrowser instance
-        SeleniumBrowser: The "with" statement return the actual selenium-supported browser instance
     """
 
     def __init__(self, browser):

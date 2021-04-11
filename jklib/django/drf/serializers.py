@@ -1,11 +1,4 @@
-"""
-Serializer and mixins classes for DRF
-Split into sub-categories:
-    Utility:                    Utility functions for serializers
-    Mixins:                     Provide utility functions for serializers (but do not inherit from them)
-    Base Serializers:           Improved DRF serializers through custom mixins and utility functions
-    Ready-to-use Serializers:   Specific and re-usable serializers for common actions
-"""
+"""Serializers and mixins classes for DRF"""
 
 
 # Django

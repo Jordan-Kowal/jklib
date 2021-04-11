@@ -1,6 +1,5 @@
 """Functions for managing image files, mostly through the pillow/PIL library"""
 
-
 # Django
 from django.utils.safestring import mark_safe
 
@@ -43,8 +42,6 @@ def get_image_dimensions(path, string=True):
 def image_as_html(image_field, max_width=300, max_height=300):
     """
     Returns the necessary HTML to display our image, with a maximum width/height.
-    This function keeps the aspect-ratio when resizing.
-    Resizing is done in CSS. The actual file remains unchanged.
     :param str image_field: The name of the image field in our model instance
     :param int max_width: Maximum display width. Defaults to 300.
     :param int max_height: Maximum display height. Defaults to 300.

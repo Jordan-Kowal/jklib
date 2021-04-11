@@ -1,22 +1,13 @@
-"""
-Viewset and mixin classes for DRF
-Split into sub-categories:
-    Mixins: Provide utility functions for viewsets (but do not inherit from them)
-    Viewsets: Improved DRF ViewSets through custom mixins and utility functions
-"""
+"""Viewset and mixin classes for DRF"""
 
 # Django
 from django.conf import settings
 from django.utils.module_loading import import_string
 from rest_framework import mixins
-from rest_framework.decorators import MethodMapper, action
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.viewsets import GenericViewSet
-
-# Local
-from .actions import SerializerMode
 
 
 # --------------------------------------------------------------------------------

@@ -1,16 +1,4 @@
-"""
-Classes and functions for handling actions of a Django command
-Contains 2 classes for running and providing feedback during Django commands
-    Operation           Called in a Django command. Runs all given tasks until one fails
-    OperationTask       Individual task/action performed during an operation
-
-The way it works is:
-    You create a new Command
-    It calls an Operation
-    This Operation is made of several OperationTask classes
-    Each OperationTask perform a specific part of the operation
-"""
-
+"""Classes and functions to perform actions in Django commands"""
 
 # Third-party
 from colorama import Fore
@@ -21,7 +9,7 @@ from colorama import init as colorama_init
 # > Helpers
 # --------------------------------------------------------------------------------
 class Color:
-    """Class to define the color used in Operation and OperationTask printed messages"""
+    """Class to define the color used in Operation and Task printed messages"""
 
     # Hierarchy
     operation = Fore.WHITE
@@ -36,13 +24,12 @@ class Color:
 
 
 # --------------------------------------------------------------------------------
-# > Main Classes
+# > Classes
 # --------------------------------------------------------------------------------
 class Operation:
     """
-    A list of OperationTask that should contain the entire workflow of a Django Command
-    This class should be called within the 'handle' method of a Django Command class
-    To run your Operation, simply call the .run() method
+    List of instructions to be run within a Django commands. Made of several Task instances.
+    To be used with our `ImprovedCommand` custom class
     """
 
     name = None
@@ -52,11 +39,7 @@ class Operation:
     # Workflow
     # ----------------------------------------
     def run(self):
-        """
-        Main function to call when you want to execute/perform your actions
-        It will run all its task one by one until all are done or one failed
-        Provides feedback in the console/shell
-        """
+        """Main method. Performs all tasks one by one and prints feedback"""
         colorama_init()
         self.print_operation_start()
         operation_success = self.run_tasks()
@@ -66,10 +49,7 @@ class Operation:
             self.print_operation_fail()
 
     def run_tasks(self):
-        """
-        Runs all tasks in order, until all are done and one fails
-        Feedback will depends on task content and their results
-        """
+        """Runs all the operation tasks"""
         success = True
         task_instances = [task() for task in self.tasks]
         for i, task_instance in enumerate(task_instances):
@@ -101,13 +81,13 @@ class Operation:
     # Feedback (in chronological order)
     # ----------------------------------------
     def print_operation_start(self):
-        """Prints a message to indicate the start of the process"""
+        """Prints a message to indicate the start of the operation"""
         print(f"{Color.operation}Starting operation '{self.name}' ...{Color.reset}\n")
 
     def print_task_start(self, task, number):
         """
         Prints a message to indicate which task (name and number) is starting
-        :param OperationTask task: The task instance we're running
+        :param Task task: The task instance we're running
         :param int number: The number of the current task
         """
         wrapper = "~" * 50
@@ -123,7 +103,7 @@ class Operation:
     def print_task_fail(task):
         """
         Prints an error message indicating the task has failed
-        :param OperationTask task: The task instance that failed
+        :param Task task: The task instance that failed
         """
         print(
             f"{Color.error}Task '{Color.task}{task.name}{Color.error}' has failed{Color.reset}\n"
@@ -133,7 +113,7 @@ class Operation:
     def print_task_success(task):
         """
         Prints a message indicating the task was a success
-        :param OperationTask task: The task instance that was a success
+        :param Task task: The task instance that was a success
         """
         print(
             f"{Color.success}Task '{Color.task}{task.name}{Color.success}' has ended successfully{Color.reset}\n"
@@ -151,14 +131,8 @@ class Operation:
         print(f"{Color.success}Operation '{self.name}' was a success.{Color.reset}")
 
 
-class OperationTask:
-    """
-    Individual task that will be performed during an Operation
-    Used to better split/segment Operation actions
-    To use, you must:
-        Implement your main logic in the "run" method
-        Provide a "name" attribute
-    """
+class Task:
+    """Individual task/step during an Operation. Used to split up the logic"""
 
     name = None
     message_suffix = "--->"
@@ -167,11 +141,7 @@ class OperationTask:
     # Workflow
     # ----------------------------------------
     def run(self):
-        """
-        Main function that will be called during an Operation. Must be overridden
-        Should return a boolean (indicating success or failure)
-        :raise NotImplementedError: If the method is not overridden
-        """
+        """Main function. Must execute the process/task logic"""
         raise NotImplementedError()
 
     # ----------------------------------------
@@ -207,12 +177,7 @@ class OperationTask:
 
     def _print_message(self, message, type_, color):
         """
-        Shared printing function that prepends:
-            Changes the color of the message
-            Prepends a string to make it more readable
-            Adds a message type in between brackets
-            Shows the message
-            And reset the color back to normal
+        Prints a message in the right color and prefix it with a type
         :param str message: The message to show in the console
         :param str type_: The type of message
         :param color: The color to apply to the whole thing

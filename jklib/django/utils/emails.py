@@ -20,15 +20,14 @@ def extract_email_addresses(emails, sep=","):
     :rtype: list(str)
     """
     if type(emails) == str:
-        emails = emails.split(",")
+        emails = emails.split(sep)
         emails = list(map(lambda x: x.strip(), emails))
     return emails
 
 
 def get_css_content(relative_path):
     """
-    Gets and returns the content of a css file
-    Please make your that CSS file do not use " or '
+    Gets and returns the content of a css file. Avoid using " or ' in your file.
     :param relative_path: Relative path to the CSS file (the same as the one you'd use in {% static %})
     :return: The content of the CSS file
     :rtype: str
@@ -51,8 +50,8 @@ def send_html_email(subject, body, sep=",", to=None, cc=None, sender=None):
     :type cc: list(str) or str
     :param str sender: The sender. Defaults to django configuration.
     """
-    to = extract_email_addresses(to)
-    cc = extract_email_addresses(cc)
+    to = extract_email_addresses(to, sep)
+    cc = extract_email_addresses(cc, sep)
     email = EmailMessage(subject=subject, body=body, to=to, cc=cc, from_email=sender,)
     email.content_subtype = "html"
     email.send()

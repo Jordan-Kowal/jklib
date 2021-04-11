@@ -1,4 +1,4 @@
-"""Validators for model fields"""
+"""Validators for Django model fields"""
 
 
 # Django

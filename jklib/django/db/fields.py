@@ -1,9 +1,4 @@
-"""
-Custom fields for django models
-Split in the following categories:
-    Shortcuts:      Function-based fields that simply defaults various kwargs for Django fields
-    Custom Fields:  Actual class-based fields for our custom needs
-"""
+"""Custom fields for Django models"""
 
 
 # Django
