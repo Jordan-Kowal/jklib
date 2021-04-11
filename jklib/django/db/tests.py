@@ -1,9 +1,5 @@
 """Utilities for testing Django models"""
 
-# Django
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
-
 # Local
 from ..utils.tests import ImprovedTestCase
 
@@ -15,17 +11,6 @@ class ModelTestCase(ImprovedTestCase):
     """Extends ImprovedTestCase to provide specific utility for testing Django models"""
 
     model_class = None
-
-    # ----------------------------------------
-    # Properties
-    # ----------------------------------------
-    @property
-    def common_errors(self):
-        """
-        :return: A list of common error classes
-        :rtype: ValueError, ValidationError, IntegrityError
-        """
-        return ValueError, ValidationError, IntegrityError
 
     # ----------------------------------------
     # Assertions

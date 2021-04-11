@@ -1,5 +1,6 @@
 # Changelog
 
+tests: removed some assertions and user creation shortcuts
 
 ## [v3.1.0] - XXXX-XX-XX
 ### Added
@@ -23,15 +24,16 @@
     - `ImprovedTestCase`
         - Uses `get_user_model` rather than the default `User` model
         - `assert_email_was_sent` now takes more arguments for more flexibility
+        - No longer provide tools to create user or random data. Use your own Factories instead.
     - `ActionTestCase`
-        - More properties: `api_client_class`, `url_template`, `http_method_name`, `success_code`, `payload`
+        - No longer provide tools to create user or random data. Use your own Factories instead.
+        - Added properties: `api_client_class`, `url_template`, `http_method_name`, `success_code`, `payload`
         - Removed old properties: `client_class`, `service_base_url`, `service_extra_url`
         - `client` has become `api_client`
         - Removed method `assert_field_has_error`
         - Replaced `detail_url`, `detail_url_with_params`, `service_url_with_params` methods with a single `url` method
-        - New method `assert_admin_permissions`
     - `ModelTestCase`
-        - Removed method `assert_fields_are_required`
+        - Removed methods `assert_fields_are_required` and `common_errors`
 - [DRF] **Permissions**:
     - `IsVerified` and `IsNotVerified` permissions have been removed
     

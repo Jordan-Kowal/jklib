@@ -45,12 +45,6 @@ class ImprovedTestCase(TestCase):
     """Improvement from TestCase with various utilities"""
 
     # ----------------------------------------
-    # Properties
-    # ----------------------------------------
-    required_fields = []
-    existing_random_values = set()
-
-    # ----------------------------------------
     # Assertions
     # ----------------------------------------
     @staticmethod
