@@ -2,20 +2,14 @@
 
 
 # Built-in
-from datetime import timedelta
+from datetime import date, timedelta
+from typing import List, Tuple
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def get_all_dates(start, end):
+def get_all_dates(start: date, end: date) -> List[Tuple[int, str, str, str]]:
     """
     Creates a list of tuples with date info for all the dates between 'start' and 'end'
     A tuple contains (year, month, week, day) which are either strings or integers
-    :param date start: start date of the dashboard
-    :param date end: end date of the dashboard
-    :return: A list of tuples (year, month, week, day)
-    :rtype: list(tuple)
     """
     months = [
         "January",
@@ -37,20 +31,20 @@ def get_all_dates(start, end):
     # Generate tuples
     several_years = True if start.year != end.year else False
     date_list = []
-    for date in days:
-        year = date.year
-        day = date.strftime("%d/%m/%Y")
+    for current_day in days:
+        year = current_day.year
+        day = current_day.strftime("%d/%m/%Y")
         # Month
-        month = months[date.month - 1]
+        month = months[current_day.month - 1]
         if several_years:
-            month += " " + str(date.year)
+            month += " " + str(current_day.year)
         # Week
-        number = date.isocalendar()[1]
+        number = current_day.isocalendar()[1]
         week = "S{:02}".format(number)
         if several_years:
-            if date.month == 12 and number == 1:
-                week += " " + str(date.year + 1)
+            if current_day.month == 12 and number == 1:
+                week += " " + str(current_day.year + 1)
             else:
-                week += " " + str(date.year)
+                week += " " + str(current_day.year)
         date_list.append((year, month, week, day))
     return date_list

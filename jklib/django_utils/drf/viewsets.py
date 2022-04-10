@@ -4,28 +4,21 @@
 from django.conf import settings
 from django.utils.module_loading import import_string
 from rest_framework import mixins
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.viewsets import GenericViewSet
 
 
-# --------------------------------------------------------------------------------
-# > Mixins
-# --------------------------------------------------------------------------------
 class BulkDestroyMixin:
     """Mixin to delete multiple instances at once"""
 
-    def bulk_destroy(self, request):
-        """
-        Delete multiple instances at once
-        :param Request request: The user's HTTP request
-        :return: HTTP 204 or 404 with no data
-        :rtype: Response
-        """
-        serializer = self.get_valid_serializer(data=request.data)
+    def bulk_destroy(self, request: Request) -> Response:
+        """Delete multiple instances at once"""
+        serializer = self.get_valid_serializer(data=request.data)  # type: ignore
         ids_to_delete = serializer.validated_data.pop("ids")
-        instances = self.get_queryset().filter(id__in=ids_to_delete)
+        instances = self.get_queryset().filter(id__in=ids_to_delete)  # type: ignore
         if len(instances) == 0:
             return Response(None, status=HTTP_404_NOT_FOUND)
         else:
@@ -46,9 +39,6 @@ class ModelMixin(
     pass
 
 
-# --------------------------------------------------------------------------------
-# > Viewsets
-# --------------------------------------------------------------------------------
 class ImprovedViewSet(GenericViewSet):
     """
     Extends GenericViewSet to provide more flexibility on action settings

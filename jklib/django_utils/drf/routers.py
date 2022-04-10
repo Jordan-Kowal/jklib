@@ -4,9 +4,6 @@
 from rest_framework.routers import DefaultRouter, DynamicRoute, Route
 
 
-# --------------------------------------------------------------------------------
-# > Routers
-# --------------------------------------------------------------------------------
 class ImprovedRouter(DefaultRouter):
     """Extends DefaultRouter to provide utility"""
 

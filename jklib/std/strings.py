@@ -1,19 +1,10 @@
 """Utility functions for working with strings"""
+# Built-in
+from typing import List
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def clean_text(text, char_list, replacement=" "):
-    """
-    Replaces specific characters with a 'replacement' character within a text
-    :param str text:  The text we want to change
-    :param char_list: List of strings, which are the subtexts we will replace
-    :type char_list: list(str)
-    :param str replacement: The string used as replacement. Defaults to " ".
-    :return: The updated string
-    :rtype: str
-    """
+def clean_text(text: str, char_list: List[str], replacement: str = " ") -> str:
+    """Replaces specific characters with a 'replacement' character within a text"""
     if char_list:
         for char in char_list:
             text = text.replace(char, replacement)
@@ -21,17 +12,8 @@ def clean_text(text, char_list, replacement=" "):
     return text
 
 
-def replace_every_nth(text, old, new, nth, start=1):
-    """
-    Modifies a text by replacing "old" string with "new" string every "nth" time
-    :param str text: The text we want to change
-    :param str old: The string that will be replaced
-    :param str new: The string used as replacement
-    :param int nth: The frequency of replacement (every nth occurrences)
-    :param int start: Which occurrence to we start with. Defaults to 1.
-    :return: The updated text
-    :rtype: str
-    """
+def replace_every_nth(text: str, old: str, new: str, nth: int, start: int = 1) -> str:
+    """Modifies a text by replacing "old" string with "new" string every "nth" time"""
     i = start
     index = text.find(old)
     while index != -1:

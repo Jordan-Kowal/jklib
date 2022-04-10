@@ -1,24 +1,18 @@
 """Functions for network management within django"""
 
 # Built-in
+from typing import Dict
 from urllib.parse import urlencode
+
+# Django
+from django.http import HttpRequest
 
 # Local
 from .settings import get_config
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def build_url(parts, params=None, end_slash=False):
-    """
-    Builds a complete URL by joining its parts and adding params at the end
-    :param list parts: Ordered list of paths to join
-    :param dict params: The GET params for the url
-    :param bool end_slash: Whether we should add a / at the end
-    :return: The computed URL
-    :rtype: str
-    """
+def build_url(parts: str, params: Dict = None, end_slash: bool = False) -> str:
+    """Builds a complete URL by joining its parts and adding params at the end"""
     # Remove extra slashes
     cleaned_parts = []
     for part in parts:
@@ -38,13 +32,8 @@ def build_url(parts, params=None, end_slash=False):
     return url.replace("//", "/")
 
 
-def get_client_ip(request):
-    """
-    Extract the IP address from the request (either from FORWARDED_FOR, REAL_IP, or REMOTE_ADDR)
-    :param request: HttpRequest from django
-    :return: The user's IP address
-    :rtype: str
-    """
+def get_client_ip(request: HttpRequest) -> str:
+    """Extract the IP address from the request (either from FORWARDED_FOR, REAL_IP, or REMOTE_ADDR)"""
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         # FORWARDED_FOR
@@ -58,12 +47,8 @@ def get_client_ip(request):
     return ip
 
 
-def get_server_domain():
-    """
-    Fetches the django server address from the settings
-    :return: The server domain/url
-    :rtype: str
-    """
+def get_server_domain() -> str:
+    """Fetches the django server address from the settings"""
     hosts = get_config("ALLOWED_HOSTS")
     domain = hosts[0] if hosts else "http://127.0.0.1:8000/"
     return domain

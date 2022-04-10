@@ -1,25 +1,29 @@
 """Classes and functions for Django commands"""
 
 
+# Built-in
+from typing import Optional, Type
+
 # Django
 from django.core.management.base import BaseCommand
 
+# Personal
+from jklib.django_utils.commands.operations import Operation
 
-# --------------------------------------------------------------------------------
-# > Classes
-# --------------------------------------------------------------------------------
+
 class ImprovedCommand(BaseCommand):
     """Extends BaseCommand to work with Operation instances"""
 
-    operation_class = None
+    operation_class: Optional[Type[Operation]] = None
 
-    def run_operation(self, *args):
+    def run_operation(self, *args) -> None:
         """Instantiate the operation with the args and runs it"""
-        operation = self.operation_class(*args)
-        operation.run()
+        if self.operation_class is not None:
+            operation: Operation = self.operation_class(*args)  # type: ignore
+            operation.run()
 
     @staticmethod
-    def ask_user_to_proceed():
+    def ask_user_to_proceed() -> bool:
         """
         Ask the user if he wants to proceed and returns a boolean answer
         :return: Whether to proceed

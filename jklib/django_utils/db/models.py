@@ -8,9 +8,6 @@ from django.db.models import Model
 from .fields import CreatedAtField, UpdatedAtField
 
 
-# --------------------------------------------------------------------------------
-# > Models
-# --------------------------------------------------------------------------------
 class LifeCycleModel(Model):
     """Model that provides lifecycle fields for creation and update"""
 
@@ -18,6 +15,4 @@ class LifeCycleModel(Model):
     updated_at = UpdatedAtField()
 
     class Meta:
-        """Makes the model abstract"""
-
         abstract = True

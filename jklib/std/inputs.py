@@ -2,17 +2,11 @@
 
 # Built-in
 import re
+from typing import Dict
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def choose_from_dict(choices):
-    """
-    The user must choose a value by inputting the associated key
-    :param dict choices: Dict of value/label the user can pick from
-    :return: The selected key
-    """
+def choose_from_dict(choices: Dict) -> str:
+    """The user must choose a value by inputting the associated key"""
     # Displays the initial choices
     input_dict = {x: y for (x, y) in choices.items()}
     input_list = sorted(input_dict.keys())
@@ -30,29 +24,19 @@ def choose_from_dict(choices):
     return answer
 
 
-def input_must_match_regex(regex, error_message):
-    """
-    The user must type an input that matches a regex. Return his input
-    :param regex regex: Regular expression object
-    :param str error_message: The error message that must be displayed
-    :return: The user's valid answer
-    :rtype: str
-    """
+def input_must_match_regex(regex: str, error_message: str) -> str:
+    """The user must type an input that matches a regex. Return his input"""
     answer = None
     while answer is None:
         answer = input()
         if re.search(regex, answer) is None:
             answer = None
-            print("Please try again:")
+            print(f"Please try again: {error_message}")
     return answer
 
 
-def yes_or_no():
-    """
-    The user must answer with Y or N. Returns a bool
-    :return: The answer in boolean format
-    :rtype: bool
-    """
+def yes_or_no() -> bool:
+    """The user must answer with Y or N. Returns a bool"""
     answer = None
     while answer is None:
         answer = input().upper()

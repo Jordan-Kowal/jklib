@@ -2,13 +2,10 @@
 
 # Django
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import APIException, ValidationError
+from rest_framework.exceptions import APIException
 from rest_framework.status import HTTP_409_CONFLICT, HTTP_412_PRECONDITION_FAILED
 
 
-# --------------------------------------------------------------------------------
-# > Classes
-# --------------------------------------------------------------------------------
 class Conflict(APIException):
     """Classic '409 Conflict HTTP' error"""
 

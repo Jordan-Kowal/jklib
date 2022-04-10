@@ -5,22 +5,13 @@
 import base64
 import io
 import os
+from typing import Union
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def convert_size(size, input_units="B", output_units="KB"):
-    """
-    Converts bytes from one unit to another, rounded up to 2 decimals
-    :param size: The initial amount of bytes
-    :type size: int or float
-    :param str input_units: The current unit for the given amount. Defaults to "B".
-    :param str output_units: The desired unit to convert to. Defaults to "KB".
-    :return: The converted amount of bytes, in the desired unit, rounded to 2 digits
-    :rtype: float
-    :raise IndexError: if 'input_unit' or 'output_units' are not in the valid unit list
-    """
+def convert_size(
+    size: Union[int, float], input_units: str = "B", output_units: str = "KB"
+) -> float:
+    """Converts bytes from one unit to another, rounded up to 2 decimals"""
     units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
     # Errors
     if input_units not in units:
@@ -42,36 +33,20 @@ def convert_size(size, input_units="B", output_units="KB"):
     return output_size
 
 
-def create_dirs(*paths):
-    """
-    For each given folder path, check if it exists. If not, it will create it
-    :param str paths: Paths to the folder
-    """
+def create_dirs(*paths: str) -> None:
+    """For each given folder path, check if it exists. If not, it will create it"""
     for path in paths:
         if not os.path.exists(path):
             os.makedirs(path)
 
 
-def decode_file(contents):
-    """
-    Decodes raw file contents and returns it
-    :param str contents: File content
-    :return: The decoded content
-    :rtype: str
-    """
+def decode_file(contents: str) -> io.BytesIO:
+    """Decodes raw file contents and returns it"""
     content_type, content_string = contents.split(",")
-    decoded = io.BytesIO(base64.b64decode(content_string))
-    return decoded
+    return io.BytesIO(base64.b64decode(content_string))
 
 
-def get_size(path, output_units="KB"):
-    """
-    Returns the size of a file, in the desired byte unit
-    :param path: Path to the file
-    :param output_units: The desired byte unit. Defaults to "KB".
-    :return: The file size in the requested byte unit
-    :rtype: float
-    """
+def get_size(path: str, output_units: str = "KB") -> float:
+    """Returns the size of a file, in the desired byte unit"""
     byte_size = os.path.getsize(path)
-    size = convert_size(byte_size, output_units=output_units)
-    return size
+    return convert_size(byte_size, output_units=output_units)

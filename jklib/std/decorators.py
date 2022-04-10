@@ -3,15 +3,13 @@
 
 # Built-in
 from time import perf_counter
+from typing import Any, Callable
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def time_it(function):
+def time_it(function: Callable) -> Callable:
     """Times a function and prints its runtime in the console"""
 
-    def run_it(*args, **kwargs):
+    def run_it(*args, **kwargs) -> Any:
         time_before = perf_counter()
         results = function(*args, **kwargs)
         time_total = perf_counter() - time_before

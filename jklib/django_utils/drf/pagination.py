@@ -5,9 +5,6 @@
 from rest_framework.pagination import PageNumberPagination
 
 
-# --------------------------------------------------------------------------------
-# > Paginations
-# --------------------------------------------------------------------------------
 class BasicPagination(PageNumberPagination):
     """Basic pagination handler used in common API"""
 

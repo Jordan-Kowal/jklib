@@ -1,13 +1,13 @@
 # Changelog
 
-tests: removed some assertions and user creation shortcuts
-
 ## [v3.1.0] - XXXX-XX-XX
 ### Added
+- [Core] Added typing for all functions and remove unnecessary docstrings
 - [Django] Added `assert_logs` decorator to apply the `self.assertLogs` context to an entire test case
 - [DRF] New `ImprovedRouter` which provides the new model route `bulk_destroy`
 
 ### Changed
+- [Django] The django package has been renamed `django_utils` to avoid name conflict with the actual django lib
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
 - [Django] Removed the `ModelWithImage` custom class 
 - [DRF] **ViewSets**:
@@ -36,6 +36,7 @@ tests: removed some assertions and user creation shortcuts
         - Removed methods `assert_fields_are_required` and `common_errors`
 - [DRF] **Permissions**:
     - `IsVerified` and `IsNotVerified` permissions have been removed
+- [Web] Removed the `selenium.py` utils
     
 ### Fixed
 - [Core] Fixed various typos

@@ -2,17 +2,11 @@
 
 # Built-in
 import os
+from typing import List
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def update_translations(languages):
-    """
-    Updates the translations for the given languages
-    :param languages: List of strings that represent the languages (fr_FR, en_US, etc.)
-    :type languages: list(str)
-    """
+def update_translations(languages: List[str]) -> None:
+    """Updates the translations for the given languages"""
     # Get the directory with manage.py
     project_root = os.getcwd()
     project_name = project_root.split("\\")[-1]

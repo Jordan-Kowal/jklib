@@ -5,19 +5,11 @@
 import os
 import smtplib
 from email.message import EmailMessage
+from typing import Tuple, Type, Union
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def attach_files(message, path):
-    """
-    Attaches our files to our EmailMessage instance (only if they are PDF or images)
-    :param EmailMessage message: Our current EmailMessage instance
-    :param str path: Path of the folder that contains our files
-    :return: The updated EmailMessage instance, now with files attached
-    :rtype: EmailMessage
-    """
+def attach_files(message: EmailMessage, path: str) -> EmailMessage:
+    """Attaches our files to our EmailMessage instance (only if they are PDF or images)"""
     files = [os.path.join(path, f) for f in os.listdir(path)]
     for file in files:
         params = {}
@@ -39,13 +31,10 @@ def attach_files(message, path):
     return message
 
 
-def choose_smtp_class(port):
-    """
-    Chooses the right SMTP class to connect to the server based on the given port
-    :param int port: Port on which to connect
-    :return: The correct SMTP class and a bool to indicate if we are in SSL
-    :rtype: tuple(SMTP, bool)
-    """
+def choose_smtp_class(
+    port: int,
+) -> Tuple[Type[Union[smtplib.SMTP, smtplib.SMTP_SSL]], bool]:
+    """Chooses the right SMTP class to connect to the server based on the given port"""
     if port == 465:
         smtp = smtplib.SMTP_SSL
         ssl = True
@@ -55,11 +44,8 @@ def choose_smtp_class(port):
     return smtp, ssl
 
 
-def connect_without_ssl(server):
-    """
-    Tries to connect to the smtp server without SSL, using TLS or not security protocol at all
-    :param SMTP server: A type of smtp instance from smtplib
-    """
+def connect_without_ssl(server: smtplib.SMTP) -> None:
+    """Tries to connect to the smtp server without SSL, using TLS or not security protocol at all"""
     try:
         server.starttls()
     except smtplib.SMTPException():
@@ -68,12 +54,8 @@ def connect_without_ssl(server):
         server.ehlo()
 
 
-def create_message():
-    """
-    Creates and returns an EmailMessage instance
-    :return: A ready-to-send EmailMessage with information and attachments
-    :rtype: EmailMessage
-    """
+def create_message() -> EmailMessage:
+    """Creates and returns an EmailMessage instance"""
     message = EmailMessage()
     message["Subject"] = ""
     message["From"] = ""
@@ -88,14 +70,8 @@ def create_message():
     return message
 
 
-def email_auth(server, ssl):
-    """
-    Authenticates with the server, using either SSL, TLS, or no security protocol
-    :param SMTP server: A type of smtp instance from smtplib
-    :param bool ssl: Indicates whether we can use SSL
-    :return: Whether the authentification was successful
-    :rtype: bool
-    """
+def email_auth(server: smtplib.SMTP, ssl: bool) -> bool:
+    """Authenticates with the server, using either SSL, TLS, or no security protocol"""
     if not ssl:
         connect_without_ssl(server)
     try:
@@ -109,13 +85,8 @@ def email_auth(server, ssl):
         return True
 
 
-def get_template(path):
-    """
-    Gets the HTML template and replaces patterns in a "template-like" manner
-    :param str path: Path to the initial HTML template/file
-    :return: The updated HTML content as string
-    :rtype: str
-    """
+def get_template(path: str) -> str:
+    """Gets the HTML template and replaces patterns in a "template-like" manner"""
     with open(path, "r", encoding="utf-8") as f:
         f_content = f.read()
     # Getting the store list and placing it in the template

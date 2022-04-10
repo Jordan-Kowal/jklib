@@ -1,0 +1,8 @@
+django
+djangorestframework
+colorama
+numpy
+pandas
+Pillow
+requests
+selenium
