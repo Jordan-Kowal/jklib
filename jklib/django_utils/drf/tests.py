@@ -1,7 +1,7 @@
 """Useful constants, functions, and classes for test management in DRF"""
 
 # Built-in
-from typing import Dict
+from typing import Dict, Optional
 from urllib.parse import urlencode
 
 # Django
@@ -25,9 +25,11 @@ class ActionTestCase(ImprovedTestCase):
         """Sets up the API client"""
         cls.api_client = cls.api_client_class()
         cls.http_method = getattr(cls.api_client, cls.http_method_name.lower())
-        super(ActionTestCase, cls).setUpClass()
+        super().setUpClass()
 
-    def url(self, context: Dict = None, params: Dict = None) -> str:
+    def build_url(
+        self, context: Optional[Dict] = None, params: Optional[Dict] = None
+    ) -> str:
         """Builds a URL through a templating system"""
         url = self.url_template
         if context is not None:

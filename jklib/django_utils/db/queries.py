@@ -7,11 +7,11 @@ from typing import Optional, Type
 from django.db.models import Model, Q, QuerySet
 
 
-def get_object_or_none(model: Type[Model], *args, **kwargs) -> Optional[Model]:
-    """Tries to get an object in the database, or returns None"""
+def maybe_get_instance(model: Type[Model], *args, **kwargs) -> Optional[Model]:
+    """Tries to get an object in the database or returns None"""
     try:
-        item = model.objects.get(*args, **kwargs)  # type: ignore
-    except model.DoesNotExist:  # type: ignore
+        item = model.objects.get(*args, **kwargs)
+    except model.DoesNotExist:
         return None
     return item
 
