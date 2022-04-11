@@ -1,8 +1,8 @@
-"""Classes and functions for Django commands"""
+"""Classes and functions for Django commands."""
 
 
 # Built-in
-from typing import Optional, Type
+from typing import Any, Optional, Type
 
 # Django
 from django.core.management.base import BaseCommand
@@ -12,14 +12,14 @@ from jklib.django_utils.commands.operations import Operation
 
 
 class ImprovedCommand(BaseCommand):
-    """Extends BaseCommand to work with Operation instances"""
+    """Extends BaseCommand to work with Operation instances."""
 
     operation_class: Optional[Type[Operation]] = None
 
-    def run_operation(self, *args) -> None:
-        """Instantiate the operation with the args and runs it"""
+    def run_operation(self, *args: Any) -> None:
+        """Instantiate the operation with the args and runs it."""
         if self.operation_class is not None:
-            operation: Operation = self.operation_class(*args)  # type: ignore
+            operation: Operation = self.operation_class(*args)
             operation.run()
 
     @staticmethod

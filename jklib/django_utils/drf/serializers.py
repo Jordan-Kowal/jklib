@@ -1,4 +1,4 @@
-"""Serializers and mixins classes for DRF"""
+"""Serializers and mixins classes for DRF."""
 
 
 # Built-in
@@ -10,49 +10,55 @@ from rest_framework import serializers
 
 
 def required() -> Dict[str, bool]:
-    """To be used in a serializer's field customization. Makes the field mandatory"""
+    """To be used in a serializer's field customization.
+
+    Makes the field mandatory
+    """
     return {"required": True, "allow_null": False, "allow_blank": False}
 
 
 def required_list() -> Dict[str, bool]:
-    """Same as required, but for a LIST of items"""
+    """Same as required, but for a LIST of items."""
     return {"required": True, "allow_null": False, "allow_empty": False}
 
 
 def optional() -> Dict[str, bool]:
-    """To be used in a serializer's field customization. Makes the field optional"""
+    """To be used in a serializer's field customization.
+
+    Makes the field optional
+    """
     return {"required": False, "allow_null": True, "allow_blank": True}
 
 
 def optional_list() -> Dict[str, bool]:
-    """Same as optional, but for a LIST of items"""
+    """Same as optional, but for a LIST of items."""
     return {"required": False, "allow_null": True, "allow_empty": True}
 
 
 class NoCreateMixin:
-    """Mixin to remove the create workflow"""
+    """Mixin to remove the create workflow."""
 
     @staticmethod
     def create(validated_data: Dict) -> Any:
-        """Serializer cannot be used without an instance"""
+        """Serializer cannot be used without an instance."""
         raise NotImplementedError
 
 
 class NoUpdateMixin:
-    """Mixin to remove the update workflow"""
+    """Mixin to remove the update workflow."""
 
     @staticmethod
-    def update(instance, validated_data: Dict) -> Any:
-        """Serializer cannot be used with an instance"""
+    def update(instance: Model, validated_data: Dict) -> Any:
+        """Serializer cannot be used with an instance."""
         raise NotImplementedError
 
 
 class ImprovedSerializer(serializers.Serializer):
-    """Improved version of the DRF Serializer class with utility functions"""
+    """Improved version of the DRF Serializer class with utility functions."""
 
     @property
     def required_fields(self) -> List[str]:
-        """Fetches the required fieldnames from the serializer"""
+        """Fetches the required fieldnames from the serializer."""
         required_fields = []
         for key, kwargs in self.fields.items():
             if kwargs.required:
@@ -72,7 +78,7 @@ class ImprovedSerializer(serializers.Serializer):
         return value
 
     def check_required_fields(self, validated_data: Dict) -> None:
-        """Check that all required fields are present in the data"""
+        """Check that all required fields are present in the data."""
         missing_fields = [
             field for field in self.required_fields if field not in validated_data
         ]
@@ -84,14 +90,15 @@ class ImprovedSerializer(serializers.Serializer):
         self,
         message: Optional[str] = None,
         model: Optional[Type[Model]] = None,
-        **params,
+        **params: Dict,
     ) -> None:
-        """Checks if an object with specific params do not already exists for our user"""
+        """Checks if an object with specific params do not already exists for
+        our user."""
         # Defaulting some parameters
         if message is None:
-            "A similar item already exists (and is linked to your user)"
+            """A similar item already exists (and is linked to your user)"""
         if model is None:
-            model = self.Meta.model  # type: ignore
+            model = self.Meta.model
         # Building the query
         user = self.context["request"].user
         query = Q(user=user) & Q(**params)
@@ -103,7 +110,7 @@ class ImprovedSerializer(serializers.Serializer):
 
 
 class IdListSerializer(ImprovedSerializer):
-    """Simple serializer that expects a list of IDs"""
+    """Simple serializer that expects a list of IDs."""
 
     ids = serializers.ListField(
         child=serializers.IntegerField(min_value=1), **required_list()

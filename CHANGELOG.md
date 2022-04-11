@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.1.0] - XXXX-XX-XX
+## [v3.1.0] - 2022-04-11
 ### Added
 - [Core] Added typing for all functions and remove unnecessary docstrings
 - [Django] Added `assert_logs` decorator to apply the `self.assertLogs` context to an entire test case
@@ -10,21 +10,22 @@
 - [Django] The django package has been renamed `django_utils` to avoid name conflict with the actual django lib
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
 - [Django] Removed the `ModelWithImage` custom class 
+- [Django] Added the `IntChoiceEnum` class to make integer choice fields easier to create (for models)
 - [DRF] **ViewSets**:
     - Added `BulkDestroyMixin` to provide the `bulk_destroy` action to your viewset
     - `DynamicViewSet` and `DynamicModelViewSet` have been removed from the lib
     - As a result, also removed the `ActionHandler` custom class and `SerializerMode` Enum, as they are not longer useful  
     - Added two new viewsets: `ImprovedViewSet` and `ImprovedModelViewSet`
-    - They allow you to have 1 serializer/action, and have 3 level of permissions: app-wide, viewset-wide, and per action
+        - They allow you to have 1 serializer/permission per action (or fallback to a default) 
 - [DRF] **Serializers**:
     - New shortcuts for serializer fields attributes: `required_list, optional, optional_list`
     - New mixins to prevent actions in ModelSerializers: `NoCreateMixin`, `NoUpdateMixin`
     - Added methods `required_fields` and `check_is_not_empty` to `ImprovedSerializer`
 - [DRF] **TestCases**:
     - `ImprovedTestCase`
-        - Uses `get_user_model` rather than the default `User` model
         - `assert_email_was_sent` now takes more arguments for more flexibility
         - No longer provide tools to create user or random data. Use your own Factories instead.
+        - Added `upload_file` function to easily upload files from an existing files
     - `ActionTestCase`
         - No longer provide tools to create user or random data. Use your own Factories instead.
         - Added properties: `api_client_class`, `url_template`, `http_method_name`, `success_code`, `payload`
