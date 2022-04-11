@@ -1,23 +1,19 @@
 """Utility functions for the pandas library"""
+# Built-in
+from typing import Dict, List, Union
+
+# Third-party
+from pandas import DataFrame
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def sorted_group_by(df, sorted_column, group_by_fields, agg_fields, agg_options):
-    """
-    Will 'group by' and aggregate values in a DataFrame, while keeping a specific sort/order
-    :param DataFrame df: An already sorted dataframe
-    :param str sorted_column: The column which unique values we will use as sorting reference
-    :param group_by_fields: The fields by which we groupby
-    :type group_by_fields: list(str) or str
-    :param agg_fields: The fields we will aggregate by
-    :type agg_fields: list(str) or str
-    :param agg_options: The arguments passed to the .agg() method
-    :type agg_fields: dict or str
-    :return: The 'grouped by', aggregated, and sorted DataFrame
-    :rtype: DataFrame
-    """
+def sorted_group_by(
+    df: DataFrame,
+    sorted_column: str,
+    group_by_fields: List[str],
+    agg_fields: List[str],
+    agg_options: Union[Dict, str],
+) -> DataFrame:
+    """Will 'group by' and aggregate values in a DataFrame, while keeping a specific sort/order"""
     # Creates the sort reference
     uniques = df[sorted_column].unique()
     sorter_index = {value: i for (i, value) in enumerate(uniques)}

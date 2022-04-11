@@ -1,1 +1,1 @@
-"""Package with utility functions for handling databases and storage packages"""
+"""Utilities related to databases and ORMs"""

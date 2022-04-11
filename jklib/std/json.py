@@ -1,20 +1,12 @@
 """Utility functions for working with JSON files"""
 
-
 # Built-in
 import json
 import os
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def sort_json(path):
-    """
-    Overwrites and sorts a JSON file to make it cleaner / more readable
-    :param path: Path to the JSON file
-    :raises TypeError: If the given path does not exist
-    """
+def sort_json(path: str) -> None:
+    """Overwrites and sorts a JSON file to make it cleaner / more readable"""
     ext = os.path.splitext(path)[1]
     if ext != ".json":
         raise TypeError("The 'path' must lead to a JSON file")

@@ -1,17 +1,10 @@
 """Utility function for classes in general"""
+# Built-in
+from typing import Any, Type
 
 
-# --------------------------------------------------------------------------------
-# > Functions
-# --------------------------------------------------------------------------------
-def is_subclass(obj, reference_class):
-    """
-    Improvement of 'issubclass' that returns False if the first arg is not an actual class
-    :param obj: The object you want information on
-    :param reference_class: The reference class to compare to
-    :return: Whether 'obj' inherits from 'reference_class'
-    :rtype: bool
-    """
+def is_subclass(obj: Any, reference_class: Type[Any]) -> bool:
+    """Improvement of 'issubclass' that returns False if the first arg is not an actual class"""
     try:
         return issubclass(obj, reference_class)
     except TypeError:

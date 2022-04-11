@@ -14,7 +14,7 @@ The snippets are split into folders/categories:
 The project uses `pre-commit` hooks to keep a consistent file structure
 
 As such, if you want to make some changes while using the pre-commit hooks:
-- Install the necessary libraries: `pip install pydocstyle isort black flake8`
+- Install the necessary libraries: `pip install mypy isort black flake8`
 - Use them (through your IDE) to automatically format/check your files
 - Install pre-commit: `pip install pre-commit`
 - Setup pre-commit by running `pre-commit install`
