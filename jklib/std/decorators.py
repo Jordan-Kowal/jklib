@@ -1,4 +1,4 @@
-"""Generic decorators for various uses"""
+"""Generic decorators for various uses."""
 
 
 # Built-in
@@ -7,9 +7,9 @@ from typing import Any, Callable
 
 
 def time_it(function: Callable) -> Callable:
-    """Times a function and prints its runtime in the console"""
+    """Times a function and prints its runtime in the console."""
 
-    def run_it(*args, **kwargs) -> Any:
+    def run_it(*args: Any, **kwargs: Any) -> Any:
         time_before = perf_counter()
         results = function(*args, **kwargs)
         time_total = perf_counter() - time_before

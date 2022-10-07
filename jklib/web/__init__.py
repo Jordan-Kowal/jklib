@@ -1,1 +1,2 @@
-"""Package with web-related utility functions (requests, beautifulsoup, selenium, etc."""
+"""Package with web-related utility functions (requests, beautifulsoup,
+selenium, etc."""

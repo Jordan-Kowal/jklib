@@ -1,4 +1,4 @@
-"""Pagination classes for DRF"""
+"""Pagination classes for DRF."""
 
 
 # Django
@@ -6,7 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class BasicPagination(PageNumberPagination):
-    """Basic pagination handler used in common API"""
+    """Basic pagination handler used in common API."""
 
     # Page navigation
     page_query_param = "page"

@@ -1,1 +1,1 @@
-"""Package with utility functions around the standard library"""
+"""Package with utility functions around the standard library."""

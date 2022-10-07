@@ -1,4 +1,4 @@
-"""Script for uploading a new version of our package to PyPi"""
+"""Script for uploading a new version of our package to PyPi."""
 
 # Built-in
 import os
@@ -12,8 +12,8 @@ from local_settings import PYPI_PASSWORD, PYPI_USERNAME
 # --------------------------------------------------------------------------------
 # > Functions
 # --------------------------------------------------------------------------------
-def package_our_code():
-    """Clears the previous build and generate a new one"""
+def package_our_code() -> None:
+    """Clears the previous build and generate a new one."""
     # Set current working directory
     file = sys.argv[0]
     root_dir = os.path.dirname(file)

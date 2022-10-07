@@ -1,1 +1,1 @@
-"""Utility functions for the BeautifulSoup package"""
+"""Utility functions for the BeautifulSoup package."""

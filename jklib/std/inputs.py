@@ -1,4 +1,4 @@
-"""Utility functions around the "input" mechanic"""
+"""Utility functions around the "input" mechanic."""
 
 # Built-in
 import re
@@ -6,7 +6,7 @@ from typing import Dict
 
 
 def choose_from_dict(choices: Dict) -> str:
-    """The user must choose a value by inputting the associated key"""
+    """The user must choose a value by inputting the associated key."""
     # Displays the initial choices
     input_dict = {x: y for (x, y) in choices.items()}
     input_list = sorted(input_dict.keys())
@@ -25,7 +25,7 @@ def choose_from_dict(choices: Dict) -> str:
 
 
 def input_must_match_regex(regex: str, error_message: str) -> str:
-    """The user must type an input that matches a regex. Return his input"""
+    """User input must match the regex."""
     answer = None
     while answer is None:
         answer = input()
@@ -36,15 +36,11 @@ def input_must_match_regex(regex: str, error_message: str) -> str:
 
 
 def yes_or_no() -> bool:
-    """The user must answer with Y or N. Returns a bool"""
-    answer = None
-    while answer is None:
+    """Forces the users to answer Y or N and returns a bool."""
+    while True:
         answer = input().upper()
         if answer == "Y":
-            answer = True
+            return True
         elif answer == "N":
-            answer = False
-        else:
-            answer = None
-            print("Invalid input. Your answer must be Y or N")
-    return answer
+            return False
+        print("Invalid input. Your answer must be Y or N")

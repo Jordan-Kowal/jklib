@@ -1,4 +1,4 @@
-"""Utility function for handling dates/times of all sorts"""
+"""Utility function for handling dates/times of all sorts."""
 
 
 # Built-in
@@ -7,10 +7,9 @@ from typing import List, Tuple
 
 
 def get_all_dates(start: date, end: date) -> List[Tuple[int, str, str, str]]:
-    """
-    Creates a list of tuples with date info for all the dates between 'start' and 'end'
-    A tuple contains (year, month, week, day) which are either strings or integers
-    """
+    """Creates a list of tuples with date info for all the dates between
+    'start' and 'end' A tuple contains (year, month, week, day) which are
+    either strings or integers."""
     months = [
         "January",
         "February",
