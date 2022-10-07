@@ -1,15 +1,16 @@
-"""Utility functions to deal with emails"""
+"""Utility functions to deal with emails."""
 
 
 # Built-in
 import os
 import smtplib
 from email.message import EmailMessage
-from typing import Tuple, Type, Union
+from typing import Sequence, Tuple, Type, Union
 
 
 def attach_files(message: EmailMessage, path: str) -> EmailMessage:
-    """Attaches our files to our EmailMessage instance (only if they are PDF or images)"""
+    """Attaches our files to our EmailMessage instance (only if they are PDF or
+    images)"""
     files = [os.path.join(path, f) for f in os.listdir(path)]
     for file in files:
         params = {}
@@ -27,14 +28,16 @@ def attach_files(message: EmailMessage, path: str) -> EmailMessage:
         else:
             continue
         params["filename"] = file_name
-        message.add_attachment(file_data, **params)
+        message.add_attachment(file_data, **params)  # type: ignore
     return message
 
 
 def choose_smtp_class(
     port: int,
-) -> Tuple[Type[Union[smtplib.SMTP, smtplib.SMTP_SSL]], bool]:
-    """Chooses the right SMTP class to connect to the server based on the given port"""
+) -> Tuple[Union[Type[smtplib.SMTP], Type[smtplib.SMTP_SSL]], bool]:
+    """Chooses the right SMTP class to connect to the server based on the given
+    port."""
+    smtp: Union[Type[smtplib.SMTP], Type[smtplib.SMTP_SSL]]
     if port == 465:
         smtp = smtplib.SMTP_SSL
         ssl = True
@@ -45,33 +48,35 @@ def choose_smtp_class(
 
 
 def connect_without_ssl(server: smtplib.SMTP) -> None:
-    """Tries to connect to the smtp server without SSL, using TLS or not security protocol at all"""
+    """Tries to connect to the smtp server without SSL, using TLS or not
+    security protocol at all."""
     try:
         server.starttls()
-    except smtplib.SMTPException():
+    except smtplib.SMTPException():  # type: ignore
         pass
     finally:
         server.ehlo()
 
 
 def create_message() -> EmailMessage:
-    """Creates and returns an EmailMessage instance"""
+    """Creates and returns an EmailMessage instance."""
     message = EmailMessage()
     message["Subject"] = ""
     message["From"] = ""
     # BCC must not be added to the headers
+    addresses: Sequence[str]
     for text, addresses in zip(["To", "Cc", "Bcc"], [[], [], []]):
         if addresses:
             message[text] = ", ".join(addresses)
-    # message.set_content("Envoyé depuis Python")
+    # message.set_content("Sent from python")
     html_content = ""
     message.add_alternative(html_content, subtype="html")
-    message = attach_files(message)
     return message
 
 
 def email_auth(server: smtplib.SMTP, ssl: bool) -> bool:
-    """Authenticates with the server, using either SSL, TLS, or no security protocol"""
+    """Authenticates with the server, using either SSL, TLS, or no security
+    protocol."""
     if not ssl:
         connect_without_ssl(server)
     try:
@@ -86,7 +91,8 @@ def email_auth(server: smtplib.SMTP, ssl: bool) -> bool:
 
 
 def get_template(path: str) -> str:
-    """Gets the HTML template and replaces patterns in a "template-like" manner"""
+    """Gets the HTML template and replaces patterns in a "template-like"
+    manner."""
     with open(path, "r", encoding="utf-8") as f:
         f_content = f.read()
     # Getting the store list and placing it in the template

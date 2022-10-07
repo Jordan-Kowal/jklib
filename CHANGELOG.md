@@ -1,5 +1,36 @@
 # Changelog
 
+## [v3.2.0] - 2022-10-07
+### Added
+- [Django] Added `FileNameWithUUID` to generate unique names for `FileField` and `ImageField` fields
+- [Django] Added `maybe_resize_image`, `image_to_base64`, and `resized_image_to_base64` image utils
+- [Django] Added `update_model` and `update_m2m` utils to easily update models and relations
+- [Django] Added `test_runner` module which provides custom test runners
+- [DRF] Added `ReadOnlyModelSerializer` which removes create and update methods
+- [DRF] Added `storage` module which provides utility for interacting with local storage and downloading files
+
+### Changed
+- [Django] Remove emails utils and added a `Email` class with similar utils
+- [Django] Updated `NoBulkManager` to also exclude `bulk_update`
+- [Django] `ImprovedTestCase` now has many more available assertions
+- [DRF] `ActionTestCase` now has many more available assertions and utilities, including multipart api calls
+- [DRF] No longer raises an error when no serializer is found by `ImprovedViewSet.get_serializer_class`
+
+### Fixed
+- [Core] Fixed various docstrings and typing issues.
+
+### Removed
+- [Django] Database function fields have been removed
+- [Django] Removed `get_image_dimensions` and `image_as_html` image utils
+- [Django] Removed `IntChoiceEnum` as it was redundant with django `IntChoices`
+- [Django] Removed `filter_on_text` and `single_sort_by` query utils
+- [Django] Remove the `ModelTestCase` class as it brought little to the table
+- [DRF] Removed `UserPermissionMixin`, `IsAdminOrOwner`, `IsObjectOwner`, and `IsSuperUser` custom permissions
+- [DRF] Removed all existing serializers utilities
+- [DRF] `BulkDestroyMixin` has been removed
+
+---
+
 ## [v3.1.0] - 2022-04-11
 ### Added
 - [Core] Added typing for all functions and remove unnecessary docstrings
@@ -9,7 +40,6 @@
 ### Changed
 - [Django] The django package has been renamed `django_utils` to avoid name conflict with the actual django lib
 - [Django] `DateCreatedField` and `DateUpdatedField` were respectively renamed `CreatedAtField` and `UpdatedAtField`
-- [Django] Removed the `ModelWithImage` custom class 
 - [Django] Added the `IntChoiceEnum` class to make integer choice fields easier to create (for models)
 - [DRF] **ViewSets**:
     - Added `BulkDestroyMixin` to provide the `bulk_destroy` action to your viewset
@@ -35,9 +65,7 @@
         - Replaced `detail_url`, `detail_url_with_params`, `service_url_with_params` methods with a single `url` method
     - `ModelTestCase`
         - Removed methods `assert_fields_are_required` and `common_errors`
-- [DRF] **Permissions**:
-    - `IsVerified` and `IsNotVerified` permissions have been removed
-- [Web] Removed the `selenium.py` utils
+
     
 ### Fixed
 - [Core] Fixed various typos
@@ -47,6 +75,11 @@
 - [DRF] The `url_path` of an extra action will now be defaulted to its name if not provided
 - [DRF] Custom `action` without the `detail` property will have their permissions fail automatically
 - [DRF] Fixed `IdListSerializer` serializer to make its only field required
+
+### Removed
+- [Django] Removed the `ModelWithImage` custom class 
+- [DRF] IsVerified` and `IsNotVerified` permissions have been removed
+- [Web] Removed the `selenium.py` utils
 
 ---
 
@@ -69,5 +102,8 @@
 
 ### Fixed
 - [Core] Various fixes that I forgot to keep track of
+
+### Removed
+N/A
 
 ---

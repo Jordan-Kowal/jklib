@@ -1,4 +1,4 @@
-"""Exception classes for DRF"""
+"""Exception classes for DRF."""
 
 # Django
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_409_CONFLICT, HTTP_412_PRECONDITION_FAILE
 
 
 class Conflict(APIException):
-    """Classic '409 Conflict HTTP' error"""
+    """Classic '409 Conflict HTTP' error."""
 
     status_code = HTTP_409_CONFLICT
     default_detail = _("A similar object already exists in the database.")
@@ -15,7 +15,7 @@ class Conflict(APIException):
 
 
 class FailedPrecondition(APIException):
-    """Classic '412 Precondition Failed' HTTP error"""
+    """Classic '412 Precondition Failed' HTTP error."""
 
     status_code = HTTP_412_PRECONDITION_FAILED
     default_detail = _("One or several preconditions have not been met.")

@@ -1,8 +1,5 @@
-django
-djangorestframework
-colorama
-numpy
-pandas
-Pillow
-requests
-selenium
+black
+flake8
+isort
+mypy
+pre-commit

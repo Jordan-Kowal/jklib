@@ -1,4 +1,4 @@
-"""Classes and functions to perform actions in Django commands"""
+"""Classes and functions to perform actions in Django commands."""
 
 # Built-in
 from typing import List, Optional, Type
@@ -9,7 +9,8 @@ from colorama import init as colorama_init
 
 
 class Color:
-    """Class to define the color used in Operation and Task printed messages"""
+    """Class to define the color used in Operation and Task printed
+    messages."""
 
     # Hierarchy
     operation = Fore.WHITE
@@ -24,9 +25,10 @@ class Color:
 
 
 class Operation:
-    """
-    List of instructions to be run within a Django commands. Made of several Task instances.
-    To be used with our `ImprovedCommand` custom class
+    """List of instructions to be run within a Django commands.
+
+    Made of several Task instances. To be used with our
+    `ImprovedCommand` custom class
     """
 
     name: Optional[str] = None
@@ -36,7 +38,10 @@ class Operation:
     # Workflow
     # ----------------------------------------
     def run(self) -> None:
-        """Main method. Performs all tasks one by one and prints feedback"""
+        """Main method.
+
+        Performs all tasks one by one and prints feedback
+        """
         colorama_init()
         self.print_operation_start()
         operation_success = self.run_tasks()
@@ -46,7 +51,7 @@ class Operation:
             self.print_operation_fail()
 
     def run_tasks(self) -> bool:
-        """Runs all the operation tasks"""
+        """Runs all the operation tasks."""
         success = True
         task_instances = [task() for task in self.tasks]
         for i, task_instance in enumerate(task_instances):
@@ -65,18 +70,19 @@ class Operation:
 
     @property
     def total_tasks(self) -> int:
-        """Task quantity in our Operation"""
+        """Task quantity in our Operation."""
         return len(self.tasks)
 
     # ----------------------------------------
     # Feedback (in chronological order)
     # ----------------------------------------
     def print_operation_start(self) -> None:
-        """Prints a message to indicate the start of the operation"""
+        """Prints a message to indicate the start of the operation."""
         print(f"{Color.operation}Starting operation '{self.name}' ...{Color.reset}\n")
 
     def print_task_start(self, task: "Task", number: int) -> None:
-        """Prints a message to indicate which task (name and number) is starting"""
+        """Prints a message to indicate which task (name and number) is
+        starting."""
         wrapper = "~" * 50
         wrapper = f"{Color.operation}{wrapper}{Color.reset}"
         print(wrapper)
@@ -88,59 +94,66 @@ class Operation:
 
     @staticmethod
     def print_task_fail(task: "Task") -> None:
-        """Prints an error message indicating the task has failed"""
+        """Prints an error message indicating the task has failed."""
         print(
             f"{Color.error}Task '{Color.task}{task.name}{Color.error}' has failed{Color.reset}\n"
         )
 
     @staticmethod
     def print_task_success(task: "Task") -> None:
-        """Prints a message indicating the task was a success"""
+        """Prints a message indicating the task was a success."""
         print(
             f"{Color.success}Task '{Color.task}{task.name}{Color.success}' has ended successfully{Color.reset}\n"
         )
 
     def print_operation_fail(self) -> None:
-        """Prints an error message indicating the Operation one task failed"""
+        """Prints an error message indicating the Operation one task failed."""
         print(
             f"{Color.error}Operation '{self.name}' could not be run entirely.{Color.reset}"
         )
         print(f"{Color.error}Please check the logs above.{Color.reset}")
 
     def print_operation_success(self) -> None:
-        """Prints a success message indicating that all tasks were run successfully"""
+        """Prints a success message indicating that all tasks were run
+        successfully."""
         print(f"{Color.success}Operation '{self.name}' was a success.{Color.reset}")
 
 
 class Task:
-    """Individual task/step during an Operation. Used to split up the logic"""
+    """Individual task/step during an Operation.
+
+    Used to split up the logic
+    """
 
     name: Optional[str] = None
     message_suffix: str = "--->"
 
     def run(self) -> None:
-        """Main function. Must execute the process/task logic"""
+        """Main function.
+
+        Must execute the process/task logic
+        """
         raise NotImplementedError()
 
     # ----------------------------------------
     # Feedback
     # ----------------------------------------
     def print_error(self, message: str) -> None:
-        """Prints a colored error message"""
+        """Prints a colored error message."""
         self._print_message(message, "error", Color.error)
 
     def print_info(self, message: str) -> None:
-        """Prints a colored info message"""
+        """Prints a colored info message."""
         self._print_message(message, "info", Color.info)
 
     def print_success(self, message: str) -> None:
-        """Prints a colored success message"""
+        """Prints a colored success message."""
         self._print_message(message, "success", Color.success)
 
     def print_warning(self, message: str) -> None:
-        """Prints a colored warning message"""
+        """Prints a colored warning message."""
         self._print_message(message, "warning", Color.warning)
 
     def _print_message(self, message: str, type_: str, color: Color) -> None:
-        """Prints a message in the right color and prefix it with a type"""
+        """Prints a message in the right color and prefix it with a type."""
         print(f"{color}{self.message_suffix} [{type_.upper()}] {message}{Color.reset}")

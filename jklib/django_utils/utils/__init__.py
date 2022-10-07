@@ -1,1 +1,1 @@
-"""Contains utility and QOL functions"""
+"""Contains utility and QOL functions."""

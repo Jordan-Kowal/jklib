@@ -1,54 +1,53 @@
-"""Utility functions for email management in django"""
+"""Utility functions for email management in django."""
 
 # Built-in
 from threading import Thread
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 # Django
-from django.contrib.staticfiles import finders
 from django.core.mail import EmailMessage
 
-
-def extract_email_addresses(emails: Union[List[str], str], sep=",") -> List[str]:
-    """Transforms a string of multiple email adresses (separated by commas) into a list"""
-    if type(emails) == str:
-        emails = emails.split(sep)
-    emails = list(map(lambda x: x.strip(), emails))
-    return emails
+# Third-party
+from django_utils.utils import settings
+from django_utils.utils.templates import render_template
 
 
-def get_css_content(relative_path: str) -> str:
-    """Gets and returns the content of a css file. Avoid using " or ' in your file."""
-    css_file = finders.find(relative_path)
-    with open(css_file, "r", encoding="utf-8") as f:
-        content = f.read()
-    return content
+class Email:
+    def __init__(
+        self,
+        subject: str,
+        template_path: str,
+    ) -> None:
+        self.subject = subject
+        self.template_path = template_path
 
+    def send(
+        self,
+        context: Dict[str, Any],
+        to: Optional[List[str]] = None,
+        cc: Optional[List[str]] = None,
+        bcc: Optional[List[str]] = None,
+        from_email: Optional[str] = None,
+    ) -> None:
+        to = to or []
+        cc = cc or []
+        bcc = bcc or []
+        # Skip if no recipients
+        if not to and not cc and not bcc:
+            return
+        email = EmailMessage(
+            subject=self.subject,
+            body=render_template(context),
+            bcc=bcc,
+            from_email=from_email or settings.DEFAULT_FROM_EMAIL,
+        )
+        email.content_subtype = "html"
+        email.send()
 
-def send_html_email(
-    subject: str,
-    body: str,
-    sep: str = ",",
-    to: Optional[List[str]] = None,
-    cc: Optional[List[str]] = None,
-    sender: Optional[str] = None,
-) -> None:
-    """Sends an HTML email with the given arguments"""
-    to = extract_email_addresses(to, sep)
-    cc = extract_email_addresses(cc, sep)
-    email = EmailMessage(subject=subject, body=body, to=to, cc=cc, from_email=sender,)
-    email.content_subtype = "html"
-    email.send()
-
-
-def send_html_email_async(
-    subject: str,
-    body: str,
-    sep: str = ",",
-    to: Optional[List[str]] = None,
-    cc: Optional[List[str]] = None,
-    sender: Optional[str] = None,
-) -> None:
-    """Similar to 'send_html_email', but uses a Thread instance to send it asynchronously"""
-    thread = Thread(target=send_html_email, args=(subject, body, sep, to, cc, sender))
-    thread.start()
+    def send_async(
+        self,
+        context: Dict[str, Any],
+        bcc: List[str],
+    ) -> None:
+        thread = Thread(target=self.send, args=(context, bcc))
+        thread.start()

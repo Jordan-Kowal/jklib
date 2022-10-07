@@ -1,4 +1,4 @@
-"""Utility functions for the pandas library"""
+"""Utility functions for the pandas library."""
 # Built-in
 from typing import Dict, List, Union
 
@@ -13,7 +13,8 @@ def sorted_group_by(
     agg_fields: List[str],
     agg_options: Union[Dict, str],
 ) -> DataFrame:
-    """Will 'group by' and aggregate values in a DataFrame, while keeping a specific sort/order"""
+    """Will 'group by' and aggregate values in a DataFrame, while keeping a
+    specific sort/order."""
     # Creates the sort reference
     uniques = df[sorted_column].unique()
     sorter_index = {value: i for (i, value) in enumerate(uniques)}

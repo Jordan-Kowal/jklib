@@ -1,1 +1,1 @@
-"""Utilities for creating Django commands"""
+"""Utilities for creating Django commands."""

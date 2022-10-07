@@ -1,1 +1,1 @@
-"""Utilities for the Django database and ORM"""
+"""Utilities for the Django database and ORM."""

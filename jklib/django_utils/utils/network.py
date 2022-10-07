@@ -1,4 +1,4 @@
-"""Functions for network management within django"""
+"""Functions for network management within django."""
 
 # Built-in
 from typing import Dict
@@ -12,7 +12,8 @@ from .settings import get_config
 
 
 def build_url(parts: str, params: Dict = None, end_slash: bool = False) -> str:
-    """Builds a complete URL by joining its parts and adding params at the end"""
+    """Builds a complete URL by joining its parts and adding params at the
+    end."""
     # Remove extra slashes
     cleaned_parts = []
     for part in parts:
@@ -33,7 +34,8 @@ def build_url(parts: str, params: Dict = None, end_slash: bool = False) -> str:
 
 
 def get_client_ip(request: HttpRequest) -> str:
-    """Extract the IP address from the request (either from FORWARDED_FOR, REAL_IP, or REMOTE_ADDR)"""
+    """Extract the IP address from the request (either from FORWARDED_FOR,
+    REAL_IP, or REMOTE_ADDR)"""
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         # FORWARDED_FOR
@@ -48,7 +50,7 @@ def get_client_ip(request: HttpRequest) -> str:
 
 
 def get_server_domain() -> str:
-    """Fetches the django server address from the settings"""
+    """Fetches the django server address from the settings."""
     hosts = get_config("ALLOWED_HOSTS")
     domain = hosts[0] if hosts else "http://127.0.0.1:8000/"
     return domain

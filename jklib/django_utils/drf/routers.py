@@ -1,11 +1,11 @@
-"""Custom routers for DRF"""
+"""Custom routers for DRF."""
 
 # Django
 from rest_framework.routers import DefaultRouter, DynamicRoute, Route
 
 
 class ImprovedRouter(DefaultRouter):
-    """Extends DefaultRouter to provide utility"""
+    """Extends DefaultRouter to provide utility."""
 
     routes = [
         # List route.

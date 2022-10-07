@@ -1,10 +1,12 @@
-"""Utility functions for transforming/converting objects into other shapes/things"""
+"""Utility functions for transforming/converting objects into other
+shapes/things."""
 # Built-in
 from typing import Any, Dict, List
 
 
 def array2d_to_dict(array2d: List[List], pk: int) -> Dict[Any, List]:
-    """Transforms a 2d array into a dict, with one of the fields as primary key"""
+    """Transforms a 2d array into a dict, with one of the fields as primary
+    key."""
     new_dict = {}
     for row in array2d:
         if isinstance(row, tuple):

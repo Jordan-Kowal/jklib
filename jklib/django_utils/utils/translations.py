@@ -1,4 +1,4 @@
-"""Scripts for handling translations within django"""
+"""Scripts for handling translations within django."""
 
 # Built-in
 import os
@@ -6,7 +6,7 @@ from typing import List
 
 
 def update_translations(languages: List[str]) -> None:
-    """Updates the translations for the given languages"""
+    """Updates the translations for the given languages."""
     # Get the directory with manage.py
     project_root = os.getcwd()
     project_name = project_root.split("\\")[-1]

@@ -1,1 +1,1 @@
-"""Utility functions for the Requests package"""
+"""Utility functions for the Requests package."""

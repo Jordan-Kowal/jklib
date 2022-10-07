@@ -23,6 +23,6 @@ repos:
     rev: "v0.942"
     hooks:
       - id: mypy
-        additional_dependencies: ["types-requests"]
+        additional_dependencies: ["types-requests", "types-PyYAML"]
         args: [--ignore-missing-imports, --disallow-untyped-defs]
         exclude: "(test_*)|(settings.py)|(manage.py)|(migrations)"
