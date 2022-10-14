@@ -5,7 +5,6 @@ import json
 from string import ascii_letters, digits
 from typing import (
     Any,
-    ByteString,
     Callable,
     Dict,
     Iterable,
@@ -19,12 +18,9 @@ from typing import (
 # Django
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.models import FieldFile, ImageField, Model, QuerySet
+from django.db.models import FileField, Model, QuerySet
 from django.test import RequestFactory, TestCase
 from rest_framework.request import Request
-
-# Third-party
-from django_utils.utils.images import image_to_base64, resized_image_to_base64
 
 CHARS = ascii_letters + digits
 
@@ -71,8 +67,8 @@ class ImprovedTestCase(TestCase):
 
     def assertFileEqual(
         self,
-        file_1: Union[FieldFile, SimpleUploadedFile],
-        file_2: Union[FieldFile, SimpleUploadedFile],
+        file_1: Union[FileField, SimpleUploadedFile],
+        file_2: Union[FileField, SimpleUploadedFile],
     ) -> None:
         # Reset cursor position to make sure we compare the whole file
         file_1.seek(0)
@@ -87,16 +83,6 @@ class ImprovedTestCase(TestCase):
     ) -> None:
         queryset_pks = {getattr(item, pk) for item in queryset}
         self.assertSetEqual(queryset_pks, set(expected_pks))
-
-    def assertImageToBase64(
-        self, img: ImageField, data: ByteString, resize_to: Optional[int] = None
-    ):
-        converted_image = (
-            resized_image_to_base64(img, resize_to)
-            if resize_to is not None
-            else image_to_base64(img)
-        )
-        self.assertEqual(converted_image, data)
 
     def assertDateEqualsString(
         self,
