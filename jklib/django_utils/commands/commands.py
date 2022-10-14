@@ -7,8 +7,8 @@ from typing import Any, Optional, Type
 # Django
 from django.core.management.base import BaseCommand
 
-# Personal
-from jklib.django_utils.commands.operations import Operation
+# Local
+from .operations import Operation
 
 
 class ImprovedCommand(BaseCommand):

@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.2.1] - 2022-10-14
+### Added
+- [Core] For local development, added multiple libraries in the `requirements.txt` file
+
+### Changed
+N/A
+
+### Fixed
+- [Django] Fixed multiple incorrect imports
+
+### Removed
+- [Django] Removed the `assertImageToBase64` from the `ImprovedTestCase`
+
 ## [v3.2.0] - 2022-10-07
 ### Added
 - [Django] Added `FileNameWithUUID` to generate unique names for `FileField` and `ImageField` fields

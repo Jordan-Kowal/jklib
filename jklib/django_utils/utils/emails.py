@@ -5,11 +5,11 @@ from threading import Thread
 from typing import Any, Dict, List, Optional
 
 # Django
+from django.conf import settings
 from django.core.mail import EmailMessage
 
-# Third-party
-from django_utils.utils import settings
-from django_utils.utils.templates import render_template
+# Local
+from .templates import render_template
 
 
 class Email:
@@ -37,7 +37,7 @@ class Email:
             return
         email = EmailMessage(
             subject=self.subject,
-            body=render_template(context),
+            body=render_template(self.template_path, context),
             bcc=bcc,
             from_email=from_email or settings.DEFAULT_FROM_EMAIL,
         )
