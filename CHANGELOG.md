@@ -1,5 +1,20 @@
 # Changelog
 
+## [v3.2.2] - 2022-11-08
+### Added
+N/A
+
+### Changed
+- [Django] Emails now have a default subject which can be overriden when calling `Email.send`
+
+### Fixed
+- [Django] Fixed emails not being sent when using the `cc` and `to` parameters
+
+### Removed
+- [Django] Removed the `commands` and the `operations` utilities
+
+---
+
 ## [v3.2.1] - 2022-10-14
 ### Added
 - [Core] For local development, added multiple libraries in the `requirements.txt` file
@@ -12,6 +27,8 @@ N/A
 
 ### Removed
 - [Django] Removed the `assertImageToBase64` from the `ImprovedTestCase`
+
+---
 
 ## [v3.2.0] - 2022-10-07
 ### Added
@@ -118,5 +135,3 @@ N/A
 
 ### Removed
 N/A
-
----
