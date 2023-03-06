@@ -11,6 +11,8 @@ from jklib.dj.templates import render_template
 
 
 class Email:
+    """Sends async/sync emails through Django using templates and contexts."""
+
     def __init__(
         self,
         default_subject: str,

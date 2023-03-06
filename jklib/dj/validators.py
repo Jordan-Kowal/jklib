@@ -8,6 +8,8 @@ from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class LengthValidator:
+    """Validates the length of a string."""
+
     message: str = ""
 
     def __init__(

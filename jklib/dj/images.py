@@ -20,6 +20,7 @@ IMAGE_TYPES = {
 
 
 def override_image_in_storage(img_field: ImageField, new_img: Image.Image) -> None:
+    """Overrides an image in storage with a new image."""
     img_filename = Path(img_field.file.name).name
     img_ext = img_filename.split(".")[-1]
     img_format = IMAGE_TYPES[img_ext]

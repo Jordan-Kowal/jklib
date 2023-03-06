@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_409_CONFLICT, HTTP_412_PRECONDITION_FAILE
 
 
 class Conflict(APIException):
-    """Classic '409 Conflict HTTP' error."""
+    """Classic '409 Conflict' HTTP error."""
 
     status_code = HTTP_409_CONFLICT
     default_detail = _("A similar object already exists in the database.")

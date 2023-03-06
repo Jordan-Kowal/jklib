@@ -9,6 +9,7 @@ from django.http import HttpResponse, StreamingHttpResponse
 
 
 def download_file(path: str, storage: Storage) -> StreamingHttpResponse:
+    """Downloads a file from a storage backend."""
     filename = urlparse(path).path.split("/").pop()
     response = StreamingHttpResponse(streaming_content=storage.open(path))
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
@@ -18,6 +19,7 @@ def download_file(path: str, storage: Storage) -> StreamingHttpResponse:
 def download_files_as_zip(
     paths: str, output_filename: str, storage: Storage
 ) -> HttpResponse:
+    """Downloads a zip-file from a storage backend."""
     content = BytesIO()
     with zipfile.ZipFile(content, "w") as zf:
         for path in paths:

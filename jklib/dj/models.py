@@ -11,6 +11,8 @@ from django.utils.deconstruct import deconstructible
 
 
 class LifeCycleAbstractModel(Model):
+    """Model that adds created_at and updated_at fields."""
+
     created_at = DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = DateTimeField(auto_now=True, verbose_name="Updated at")
 
@@ -55,6 +57,7 @@ class FileNameWithUUID(object):
 def maybe_get_instance(
     model_class: Type[Model], *args: Any, **kwargs: Any
 ) -> Optional[Model]:
+    """Returns an instance of a model if it exists, otherwise returns None."""
     try:
         item = model_class.objects.get(*args, **kwargs)
     except model_class.DoesNotExist:
@@ -63,6 +66,7 @@ def maybe_get_instance(
 
 
 def update_model_instance(instance: Model, **kwargs: Any) -> Model:
+    """Updates a model instance with the provided kwargs."""
     for key, value in kwargs.items():
         setattr(instance, key, value)
     instance.save()

@@ -3,7 +3,7 @@ from typing import List
 
 
 def clean_text(text: str, olds: List[str], new: str = " ") -> str:
-    """Replace all occurrences of 'olds' with 'new' within a text."""
+    """Replaces all occurrences of 'olds' with 'new' within a text."""
     for old in olds:
         text = text.replace(old, new)
     text = text.strip()
@@ -11,7 +11,7 @@ def clean_text(text: str, olds: List[str], new: str = " ") -> str:
 
 
 def replace_every_nth(text: str, old: str, new: str, nth: int, start: int = 1) -> str:
-    """Replace every nth occurrence of 'old' with 'new' within a text."""
+    """Replaces every nth occurrence of 'old' with 'new' within a text."""
     i = start
     index = text.find(old)
     while index != -1:

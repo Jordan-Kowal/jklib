@@ -6,6 +6,8 @@ from django.db import models
 
 
 class NoBulkManager(models.Manager):
+    """Disables bulk operations on a model."""
+
     def bulk_create(
         self,
         objs: Iterable,

@@ -11,6 +11,8 @@ from jklib.std.images import resized_image_to_base64
 
 
 class ReadOnlyModelSerializer(serializers.ModelSerializer):
+    """A `ModelSerializer` that only allows for reading."""
+
     def create(self, validated_data: Dict[str, Any]) -> Model:
         raise NotImplementedError
 
@@ -19,5 +21,7 @@ class ReadOnlyModelSerializer(serializers.ModelSerializer):
 
 
 class ThumbnailField(serializers.ImageField):
+    """A `serializers.ImageField` that returns a thumbnail."""
+
     def to_representation(self, data: serializers.ImageField) -> bytes:
         return resized_image_to_base64(data, settings.MAX_THUMBNAIL_SIZE)

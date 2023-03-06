@@ -16,11 +16,13 @@ class ModelMixin(
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
 ):
+    """A mixin that includes all the `ModelMixin`s."""
+
     pass
 
 
 class ImprovedViewSet(GenericViewSet):
-    """Allow permissions and serializers to be 'per action'."""
+    """Allows permissions and serializers to be 'per action'."""
 
     default_permission_classes: Sequence[Type[BasePermission]] = ()
     default_serializer_class: Optional[Type[BaseSerializer]] = None

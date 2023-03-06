@@ -7,6 +7,8 @@ from django_filters import FilterSet
 
 
 class ImprovedFilterSet(FilterSet):
+    """Extends the default `FilterSet` to allow for custom filters."""
+
     @staticmethod
     def do_nothing(
         queryset: QuerySet[Model], _name: str, _value: str

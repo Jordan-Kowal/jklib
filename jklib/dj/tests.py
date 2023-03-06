@@ -56,6 +56,8 @@ def assert_logs(logger: str, level: str) -> Callable:
 
 
 class AssertionTestCase(TestCase):
+    """A `TestCase` with some assertion methods."""
+
     def assertDateEqualsString(
         self,
         instance_date: Optional[Union[datetime.datetime, datetime.date]],
@@ -160,6 +162,8 @@ class AssertionTestCase(TestCase):
 
 
 class ImprovedTestCase(AssertionTestCase):
+    """Base TestCase with additional assertions and methods."""
+
     @staticmethod
     def build_fake_request(
         method: str = "get", path: str = "/", data: Dict = None
@@ -188,6 +192,8 @@ class ImprovedTestCase(AssertionTestCase):
 
 
 class APITestCase(ImprovedTestCase):
+    """Base TestCase for API tests."""
+
     viewset_url: str = ""
     api_client_class: Type[APIClient] = APIClient
     api_client: APIClient

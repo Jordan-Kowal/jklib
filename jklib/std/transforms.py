@@ -67,4 +67,5 @@ def dict_to_flat_dict(data: Dict[str, Any]) -> Dict[str, Union[str, int, bool]]:
 
 
 def ordered_dict_to_dict(ordered_dict: OrderedDict) -> Dict[Any, Any]:
+    """Converts an OrderedDict to a dict."""
     return json.loads(json.dumps(ordered_dict))

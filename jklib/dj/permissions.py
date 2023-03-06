@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 
 
 class BlockAll(BasePermission):
+    """Blocks all requests."""
+
     message = "Access denied"
 
     def has_permission(self, request: Request, view: APIView) -> bool:
@@ -12,6 +14,8 @@ class BlockAll(BasePermission):
 
 
 class IsNotAuthenticated(IsAuthenticated):
+    """Blocks requests if the user is authenticated."""
+
     message = "You must be logged out to use this service"
 
     def has_permission(self, request: Request, view: APIView) -> bool:
