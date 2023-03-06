@@ -1,6 +1,3 @@
-"""Utility functions for managing files and folders."""
-
-
 # Built-in
 import base64
 import io

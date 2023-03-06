@@ -1,5 +1,3 @@
-"""Utility functions around the "input" mechanic."""
-
 # Built-in
 import re
 from typing import Dict

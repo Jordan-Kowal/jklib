@@ -1,5 +1,14 @@
 # Changelog
 
+
+## [v4.0.0] - 2023-03-07
+- Update local development configuration (pre-commits, requirements, etc.)
+- Removal of most packages, and kept only **std** and **django_utils**
+- Renamed **django_utils** package as **dj**
+- Added new functions in both **dj** and **std** packages
+
+---
+
 ## [v3.2.2] - 2022-11-08
 ### Added
 N/A

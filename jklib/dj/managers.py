@@ -1,6 +1,3 @@
-"""Custom managers for Django models."""
-
-
 # Built-in
 from typing import Iterable, List, Optional, Sequence
 

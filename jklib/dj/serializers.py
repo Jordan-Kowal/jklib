@@ -1,12 +1,13 @@
-"""Serializers and mixins classes for DRF."""
-
-
 # Built-in
 from typing import Any, Dict
 
 # Django
+from django.conf import settings
 from django.db.models import Model
 from rest_framework import serializers
+
+# Application
+from jklib.std.images import resized_image_to_base64
 
 
 class ReadOnlyModelSerializer(serializers.ModelSerializer):
@@ -15,3 +16,8 @@ class ReadOnlyModelSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Model, validated_data: Dict[str, Any]) -> Model:
         raise NotImplementedError
+
+
+class ThumbnailField(serializers.ImageField):
+    def to_representation(self, data: serializers.ImageField) -> bytes:
+        return resized_image_to_base64(data, settings.MAX_THUMBNAIL_SIZE)

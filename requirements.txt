@@ -1,0 +1,4 @@
+django==4.*
+djangorestframework==3.*
+django-filter==2.*
+pillow==9.*

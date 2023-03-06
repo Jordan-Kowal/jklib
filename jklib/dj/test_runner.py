@@ -1,5 +1,3 @@
-"""Custom test runners."""
-
 # Built-in
 import re
 from time import perf_counter

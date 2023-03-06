@@ -1,9 +1,6 @@
 black
+docformatter
 flake8
 isort
 mypy
 pre-commit
-
-django==4.0.*  # 4.1 not working for now due to css.map and collectstatic issue
-djangorestframework==3.*
-django-filter==2.*

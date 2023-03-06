@@ -1,5 +1,3 @@
-"""Viewset and mixin classes for DRF."""
-
 # Built-in
 from typing import Any, Dict, List, Optional, Sequence, Type
 
@@ -24,38 +22,25 @@ class ModelMixin(
 class ImprovedViewSet(GenericViewSet):
     """Allow permissions and serializers to be 'per action'."""
 
-    default_permissions: Sequence[Type[BasePermission]] = ()
-    default_serializer: Optional[Type[BaseSerializer]] = None
-    permissions_per_action: Dict[str, Sequence[Type[BasePermission]]] = {}
-    serializer_per_action: Dict[str, Type[BaseSerializer]] = {}
+    default_permission_classes: Sequence[Type[BasePermission]] = ()
+    default_serializer_class: Optional[Type[BaseSerializer]] = None
+    permission_classes_per_action: Dict[str, Sequence[Type[BasePermission]]] = {}
+    serializer_class_per_action: Dict[str, Type[BaseSerializer]] = {}
 
     def get_permissions(self) -> List[BasePermission]:
-        """Override.
-
-        Either gets the action permissions, viewset permissions, or
-        default settings permissions
-        """
-        permissions = self.permissions_per_action.get(
-            self.action, self.default_permissions
+        permissions = self.permission_classes_per_action.get(
+            self.action, self.default_permission_classes
         )
         if len(permissions) == 0:
             permissions = api_settings.DEFAULT_PERMISSION_CLASSES
         return [permission() for permission in permissions]
 
     def get_serializer_class(self) -> Type[BaseSerializer]:
-        """Override.
-
-        Fetches the action serializer using the `serializer_classes` map
-        """
-        return self.serializer_per_action.get(self.action, self.default_serializer)
+        return self.serializer_class_per_action.get(
+            self.action, self.default_serializer_class
+        )
 
     def get_valid_serializer(self, *args: Any, **kwargs: Any) -> BaseSerializer:
-        """Shortcut to fetch the serializer, try to validate its data, and
-        return it."""
         serializer = self.get_serializer(*args, **kwargs)
         serializer.is_valid(raise_exception=True)
         return serializer
-
-
-class ImprovedModelViewSet(ImprovedViewSet, ModelMixin):
-    pass

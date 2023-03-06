@@ -1,21 +1,17 @@
-"""Utility functions for working with strings."""
 # Built-in
 from typing import List
 
 
-def clean_text(text: str, char_list: List[str], replacement: str = " ") -> str:
-    """Replaces specific characters with a 'replacement' character within a
-    text."""
-    if char_list:
-        for char in char_list:
-            text = text.replace(char, replacement)
+def clean_text(text: str, olds: List[str], new: str = " ") -> str:
+    """Replace all occurrences of 'olds' with 'new' within a text."""
+    for old in olds:
+        text = text.replace(old, new)
     text = text.strip()
     return text
 
 
 def replace_every_nth(text: str, old: str, new: str, nth: int, start: int = 1) -> str:
-    """Modifies a text by replacing "old" string with "new" string every "nth"
-    time."""
+    """Replace every nth occurrence of 'old' with 'new' within a text."""
     i = start
     index = text.find(old)
     while index != -1:
