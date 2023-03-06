@@ -1,6 +1,3 @@
-"""Validators for Django model fields."""
-
-
 # Built-in
 from typing import Optional
 
@@ -11,14 +8,13 @@ from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class LengthValidator:
-    """Validator that can check the min and/or max length of a field."""
+    """Validates the length of a string."""
 
-    message: str = ""  # Depends on args
+    message: str = ""
 
     def __init__(
         self, min_: Optional[int] = None, max_: Optional[int] = None, trim: bool = True
     ) -> None:
-        """Sets the instance attributes."""
         if min_ is None and max_ is None:
             raise ValueError("You need to provide at least a min or max length")
         self.min_: Optional[int] = min_
@@ -26,7 +22,6 @@ class LengthValidator:
         self.trim: bool = trim
 
     def __call__(self, value: str) -> None:
-        """Checks if the value meets the length criterion."""
         if self.trim:
             value = value.strip()
         length = len(value)

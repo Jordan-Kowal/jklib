@@ -1,12 +1,10 @@
-"""Utility functions for working with JSON files."""
-
 # Built-in
 import json
 import os
 
 
 def sort_json(path: str) -> None:
-    """Overwrites and sorts a JSON file to make it cleaner / more readable."""
+    """Overwrites and sorts a JSON file by keys."""
     ext = os.path.splitext(path)[1]
     if ext != ".json":
         raise TypeError("The 'path' must lead to a JSON file")

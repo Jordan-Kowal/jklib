@@ -1,6 +1,3 @@
-"""Decorators for django."""
-
-
 # Built-in
 from typing import Any, Callable
 
@@ -10,8 +7,7 @@ from django.shortcuts import render
 
 
 def render_to(template: str) -> Callable:
-    """Decorator that renders a django view to a specific template Functions
-    using the decorator must simply return the context dict."""
+    """Renders a django view to a specific template."""
 
     def renderer(function: Callable) -> Callable:
         def wrapper(request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:

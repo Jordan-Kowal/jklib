@@ -1,2 +1,1 @@
-"""Package that contains various utility functions spread across
-subpackages."""
+"""Package with useful snippets for Django and general Python development."""

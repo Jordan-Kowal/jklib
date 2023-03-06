@@ -1,6 +1,3 @@
-"""Custom managers for Django models."""
-
-
 # Built-in
 from typing import Iterable, List, Optional, Sequence
 
@@ -9,6 +6,8 @@ from django.db import models
 
 
 class NoBulkManager(models.Manager):
+    """Disables bulk operations on a model."""
+
     def bulk_create(
         self,
         objs: Iterable,

@@ -1,5 +1,3 @@
-"""Utility functions for email management in django."""
-
 # Built-in
 from threading import Thread
 from typing import Any, Dict, List, Optional
@@ -8,11 +6,13 @@ from typing import Any, Dict, List, Optional
 from django.conf import settings
 from django.core.mail import EmailMessage
 
-# Local
-from .templates import render_template
+# Application
+from jklib.dj.templates import render_template
 
 
 class Email:
+    """Sends async/sync emails through Django using templates and contexts."""
+
     def __init__(
         self,
         default_subject: str,
