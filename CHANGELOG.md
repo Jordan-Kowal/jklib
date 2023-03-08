@@ -1,5 +1,11 @@
 # Changelog
 
+## [On going] - TBD
+
+- [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
+  - Can use `ImprovedManager(allow_bulk=False)` to disable bulk operations
+
+---
 
 ## [v4.0.0] - 2023-03-07
 - Update local development configuration (pre-commits, requirements, etc.)
