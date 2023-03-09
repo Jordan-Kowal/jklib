@@ -3,6 +3,7 @@ repos:
     rev: v5.10.1
     hooks:
       - id: isort
+        args: [--settings-path, ./.isort.cfg]
         exclude: '(migrations)'
 
   - repo: https://github.com/myint/docformatter
@@ -21,6 +22,7 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
+        args: [--config, ./.flake8]
         exclude: '(migrations)'
 
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -28,6 +30,12 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
-          ['types-requests', 'types-PyYAML', 'types-pytz']
-        args: [--ignore-missing-imports, --disallow-untyped-defs]
+          [ 'types-requests', 'types-PyYAML', 'types-pytz' ]
+        args:
+          [
+            --ignore-missing-imports,
+            --disallow-untyped-defs,
+            --config,
+            ./mypy.ini,
+          ]
         exclude: '(test_*)|(settings.py)|(manage.py)|(migrations)'

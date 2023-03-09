@@ -2,6 +2,7 @@
 
 ## [On going] - TBD
 
+- [dev] Updated pre-commits
 - [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
   - Can use `ImprovedManager(allow_bulk=False)` to disable bulk operations
 
