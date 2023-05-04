@@ -1,5 +1,6 @@
 # Built-in
 import datetime
+import json
 from io import BytesIO
 from typing import (
     TYPE_CHECKING,
@@ -22,6 +23,7 @@ from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError
 from django.db.models import FileField, ImageField, Model, QuerySet
+from django.http import StreamingHttpResponse
 from django.test import RequestFactory, TestCase
 from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.utils import timezone
@@ -231,6 +233,10 @@ class APITestCase(ImprovedTestCase):
                 user_active_session_ids.append(session.pk)
         if len(user_active_session_ids) > 0:
             Session.objects.filter(pk__in=user_active_session_ids).delete()
+
+    @staticmethod
+    def parse_streaming_response(response: StreamingHttpResponse) -> Union[Dict, List]:
+        return json.loads(b"".join(response.streaming_content).decode("utf-8"))
 
     def multipart_api_call(
         self,

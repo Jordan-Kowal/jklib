@@ -5,6 +5,8 @@
 - [dev] Updated pre-commits
 - [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
   - Can use `ImprovedManager(allow_bulk=False)` to disable bulk operations
+- [dj] Added `generate_json_streaming_content` to `ImprovedViewSet` to stream JSON response
+  - Added `parse_streaming_response` in test utils to handle streaming responses in unittests
 
 ---
 

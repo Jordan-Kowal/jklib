@@ -1,10 +1,12 @@
 # Built-in
-from typing import Any, Dict, List, Optional, Sequence, Type
+from typing import Any, Dict, List, Optional, Sequence, Type, Generator
 
+from django.db.models import QuerySet
 # Django
 from rest_framework import mixins
 from rest_framework.permissions import BasePermission
-from rest_framework.serializers import BaseSerializer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.serializers import BaseSerializer, Serializer
 from rest_framework.settings import api_settings
 from rest_framework.viewsets import GenericViewSet
 
@@ -46,3 +48,27 @@ class ImprovedViewSet(GenericViewSet):
         serializer = self.get_serializer(*args, **kwargs)
         serializer.is_valid(raise_exception=True)
         return serializer
+
+    def generate_json_streaming_content(
+        self,
+        queryset: QuerySet,
+        serializer_class: Optional[Type[Serializer]] = None,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Generator[bytes, None, None]:
+        """Generates a JSON streaming response as bytes from a queryset."""
+        serializer_class = serializer_class or self.get_serializer_class()
+        context = context or self.get_serializer_context()
+        renderer = JSONRenderer()
+        total = queryset.count()
+        # Manually adds [] and , to the response to make it a valid JSON array
+        for i, item in enumerate(queryset):
+            data = b""
+            if i == 0:
+                data += b"["
+            serializer = serializer_class(item, context=context)
+            data += renderer.render(serializer.data)
+            if i == total - 1:
+                data += b"]"
+            else:
+                data += b","
+            yield data
