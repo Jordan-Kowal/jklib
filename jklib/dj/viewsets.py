@@ -1,8 +1,8 @@
 # Built-in
-from typing import Any, Dict, List, Optional, Sequence, Type, Generator
+from typing import Any, Dict, Generator, List, Optional, Sequence, Type
 
-from django.db.models import QuerySet
 # Django
+from django.db.models import QuerySet
 from rest_framework import mixins
 from rest_framework.permissions import BasePermission
 from rest_framework.renderers import JSONRenderer

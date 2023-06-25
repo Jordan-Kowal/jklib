@@ -29,6 +29,7 @@ from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.utils import timezone
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
 # Application
@@ -196,7 +197,6 @@ class ImprovedTestCase(AssertionTestCase):
 class APITestCase(ImprovedTestCase):
     """Base TestCase for API tests."""
 
-    viewset_url: str = ""
     api_client_class: Type[APIClient] = APIClient
     api_client: APIClient
     payload: Dict[str, Any]
@@ -206,21 +206,15 @@ class APITestCase(ImprovedTestCase):
         cls.api_client = cls.api_client_class()
         super().setUpClass()
 
+    @staticmethod
     def build_url(
-        self,
-        extra_path: str = None,
-        detail_key: Union[str, int] = None,
-        params: Optional[Dict] = None,
+        name: str,
+        kwargs: Optional[Dict] = None,
+        query_kwargs: Optional[Dict] = None,
     ) -> str:
-        url = self.viewset_url
-        if url[-1] != "/":
-            url += "/"
-        if detail_key is not None:
-            url += f"{detail_key}/"
-        if extra_path is not None:
-            url += f"{extra_path}/"
-        if params is not None:
-            url += f"?{urlencode(params)}"
+        url = reverse(name, kwargs=kwargs)
+        if query_kwargs is not None:
+            url += f"?{urlencode(query_kwargs)}"
         return url
 
     @staticmethod
