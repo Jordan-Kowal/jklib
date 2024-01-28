@@ -10,14 +10,18 @@ from django.db.models import DateTimeField, Manager, Model
 from django.utils.deconstruct import deconstructible
 
 
-class LifeCycleAbstractModel(Model):
-    """Model that adds created_at and updated_at fields."""
+class LifeCycleMixin:
+    """Mixin that adds created_at and updated_at fields."""
 
     created_at = DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = DateTimeField(auto_now=True, verbose_name="Updated at")
 
-    class Meta:
-        abstract = True
+
+class UserTrackingMixin:
+    """Mixin that adds created_by and updated_by fields."""
+
+    created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    updated_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
 
 class PreCleanedAbstractModel(Model):
@@ -55,7 +59,7 @@ class FileNameWithUUID(object):
 
 
 def maybe_get_instance(
-    model_class: Type[Model], *args: Any, **kwargs: Any
+        model_class: Type[Model], *args: Any, **kwargs: Any
 ) -> Optional[Model]:
     """Returns an instance of a model if it exists, otherwise returns None."""
     try:
@@ -74,8 +78,8 @@ def update_model_instance(instance: Model, **kwargs: Any) -> Model:
 
 
 def update_m2m(
-    m2m_field: Manager,
-    ids: List[str],
+        m2m_field: Manager,
+        ids: List[str],
 ) -> None:
     """Updates a many-to-many field with a list of ids."""
     unique_ids = set(ids or [])
