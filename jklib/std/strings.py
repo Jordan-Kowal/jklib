@@ -16,7 +16,7 @@ def replace_every_nth(text: str, old: str, new: str, nth: int, start: int = 1) -
     index = text.find(old)
     while index != -1:
         if i == nth:
-            text = text[:index] + new + text[index + len(old) :]
+            text = text[:index] + new + text[index + len(old) :]  # noqa
             i = 0
         index = text.find(old, index + len(old) + 1)
         i += 1

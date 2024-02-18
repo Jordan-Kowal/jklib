@@ -47,13 +47,13 @@ def dict_to_flat_dict(data: Dict[str, Any]) -> Dict[str, Union[str, int, bool]]:
         if current_value is None or current_value == "":
             return
         # Array: Add index to path for each value and recurse
-        if type(current_value) == list:
+        if type(current_value) == list:  # noqa
             for i, sub_value in enumerate(current_value):
                 new_path = f"{current_path}[{i}]"
                 _convert_value(new_path, sub_value)
             return
         # Object: Add key to path for each value and recurse
-        if type(current_value) == dict:
+        if type(current_value) == dict:  # noqa
             for sub_key, sub_value in current_value.items():
                 new_path = f"{current_path}[{str(sub_key)}]"
                 _convert_value(new_path, sub_value)

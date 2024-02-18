@@ -1,5 +1,10 @@
 # Changelog
 
+## [v5.0.1] - 2024-02-18
+
+- [dev] Updated linters and pre-commits
+- [dj] Fixed imports in [models.py](./jklib/dj/models.py)
+
 ## [v5.0.0] - 2024-02-18
 
 - [dev] Updated pre-commits

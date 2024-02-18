@@ -23,9 +23,6 @@ class Result:
     FAILURE_SYMBOL = "F"
 
     def __init__(self, test) -> None:
-        #       test_name            app                                   case
-        #  |------------------|  |--------|                   |----------------------------|
-        # "test_unique_together (receptions.tests.test_models.ReceptionStatusHistoryTestCase)"
         self.test = test
         match = re.match("^(.+) \((.+)\)$", str(test))  # noqa: W605
         self.app: str = match.group(2).split(".")[0]

@@ -5,16 +5,16 @@ from typing import Any, List, Optional, Type
 
 # Django
 from django import forms
-from django.db import IntegrityError
-from django.db.models import DateTimeField, Manager, Model
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError, models
 from django.utils.deconstruct import deconstructible
 
 
 class LifeCycleMixin:
     """Mixin that adds created_at and updated_at fields."""
 
-    created_at = DateTimeField(auto_now_add=True, verbose_name="Created at")
-    updated_at = DateTimeField(auto_now=True, verbose_name="Updated at")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
 
 
 class UserTrackingMixin:
@@ -24,7 +24,7 @@ class UserTrackingMixin:
     updated_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
 
-class PreCleanedAbstractModel(Model):
+class PreCleanedAbstractModel(models.Model):
     """Model that calls .full_clean() before saving."""
 
     class Meta:
@@ -59,8 +59,8 @@ class FileNameWithUUID(object):
 
 
 def maybe_get_instance(
-        model_class: Type[Model], *args: Any, **kwargs: Any
-) -> Optional[Model]:
+    model_class: Type[models.Model], *args: Any, **kwargs: Any
+) -> Optional[models.Model]:
     """Returns an instance of a model if it exists, otherwise returns None."""
     try:
         item = model_class.objects.get(*args, **kwargs)
@@ -69,7 +69,7 @@ def maybe_get_instance(
     return item
 
 
-def update_model_instance(instance: Model, **kwargs: Any) -> Model:
+def update_model_instance(instance: models.Model, **kwargs: Any) -> models.Model:
     """Updates a model instance with the provided kwargs."""
     for key, value in kwargs.items():
         setattr(instance, key, value)
@@ -78,8 +78,8 @@ def update_model_instance(instance: Model, **kwargs: Any) -> Model:
 
 
 def update_m2m(
-        m2m_field: Manager,
-        ids: List[str],
+    m2m_field: models.Manager,
+    ids: List[str],
 ) -> None:
     """Updates a many-to-many field with a list of ids."""
     unique_ids = set(ids or [])

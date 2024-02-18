@@ -1,4 +1,4 @@
-django==4.*
+django==5.*
 djangorestframework==3.*
 django-filter==2.*
-pillow==9.*
+pillow==10.*
