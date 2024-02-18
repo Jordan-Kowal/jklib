@@ -1,6 +1,6 @@
 # Changelog
 
-## [v5.0.0] - 2024-02-18
+## [v5.0.2] - 2024-02-18
 
 - [dev] Updated linters and pre-commits
 - [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
