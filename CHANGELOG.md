@@ -1,20 +1,16 @@
 # Changelog
 
-## [v5.0.1] - 2024-02-18
-
-- [dev] Updated linters and pre-commits
-- [dj] Fixed imports in [models.py](./jklib/dj/models.py)
-
 ## [v5.0.0] - 2024-02-18
 
-- [dev] Updated pre-commits
+- [dev] Updated linters and pre-commits
 - [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
   - Can use `ImprovedManager(allow_bulk=False)` to disable bulk operations
-- [dj] Renamed `LifeCycleAbstractModel` to `LifeCycleMixin` which no longer inherits from `models.Model`
-- [dj] Added `UserTrackingMixin` to track the user who created and updated a model
 - [dj] Added `generate_json_streaming_content` to `ImprovedViewSet` to stream JSON response
   - Added `parse_streaming_response` in test utils to handle streaming responses in unittests
   - Updated `APITestCase.build_url` to use the endpoint's name like `reverse` and also handle query params
+
+### Breaking changes
+- [dj] Removed `LifeCycleAbstractModel`
 
 ---
 

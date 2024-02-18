@@ -5,23 +5,8 @@ from typing import Any, List, Optional, Type
 
 # Django
 from django import forms
-from django.contrib.auth import get_user_model
 from django.db import IntegrityError, models
 from django.utils.deconstruct import deconstructible
-
-
-class LifeCycleMixin:
-    """Mixin that adds created_at and updated_at fields."""
-
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
-
-
-class UserTrackingMixin:
-    """Mixin that adds created_by and updated_by fields."""
-
-    created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    updated_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
 
 class PreCleanedAbstractModel(models.Model):
