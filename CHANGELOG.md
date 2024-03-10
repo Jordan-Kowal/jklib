@@ -3,6 +3,7 @@
 ## [v5.0.2] - 2024-02-18
 
 - [dev] Updated linters and pre-commits
+- [dj] Added new assertions to `ImprovedTestCase`
 - [dj] Replaced `NoBulkManager` with `ImprovedManager` which provides more flexibility
   - Can use `ImprovedManager(allow_bulk=False)` to disable bulk operations
 - [dj] Added `generate_json_streaming_content` to `ImprovedViewSet` to stream JSON response
