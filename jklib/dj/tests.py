@@ -14,6 +14,7 @@ from typing import (
     Type,
     Union, OrderedDict,
 )
+from unittest.mock import Mock
 from urllib.parse import urlencode
 from zipfile import ZipFile
 
@@ -175,6 +176,11 @@ class AssertionTestCase(TestCase):
     ) -> None:
         queryset_pks = {getattr(item, pk) for item in queryset}
         self.assertSetEqual(queryset_pks, set(expected_pks))
+
+    def assertMockCalls(self, mock: Mock, expected_args: List) -> None:
+        self.assertEqual(len(mock.call_args_list), len(expected_args))
+        for (args, _kwargs), expected in zip(mock.call_args_list, expected_args):
+            self.assertEqual(args, expected)
 
 
 class ImprovedTestCase(AssertionTestCase):

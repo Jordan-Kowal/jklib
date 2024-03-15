@@ -1,5 +1,10 @@
 # Changelog
 
+## [v5.0.3] - TBD
+
+- [dj] Added new test assertions in `ImprovedTestCase`
+- [dj] Added `ImprovedModel` with save/delete hooks
+
 ## [v5.0.2] - 2024-02-18
 
 - [dev] Updated linters and pre-commits

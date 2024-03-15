@@ -9,6 +9,41 @@ from django.db import IntegrityError, models
 from django.utils.deconstruct import deconstructible
 
 
+class ImprovedModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        is_create = self.pk is None
+        self._pre_create() if is_create else self._pre_update()
+        super().save(*args, **kwargs)
+        self._post_create() if is_create else self._post_update()
+
+    def delete(self, *args: Any, **kwargs: Any) -> None:
+        self._pre_delete()
+        super().delete(*args, **kwargs)
+        self._post_delete()
+
+    def _pre_create(self) -> None:
+        pass
+
+    def _post_create(self) -> None:
+        pass
+
+    def _pre_update(self) -> None:
+        pass
+
+    def _post_update(self) -> None:
+        pass
+
+    def _pre_delete(self) -> None:
+        pass
+
+    def _post_delete(self) -> None:
+        pass
+
+
 class PreCleanedAbstractModel(models.Model):
     """Model that calls .full_clean() before saving."""
 
@@ -28,6 +63,8 @@ class PreCleanedAbstractModel(models.Model):
             raise IntegrityError(e)
         except Exception as e:
             raise e
+
+
 
 
 @deconstructible
