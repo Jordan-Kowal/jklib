@@ -1,9 +1,13 @@
 # Changelog
 
-## [v5.0.3] - TBD
+## [v5.1.0] - 2024-04-14
 
 - [dj] Added new test assertions in `ImprovedTestCase`
-- [dj] Added `ImprovedModel` with save/delete hooks
+- [dj] Added `ImprovedModel` with pre/post save/delete hooks
+- [meili] Added the `meili` folder with utilities to interact with MeiliSearch. Includes:
+  - types
+  - search utils
+  - Model indexer and serializers for Django (with test utils)
 
 ## [v5.0.2] - 2024-02-18
 
