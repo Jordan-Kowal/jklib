@@ -1,5 +1,9 @@
 # Changelog
 
+## [v5.1.1] - 2024-05-04
+
+- [meili] Sleep time for indexer tests is now a class variable that defaults to 0.1s
+
 ## [v5.1.0] - 2024-04-14
 
 - [dj] Added new test assertions in `ImprovedTestCase`

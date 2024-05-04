@@ -12,7 +12,6 @@ from django.test import tag
 # Application
 from jklib.meili.dj.indexer import MeilisearchModelIndexer
 
-SLEEP_TIME = 0.07
 
 M = TypeVar("M", bound=Model)
 
@@ -34,11 +33,12 @@ class IndexerBaseTestMixin(Generic[M]):
     item_1: M
     item_2: M
     search_attribute: str
+    sleep_time: float = 0.1
 
     def setUp(self):
         super().setUp()
         self.meilisearch_client.delete_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
 
     def tearDown(self):
         self.meilisearch_client.delete_index(self.indexer_class.index_name())
@@ -47,20 +47,20 @@ class IndexerBaseTestMixin(Generic[M]):
     def test_index_exists(self) -> None:
         self.assertFalse(self.indexer_class.index_exists())
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         self.assertTrue(self.indexer_class.index_exists())
 
     def test_maybe_create_index(self) -> None:
         self.assertFalse(self.indexer_class.index_exists())
         self.indexer_class.maybe_create_index()
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         self.assertTrue(self.indexer_class.index_exists())
 
     def test_update_settings(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         self.indexer_class.update_settings()
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).get_settings()
@@ -69,13 +69,13 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_index(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
         self.assertSearchHits(response, [])
         self.indexer_class.index(self.item_1)
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
@@ -83,13 +83,13 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_index_multiple(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
         self.assertSearchHits(response, [])
         self.indexer_class.index_multiple([self.item_1, self.item_2])
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
@@ -97,13 +97,13 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_index_from_query(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
         self.assertSearchHits(response, [])
         self.indexer_class.index_from_query(Q(id=self.item_1.id))
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
@@ -111,13 +111,13 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_index_all(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
         self.assertSearchHits(response, [])
         self.indexer_class.index_all()
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
@@ -125,13 +125,13 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_index_all_atomically(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
         self.assertEqual(response["hits"], [])
         self.indexer_class.index_all_atomically()
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
@@ -139,15 +139,15 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_unindex(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         self.indexer_class.index(self.item_1)
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
         self.assertSearchHits(response, [self.item_1])
         self.indexer_class.unindex(self.item_1.id)
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search(getattr(self.item_1, self.search_attribute))
@@ -155,15 +155,15 @@ class IndexerBaseTestMixin(Generic[M]):
 
     def test_unindex_multiple(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         self.indexer_class.index_multiple([self.item_1, self.item_2])
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
         self.assertSearchHits(response, [self.item_1, self.item_2])
         self.indexer_class.unindex_multiple([self.item_1.id, self.item_2.id])
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.meilisearch_client.index(
             self.indexer_class.index_name()
         ).search("")
@@ -172,11 +172,11 @@ class IndexerBaseTestMixin(Generic[M]):
     def test_search(self) -> None:
         self.meilisearch_client.create_index(self.indexer_class.index_name())
         search_value = getattr(self.item_1, self.search_attribute)
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.indexer_class.search(search_value)
         self.assertSearchHits(response, [])
         self.indexer_class.index(self.item_1)
-        sleep(SLEEP_TIME)
+        sleep(self.sleep_time)
         response = self.indexer_class.search(search_value)
         self.assertSearchHits(response, [self.item_1])
         self.assertEqual(response.get("limit"), 20)
