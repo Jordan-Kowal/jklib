@@ -1,7 +1,5 @@
-# Built-in
 from typing import Dict
 
-# Django
 from django.template import loader
 
 

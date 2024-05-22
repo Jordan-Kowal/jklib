@@ -1,7 +1,5 @@
-# Built-in
 from typing import Iterable, List, Optional, Sequence
 
-# Django
 from django.db.models import Manager, Model, QuerySet
 
 
@@ -14,10 +12,10 @@ class ImprovedManager(Manager):
     ):
         super().__init__()
         self.allow_bulk = allow_bulk
-        self.select_related = select_related or []
-        self.prefetch_related = prefetch_related or []
+        self.select_related = select_related or []  # type: ignore
+        self.prefetch_related = prefetch_related or []  # type: ignore
 
-    def bulk_create(
+    def bulk_create(  # type: ignore
         self,
         objs: Iterable,
         batch_size: Optional[int] = None,
@@ -37,7 +35,7 @@ class ImprovedManager(Manager):
     def get_queryset(self) -> QuerySet["Model"]:
         queryset = super().get_queryset()
         if self.select_related:
-            queryset = queryset.select_related(*self.select_related)
+            queryset = queryset.select_related(*self.select_related)  # type: ignore
         if self.prefetch_related:
-            queryset = queryset.prefetch_related(*self.prefetch_related)
+            queryset = queryset.prefetch_related(*self.prefetch_related)  # type: ignore
         return queryset

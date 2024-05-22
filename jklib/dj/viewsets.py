@@ -1,7 +1,5 @@
-# Built-in
 from typing import Any, Dict, Generator, List, Optional, Sequence, Type
 
-# Django
 from django.db.models import QuerySet
 from rest_framework import mixins
 from rest_framework.permissions import BasePermission
@@ -36,7 +34,7 @@ class ImprovedViewSet(GenericViewSet):
             self.action, self.default_permission_classes
         )
         if len(permissions) == 0:
-            permissions = api_settings.DEFAULT_PERMISSION_CLASSES
+            permissions = api_settings.DEFAULT_PERMISSION_CLASSES  # type: ignore
         return [permission() for permission in permissions]
 
     def get_serializer_class(self) -> Type[BaseSerializer]:
@@ -56,7 +54,7 @@ class ImprovedViewSet(GenericViewSet):
         context: Optional[Dict[str, Any]] = None,
     ) -> Generator[bytes, None, None]:
         """Generates a JSON streaming response as bytes from a queryset."""
-        serializer_class = serializer_class or self.get_serializer_class()
+        serializer_class = serializer_class or self.get_serializer_class()  # type: ignore
         context = context or self.get_serializer_context()
         renderer = JSONRenderer()
         total = queryset.count()

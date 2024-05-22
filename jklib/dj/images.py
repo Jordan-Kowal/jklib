@@ -1,13 +1,11 @@
-# Built-in
 from io import BytesIO
 from pathlib import Path
 
-# Third-party
-from PIL import Image
-
-# Django
 from django.core.files import File
 from django.db.models import ImageField
+
+# Third-party
+from PIL import Image
 
 IMAGE_TYPES = {
     "jpg": "JPEG",

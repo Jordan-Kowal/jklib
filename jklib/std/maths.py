@@ -1,4 +1,3 @@
-# Built-in
 from decimal import Decimal
 from typing import Union
 

@@ -9,10 +9,13 @@ The snippets are split into folders/categories:
 - `std`: Generic utilities around the standard library that can be used in any project 
 
 
-## Pre-commit hooks
-The project uses `pre-commit` hooks to keep a consistent file structure
+### Using git hooks
 
-As such, if you want to make some changes while using the pre-commit hooks:
-- Install the necessary libraries: `pip install -r requirements-dev.txt`
-- Use them (through your IDE) to automatically format/check your files
-- Setup pre-commit by running `pre-commit install`
+Git hooks are set in the [.githooks](.githooks) folder
+_(as `.git/hooks` is not tracked in `.git`)_
+
+Run the following command to tell `git` to look for hooks in this folder:
+
+```shell
+git config core.hooksPath .githooks
+```

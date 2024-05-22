@@ -1,7 +1,5 @@
-# Built-in
 from typing import List, Tuple
 
-# Application
 from jklib.meili.types import MeilisearchFilterValue
 
 

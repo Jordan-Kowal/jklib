@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+echo "---------- Git hook: pre-commit ----------"
+
+# Ruff (imports, lint, and format)
+echo ""
+echo ">>> [1/2] Running Ruff"
+output=$(ruff check --select I .)
+echo "Imports: $output"
+output=$(ruff check .)
+echo "Lint: $output"
+output=$(ruff format --check .)
+echo "Format: $output"
+
+# MyPy (type checking)
+echo ""
+echo ">>> [2/2] Running My"
+mypy .
+
+echo "------------------------------------------"

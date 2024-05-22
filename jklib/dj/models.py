@@ -1,9 +1,7 @@
-# Built-in
 import os
-import uuid
 from typing import Any, List, Optional, Type
+import uuid
 
-# Django
 from django import forms
 from django.db import IntegrityError, models
 from django.utils.deconstruct import deconstructible
@@ -55,8 +53,6 @@ class PreCleanedAbstractModel(models.Model):
             raise IntegrityError(e)
         except Exception as e:
             raise e
-
-
 
 
 @deconstructible

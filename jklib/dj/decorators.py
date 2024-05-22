@@ -1,7 +1,5 @@
-# Built-in
 from typing import Any, Callable
 
-# Django
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 

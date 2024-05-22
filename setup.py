@@ -1,13 +1,11 @@
 """Setup file for the PyPi packaging."""
 
-
-# Third-party
-from setuptools import find_packages, setup
+from setuptools import find_packages, setup  # type: ignore
 
 # --------------------------------------------------------------------------------
 # > Variables
 # --------------------------------------------------------------------------------
-VERSION = "5.1.1"
+VERSION = "5.2.0"
 packages = find_packages()
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()

@@ -1,10 +1,9 @@
 # Built-in
 import re
 from time import perf_counter
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from unittest import TestResult, TextTestResult, TextTestRunner
 
-# Django
 from django.test import runner
 
 # Terminal Colors
@@ -22,9 +21,9 @@ class Result:
     ERROR_SYMBOL = "E"
     FAILURE_SYMBOL = "F"
 
-    def __init__(self, test) -> None:
+    def __init__(self, test: Any) -> None:
         self.test = test
-        match = re.match("^(.+) \((.+)\)$", str(test))  # noqa: W605
+        match = re.match("^(.+) \((.+)\)$", str(test))  # noqa
         self.app: str = match.group(2).split(".")[0]
         self.case: str = match.group(2).split(".")[-1]
         self.test_name: str = match.group(1)
@@ -68,26 +67,26 @@ class TimedTextTestResult(TextTestResult):
     """Extends TextTestResult to track execution time of each test and print
     them."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(TimedTextTestResult, self).__init__(*args, **kwargs)
         self.clocks: Dict[str, Result] = dict()
         self.unknown_errors: List[Result] = []
 
-    def startTest(self, test) -> None:
+    def startTest(self, test: Any) -> None:
         self.clocks[f"{test}"] = Result(test)
         super().startTest(test)
 
-    def addError(self, test, err) -> None:
+    def addError(self, test: Any, err: Any) -> None:
         result = self._get_result(test)
         result.set_error()
         super().addError(test, err)
 
-    def addFailure(self, test, err) -> None:
+    def addFailure(self, test: Any, err: Any) -> None:
         result = self._get_result(test)
         result.set_failure()
         super().addFailure(test, err)
 
-    def addSuccess(self, test) -> None:
+    def addSuccess(self, test: Any) -> None:
         result = self._get_result(test)
         result.set_success()
         super().addSuccess(test)
@@ -125,7 +124,7 @@ class TimedTextTestResult(TextTestResult):
         for result in self.unknown_errors:
             print(f"\t{FAILURE_COLOR}{result.test}{ENDC_COLOR}")
 
-    def _get_result(self, test) -> Result:
+    def _get_result(self, test: Any) -> Result:
         """We might end up with an unknown key when crashing in a setUpClass
         method All its tests will be ignored, but to avoid crashing, we create
         a test result on the fly And store that result in the unknown errors
@@ -142,7 +141,7 @@ class TimedTextTestRunner(TextTestRunner):
 
     resultclass = TimedTextTestResult
 
-    def run(self, test) -> TestResult:
+    def run(self, test: Any) -> TestResult:
         result = super().run(test)
         result.show_execution_times()
         result.show_unknown_errors()

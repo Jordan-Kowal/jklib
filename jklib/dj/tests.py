@@ -1,7 +1,6 @@
-# Built-in
 import datetime
-import json
 from io import BytesIO
+import json
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -10,15 +9,15 @@ from typing import (
     Dict,
     Iterable,
     List,
+    Mapping,
     Optional,
+    OrderedDict,
     Type,
-    Union, OrderedDict,
+    Union,
 )
-from unittest.mock import Mock
 from urllib.parse import urlencode
 from zipfile import ZipFile
 
-# Django
 from django.contrib.sessions.models import Session
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -33,12 +32,10 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-# Application
 from jklib.std.images import image_to_base64, resized_image_to_base64
 from jklib.std.transforms import dict_to_flat_dict
 
 if TYPE_CHECKING:
-    # Django
     from django.contrib.auth.models import User as UserType
 
 CONTENT_DISPOSITION = 'attachment; filename="{file_name}"'
@@ -49,7 +46,7 @@ def assert_logs(logger: str, level: str) -> Callable:
     level = level.upper()
 
     def decorator(function: Callable) -> Callable:
-        def wrapper(self: TestCase, *args, **kwargs) -> Any:
+        def wrapper(self: TestCase, *args: Any, **kwargs: Any) -> Any:
             with self.assertLogs(logger=logger, level=level) as context:
                 self.logger_context = context
                 return function(self, *args, **kwargs)
@@ -63,11 +60,11 @@ class AssertionTestCase(TestCase):
     """A `TestCase` with some assertion methods."""
 
     def assertDictEqual(
-            self,
-            d1: Union[Dict, OrderedDict],
-            d2: Union[Dict, OrderedDict],
-            msg: Optional[str] = None,
-    ):
+        self,
+        d1: Mapping[Any, object],
+        d2: Mapping[Any, object],
+        msg: Optional[str] = None,
+    ) -> None:
         """Overrides `assertDictEqual` to handle `OrderedDict` instances."""
         if isinstance(d1, OrderedDict):
             d1 = dict(d1)
@@ -76,11 +73,11 @@ class AssertionTestCase(TestCase):
         super().assertDictEqual(d1, d2, msg)
 
     def assertDateEqualsString(
-            self,
-            instance_date: Optional[Union[datetime.datetime, datetime.date]],
-            string_date: Optional[str],
-            format: Optional[str] = "%Y-%m-%dT%H:%M:%S.%fZ",
-    ):
+        self,
+        instance_date: Optional[Union[datetime.datetime, datetime.date]],
+        string_date: Optional[str],
+        format: Optional[str] = "%Y-%m-%dT%H:%M:%S.%fZ",
+    ) -> None:
         if not instance_date:
             self.assertIsNone(string_date)
         else:
@@ -94,7 +91,7 @@ class AssertionTestCase(TestCase):
         )
 
     def assertDownloadZipFile(
-            self, response: Response, file_name: str, zip_content: List[str]
+        self, response: Response, file_name: str, zip_content: List[str]
     ) -> None:
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -107,11 +104,11 @@ class AssertionTestCase(TestCase):
         self.assertSetEqual(set(zip_content), zipped_files)
 
     def assertEmailWasSent(
-            self,
-            subject: str,
-            to: Optional[List[str]] = None,
-            cc: Optional[List[str]] = None,
-            bcc: Optional[List[str]] = None,
+        self,
+        subject: str,
+        to: Optional[List[str]] = None,
+        cc: Optional[List[str]] = None,
+        bcc: Optional[List[str]] = None,
     ) -> None:
         email = mail.outbox[-1]
         self.assertEqual(email.subject, subject)
@@ -126,9 +123,9 @@ class AssertionTestCase(TestCase):
             self.assertSetEqual(set(bcc), set(email.bcc))
 
     def assertFieldsHaveError(
-            self,
-            response: Response,
-            key_paths: List[str],
+        self,
+        response: Response,
+        key_paths: List[str],
     ) -> None:
         self.assertEqual(response.status_code, 400)
         for key_path in key_paths:
@@ -142,28 +139,28 @@ class AssertionTestCase(TestCase):
             self.assertIsNotNone(value)
 
     def assertFileEqual(
-            self,
-            file_1: Union[FileField, SimpleUploadedFile],
-            file_2: Union[FileField, SimpleUploadedFile],
+        self,
+        file_1: Union[FileField, SimpleUploadedFile],
+        file_2: Union[FileField, SimpleUploadedFile],
     ) -> None:
         # Reset cursor position to make sure we compare the whole file
-        file_1.seek(0)
-        file_2.seek(0)
+        file_1.seek(0)  # type: ignore
+        file_2.seek(0)  # type: ignore
         # .read() must be stored within variable or it won't work
-        content_1 = file_1.read()
-        content_2 = file_2.read()
+        content_1 = file_1.read()  # type: ignore
+        content_2 = file_2.read()  # type: ignore
         self.assertEqual(content_1, content_2)
 
     def assertFileIsNone(self, file_field: FileField) -> None:
         self.assertFalse(bool(file_field))
 
     def assertImageToBase64(
-            self, img: ImageField, data: ByteString, resize_to: Optional[int] = None
-    ):
+        self, img: ImageField, data: ByteString, resize_to: Optional[int] = None
+    ) -> None:
         converted_image = (
-            resized_image_to_base64(img, resize_to)
+            resized_image_to_base64(img, resize_to)  # type: ignore
             if resize_to is not None
-            else image_to_base64(img)
+            else image_to_base64(img)  # type: ignore
         )
         self.assertEqual(converted_image, data)
 
@@ -172,15 +169,10 @@ class AssertionTestCase(TestCase):
             instance.save()
 
     def assertQuerySetPks(
-            self, queryset: QuerySet, expected_pks=Iterable[Any], pk="id"
+        self, queryset: QuerySet, expected_pks: Iterable[Any], pk: str = "id"
     ) -> None:
         queryset_pks = {getattr(item, pk) for item in queryset}
         self.assertSetEqual(queryset_pks, set(expected_pks))
-
-    def assertMockCalls(self, mock: Mock, expected_args: List) -> None:
-        self.assertEqual(len(mock.call_args_list), len(expected_args))
-        for (args, _kwargs), expected in zip(mock.call_args_list, expected_args):
-            self.assertEqual(args, expected)
 
 
 class ImprovedTestCase(AssertionTestCase):
@@ -188,7 +180,7 @@ class ImprovedTestCase(AssertionTestCase):
 
     @staticmethod
     def build_fake_request(
-            method: str = "get", path: str = "/", data: Dict = None
+        method: str = "get", path: str = "/", data: Dict = None
     ) -> Request:
         factory = RequestFactory()
         factory_call = getattr(factory, method.lower())
@@ -201,7 +193,7 @@ class ImprovedTestCase(AssertionTestCase):
 
     @staticmethod
     def uploaded_file_from_path(
-            filepath: str, upload_name: Optional[str] = None
+        filepath: str, upload_name: Optional[str] = None
     ) -> SimpleUploadedFile:
         if upload_name is None:
             upload_name = filepath.split("/")[-1]
@@ -227,9 +219,9 @@ class APITestCase(ImprovedTestCase):
 
     @staticmethod
     def build_url(
-            name: str,
-            kwargs: Optional[Dict] = None,
-            query_kwargs: Optional[Dict] = None,
+        name: str,
+        kwargs: Optional[Dict] = None,
+        query_kwargs: Optional[Dict] = None,
     ) -> str:
         url = reverse(name, kwargs=kwargs)
         if query_kwargs is not None:
@@ -249,19 +241,19 @@ class APITestCase(ImprovedTestCase):
 
     @staticmethod
     def parse_streaming_response(response: StreamingHttpResponse) -> Union[Dict, List]:
-        return json.loads(b"".join(response.streaming_content).decode("utf-8"))
+        return json.loads(b"".join(response.streaming_content).decode("utf-8"))  # type: ignore
 
     def multipart_api_call(
-            self,
-            method: str,
-            url: str,
-            payload: Dict[str, Any],
-            *args: Any,
-            **kwargs: Any,
+        self,
+        method: str,
+        url: str,
+        payload: Dict[str, Any],
+        *args: Any,
+        **kwargs: Any,
     ) -> Response:
         """Transforms a JSON payload into a flattened form-data and performs a
         multipart request."""
         flat_dict = dict_to_flat_dict(payload)
         data = encode_multipart(data=flat_dict, boundary=BOUNDARY)
         method = getattr(self.api_client, method.lower())
-        return method(url, data=data, content_type=MULTIPART_CONTENT, *args, **kwargs)
+        return method(url, data=data, content_type=MULTIPART_CONTENT, *args, **kwargs)  # type: ignore

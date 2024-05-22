@@ -1,7 +1,5 @@
-# Built-in
 from typing import Optional
 
-# Django
 from django.db.models import Model
 from django.http.request import HttpRequest
 

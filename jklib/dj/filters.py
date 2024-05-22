@@ -1,7 +1,5 @@
-# Built-in
 from typing import Any, Dict
 
-# Django
 from django.db.models import Model, QuerySet
 from django_filters import FilterSet
 

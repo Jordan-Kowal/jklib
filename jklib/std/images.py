@@ -1,9 +1,7 @@
-# Built-in
 import base64
 from io import BytesIO
 from typing import Optional, Tuple
 
-# Third-party
 from PIL import Image
 
 

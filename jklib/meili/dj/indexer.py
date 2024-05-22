@@ -1,4 +1,3 @@
-# Built-in
 from abc import ABC, abstractmethod
 from typing import (
     TYPE_CHECKING,
@@ -13,15 +12,11 @@ from typing import (
     Unpack,
 )
 
-# Third-party
-from meilisearch import Client
-
-# Django
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q, QuerySet
+from meilisearch import Client
 
-# Application
 from jklib.meili.search import build_search_filter
 from jklib.meili.types import (
     MeilisearchFilters,
@@ -32,7 +27,6 @@ from jklib.meili.types import (
 )
 
 if TYPE_CHECKING:
-    # Django
     from django.db.models import Model
 
 

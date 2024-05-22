@@ -1,17 +1,11 @@
-# Built-in
 from time import sleep
-from typing import Generic, Type, TypeVar
+from typing import Dict, Generic, List, Type, TypeVar
 
-# Third-party
-from meilisearch import Client
-
-# Django
 from django.db.models import Model, Q
 from django.test import tag
+from meilisearch import Client
 
-# Application
 from jklib.meili.dj.indexer import MeilisearchModelIndexer
-
 
 M = TypeVar("M", bound=Model)
 
@@ -35,14 +29,14 @@ class IndexerBaseTestMixin(Generic[M]):
     search_attribute: str
     sleep_time: float = 0.1
 
-    def setUp(self):
-        super().setUp()
+    def setUp(self) -> None:
+        super().setUp()  # type: ignore
         self.meilisearch_client.delete_index(self.indexer_class.index_name())
         sleep(self.sleep_time)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.meilisearch_client.delete_index(self.indexer_class.index_name())
-        super().tearDown()
+        super().tearDown()  # type: ignore
 
     def test_index_exists(self) -> None:
         self.assertFalse(self.indexer_class.index_exists())
@@ -174,23 +168,23 @@ class IndexerBaseTestMixin(Generic[M]):
         search_value = getattr(self.item_1, self.search_attribute)
         sleep(self.sleep_time)
         response = self.indexer_class.search(search_value)
-        self.assertSearchHits(response, [])
+        self.assertSearchHits(response, [])  # type: ignore
         self.indexer_class.index(self.item_1)
         sleep(self.sleep_time)
         response = self.indexer_class.search(search_value)
-        self.assertSearchHits(response, [self.item_1])
+        self.assertSearchHits(response, [self.item_1])  # type: ignore
         self.assertEqual(response.get("limit"), 20)
         response = self.indexer_class.search(search_value, limit=1)
-        self.assertSearchHits(response, [self.item_1])
+        self.assertSearchHits(response, [self.item_1])  # type: ignore
         self.assertEqual(response.get("limit"), 1)
         response = self.indexer_class.search(search_value, only_hits=True, limit=1)
-        self.assertSearchHits(response, [self.item_1])
+        self.assertSearchHits(response, [self.item_1])  # type: ignore
         self.assertNotIn("limit", response)
 
     def test_meilisearch_client(self) -> None:
         self.assertIsInstance(self.indexer_class.meilisearch_client(), Client)
 
-    def assertSearchHits(self, response, items):
+    def assertSearchHits(self, response: Dict, items: List[M]) -> None:
         ids = {hit["id"] for hit in response["hits"]}
         self.assertSetEqual(
             ids, {getattr(item, self.indexer_class.PRIMARY_KEY) for item in items}

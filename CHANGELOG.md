@@ -1,5 +1,12 @@
 # Changelog
 
+## [v5.2.0] - 2024-05-22
+
+- [dj] Removed `AssertionTestCase.assertMockCalls` as it can be replaced by `assert_called_with` and `assert_has_calls`
+- [others] Replaced `black`, `isort`, and `flake8` with `ruff`
+- [others] Replaced `pre-commit` with git hooks from the `.githooks` folder
+- [others] Added a QA pipeline in the CICD
+
 ## [v5.1.1] - 2024-05-04
 
 - [meili] Sleep time for indexer tests is now a class variable that defaults to 0.1s

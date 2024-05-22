@@ -1,6 +1,6 @@
-black
-docformatter
-flake8
-isort
+django-filter-stubs
+django-stubs
+djangorestframework-stubs
 mypy
-pre-commit
+ruff
+types-Pillow

@@ -1,12 +1,9 @@
-# Built-in
 from threading import Thread
 from typing import Any, Dict, List, Optional
 
-# Django
 from django.conf import settings
 from django.core.mail import EmailMessage
 
-# Application
 from jklib.dj.templates import render_template
 
 

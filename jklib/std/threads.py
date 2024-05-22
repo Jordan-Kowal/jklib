@@ -1,4 +1,3 @@
-# Built-in
 from threading import Thread
 from typing import List
 

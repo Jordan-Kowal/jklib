@@ -1,9 +1,7 @@
-# Built-in
-import zipfile
 from io import BytesIO
 from urllib.parse import urlparse
+import zipfile
 
-# Django
 from django.core.files.storage import Storage
 from django.http import HttpResponse, StreamingHttpResponse
 

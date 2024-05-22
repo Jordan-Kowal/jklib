@@ -2,11 +2,11 @@
 
 # Built-in
 import os
-import sys
 from shutil import rmtree
+import sys
 
 # Third-party
-from local_settings import PYPI_PASSWORD, PYPI_USERNAME
+from local_settings import PYPI_PASSWORD, PYPI_USERNAME  # type: ignore
 
 
 # --------------------------------------------------------------------------------
