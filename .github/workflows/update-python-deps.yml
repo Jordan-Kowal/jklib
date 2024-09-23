@@ -19,22 +19,20 @@ jobs:
           python-version: "3.12" # Cached by github (https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md#python)
           cache: "pip"
           cache-dependency-path: |
-            ./backend/uv.lock
+            ./uv.lock
 
       - name: Install uv
         run: |
-          cd backend
           python -m pip install --upgrade pip
           pip install uv
 
       - name: Update dependencies
         run: |
-          cd backend
           uv sync --upgrade
 
       - name: Check for uv.lock changes
         run: |
-          git add ./backend/uv.lock
+          git add ./uv.lock
           if git diff --cached --exit-code --quiet; then
             echo "No changes in uv.lock"
             echo "deps_change=false" >> $GITHUB_ENV
@@ -55,6 +53,6 @@ jobs:
         with:
           token: ${{ secrets.PAT_FOR_ACTIONS }}
           branch: deps/update-python-dependencies
-          title: "[Backend] Update python dependencies"
+          title: "[Deps] Update python dependencies"
           body: "Update python dependencies"
           reviewers: "Jordan-Kowal"
