@@ -5,7 +5,8 @@
 - [others] Updated `.githooks`
 - [others] Added automatic deps update through github action
 - [others] Updated deps
-- [others] Migrated to `uv` package manager and `pyproject.toml` settings
+- [others] Migrated to `uv` package manager
+- [others] Moved to `pyproject.toml`
 
 ## [v5.2.0] - 2024-05-22
 
