@@ -7,7 +7,6 @@ name = "jklib"
 version = "5.2.1"
 description = "Package with utility functions on many different subjects"
 readme = "README.md"
-readme-content-type = "text/markdown"
 license = { text = "MIT" }
 authors = [{ name = "Jordan Kowal", email = "kowaljordan@gmail.com" }]
 keywords = ["utility", "development"]
