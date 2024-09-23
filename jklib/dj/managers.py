@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional, Sequence
+from typing import Iterable, List, Optional
 
 from django.db.models import Manager, Model, QuerySet
 
@@ -26,7 +26,7 @@ class ImprovedManager(Manager):
         return super().bulk_create(objs, batch_size, ignore_conflicts)
 
     def bulk_update(
-        self, objs: Iterable, fields: Sequence[str], batch_size: Optional[int] = None
+        self, objs: Iterable, fields: Iterable[str], batch_size: Optional[int] = None
     ) -> int:
         if not self.allow_bulk:
             raise NotImplementedError

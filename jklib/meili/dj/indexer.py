@@ -136,8 +136,8 @@ class MeilisearchModelIndexer(ABC, Generic[M]):
     ) -> Union[MeilisearchSearchHits, MeilisearchSearchResults]:
         filters = filters or {}
         params["filter"] = build_search_filter(**filters) or None
-        response = (
-            cls.meilisearch_client().index(cls.index_name()).search(query, params)
+        response: MeilisearchSearchResults = (
+            cls.meilisearch_client().index(cls.index_name()).search(query, params)  # type: ignore
         )
         if only_hits:
             return {"hits": response["hits"]}

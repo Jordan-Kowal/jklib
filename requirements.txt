@@ -1,5 +1,0 @@
-django==5.*
-djangorestframework==3.*
-django-filter==2.*
-meilisearch==0.30.0
-pillow==10.*

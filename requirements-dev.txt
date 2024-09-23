@@ -1,6 +1,0 @@
-django-filter-stubs
-django-stubs
-djangorestframework-stubs
-mypy
-ruff
-types-Pillow
