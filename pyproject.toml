@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jklib"
-version = "5.2.1"
+version = "5.2.2"
 description = "Package with utility functions on many different subjects"
 readme = "README.md"
 license = { text = "MIT" }
