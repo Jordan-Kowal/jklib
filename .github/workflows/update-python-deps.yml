@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_FOR_ACTIONS }}
+          token: ${{ secrets.DEPENDABOT_PAT }}
 
       - uses: actions/setup-python@v5
         with:
@@ -53,8 +53,8 @@ jobs:
         if: env.deps_change == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.PAT_FOR_ACTIONS }}
+          token: ${{ secrets.DEPENDABOT_PAT }}
           branch: deps/update-python-dependencies
           title: "[Deps] Update python dependencies"
           body: "Update python dependencies"
-          reviewers: "Jordan-Kowal"
+          assignees: "Jordan-Kowal"
