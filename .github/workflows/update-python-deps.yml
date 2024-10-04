@@ -32,6 +32,8 @@ jobs:
 
       - name: Check for uv.lock changes
         run: |
+          git config --global user.name "Jordan-Kowal"
+          git config --global user.email "kowaljordan@gmail.com"
           git add ./uv.lock
           if git diff --cached --exit-code --quiet; then
             echo "No changes in uv.lock"
@@ -44,7 +46,7 @@ jobs:
       - name: Commit changes
         if: env.deps_change == 'true'
         run: |
-          git commit -m "chore: update python dependencies" --author="${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
+          git commit -m "chore: update python dependencies"
           git push -f origin HEAD:deps/update-python-dependencies
 
       - name: Create Pull Request
@@ -55,4 +57,4 @@ jobs:
           branch: deps/update-python-dependencies
           title: "[Deps] Update python dependencies"
           body: "Update python dependencies"
-          reviewers: "Jordan-Kowal"
+          assignees: "Jordan-Kowal"
