@@ -27,7 +27,7 @@ dependencies = [
 
 [project.urls]
 homepage = "https://github.com/Jordan-Kowal/jklib"
-download = "https://github.com/Jordan-Kowal/jklib/archive/v5.2.1.tar.gz"
+download = "https://github.com/Jordan-Kowal/jklib/archive/v5.2.2.tar.gz"
 
 # ------------------------------
 # Dependencies
