@@ -10,7 +10,7 @@ The snippets are split into folders/categories:
 - `meili`: Utilities to interact with **MeiliSearch** (with a subfolder for `dj` **Django**)
 - `std`: Generic utilities around the standard library that can be used in any project
 
-### Using git hooks
+## Using git hooks
 
 Git hooks are set in the [.githooks](.githooks) folder
 _(as `.git/hooks` is not tracked in `.git`)_
