@@ -1,5 +1,10 @@
 # Changelog
 
+## [v5.2.3] - 2024-10-22
+
+- [others] Updated deps
+- [others] Updated project documentation for build
+
 ## [v5.2.2] - 2024-10-04
 
 - [others] Updated deps

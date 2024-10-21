@@ -4,18 +4,29 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jklib"
-version = "5.2.2"
+version = "5.2.3"
+requires-python = ">=3.10"
 description = "Package with utility functions on many different subjects"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Jordan Kowal", email = "kowaljordan@gmail.com" }]
-keywords = ["utility", "development"]
+maintainers = [{ name = "Jordan Kowal", email = "kowaljordan@gmail.com" }]
+keywords = ["utility", "development", "django", "meilisearch"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "Topic :: Software Development :: Build Tools",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development",
 ]
 dependencies = [
     "django>=5.1.1",
@@ -26,8 +37,10 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/Jordan-Kowal/jklib"
-download = "https://github.com/Jordan-Kowal/jklib/archive/v5.2.2.tar.gz"
+Homepage = "https://github.com/Jordan-Kowal/jklib"
+Issues = "https://github.com/Jordan-Kowal/jklib/issues"
+Download = "https://github.com/Jordan-Kowal/jklib/archive/v5.2.3.tar.gz"
+"Release notes" = "https://github.com/Jordan-Kowal/jklib/releases"
 
 # ------------------------------
 # Dependencies
